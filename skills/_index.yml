@@ -1,0 +1,13 @@
+name: Banco Inter agent skills
+type: AgentSkillIndex
+generated: '2026-10-18'
+method: generated
+source: openapi/
+note: Banco Inter publishes no skills or AGENTS.md; these are generated from the contracts in openapi/ and ground every step in real operationIds.
+skills:
+  - {name: obtain-access-token, file: skills/banco-inter-obtain-access-token.md, api: openapi/banco-inter-token-openapi.yml}
+  - {name: check-balance-and-statement, file: skills/banco-inter-check-balance-and-statement.md, api: openapi/banco-inter-banking-openapi.yml}
+  - {name: issue-bolepix-charge, file: skills/banco-inter-issue-bolepix-charge.md, api: openapi/banco-inter-cobranca-bolepix-openapi.yml}
+  - {name: pay-with-pix, file: skills/banco-inter-pay-with-pix.md, api: openapi/banco-inter-banking-openapi.yml}
+  - {name: setup-pix-automatico, file: skills/banco-inter-setup-pix-automatico.md, api: openapi/banco-inter-pix-automatico-openapi.yml}
+  - {name: manage-webhooks, file: skills/banco-inter-manage-webhooks.md, api: openapi/banco-inter-banking-openapi.yml}

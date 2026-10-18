@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-update-cobranca-response-body-schema.json",
+  "title": "UpdateCobrancaResponseBody",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-cobranca-bolepix-openapi.yml#/components/schemas/UpdateCobrancaResponseBody",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "PROCESSANDO",
+        "SUCESSO",
+        "FALHA"
+      ]
+    },
+    "mensagem": {
+      "type": "string"
+    },
+    "codigoEdicao": {
+      "type": "string",
+      "description": "Identificador utilizado para consultar status da edição.\n"
+    }
+  }
+}

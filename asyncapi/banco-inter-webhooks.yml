@@ -1,0 +1,48 @@
+generated: '2026-10-18'
+method: derived
+generator: derive-webhooks.py
+source:
+- openapi/banco-inter-banking-openapi.yml
+- openapi/banco-inter-cobranca-bolepix-openapi.yml
+- openapi/banco-inter-cobranca-openapi.yml
+- openapi/banco-inter-pix-automatico-openapi.yml
+- openapi/banco-inter-pix-openapi.yml
+description: 'Event surface derived from the provider''s own OpenAPI: callbacks. No AsyncAPI document is published by the provider; this catalog
+  lists the events the contract names.'
+management_operations:
+- putWebhookBanking
+- getWebhookBanking
+- deleteWebhookBanking
+- callbacksFilter
+- retryCallback
+- webhookPut
+- webhookGet
+- webhookDelete
+- addWebhookrec
+- findWebhookrec
+- deleteWebhookrec
+- addWebhookCobr
+- findWebhookCobr
+- deleteWebhookCobr
+events:
+- event: pixPagamentoList
+  description: callback declared on putWebhookBanking
+  declared_in: callbacks
+- event: pagamentoBoletoList
+  description: callback declared on putWebhookBanking
+  declared_in: callbacks
+- event: listaCobrancas
+  description: callback declared on webhookPut
+  declared_in: callbacks
+- event: listaBoletoCobranca
+  description: callback declared on webhookPut
+  declared_in: callbacks
+- event: rec
+  description: callback declared on addWebhookrec
+  declared_in: callbacks
+- event: cobr
+  description: callback declared on addWebhookCobr
+  declared_in: callbacks
+- event: listaPix
+  description: callback declared on webhookPut
+  declared_in: callbacks

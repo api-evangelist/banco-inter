@@ -1,0 +1,1 @@
+{"resource":"https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp","authorization_servers":["https://accounts.uatbi.com.br/generic/oauth"],"scopes_supported":["openid","sandbox.write"],"bearer_methods_supported":["header"]}

@@ -1,0 +1,10 @@
+generated: '2026-10-18'
+method: searched
+source: https://developers.inter.co/sandbox
+description: Sandbox environment for testing Banco Inter APIs before production deployment
+docs: https://developers.inter.co/docs/sandbox
+note: |
+  Banco Inter provides a sandbox environment for testing API integrations.
+  The sandbox was temporarily unavailable at the time of checking (message: "Ambiente Sandbox indisponível no momento").
+  Sandbox uses separate base URLs (e.g., https://cdpj-sandbox.partners.uatinter.co/oauth/v2 for OAuth).
+  Developers can create integrations, manage them, and test in the sandbox environment before moving to production.

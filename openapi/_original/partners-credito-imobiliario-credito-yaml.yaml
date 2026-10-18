@@ -1,0 +1,409 @@
+openapi: 3.0.3
+info:
+  title: API Credito
+  version: 1.0.0
+servers:
+  - url: https://ce-partners.uatbi.com.br
+    description: Servidor de Produção
+paths:
+  /proposta:
+    get:
+      tags:
+        - Proposta
+      summary: Consultar proposta
+      description: >-
+        Verifica se uma dada proposta foi operada(aprovada/reprovada), caso sim,
+        devolve o retorno.
+      operationId: buscaRetornoAprovacao
+      security:
+        - microservice_auth:
+            - ce-imp-api:read
+      parameters:
+        - name: proposta
+          in: query
+          required: true
+          description: Numero da proposta a ser consultado
+          schema:
+            type: string
+        - name: produtoId
+          in: query
+          required: true
+          description: Id do produto atrelado a proposta
+          schema:
+            type: integer
+            format: int64
+        - name: retornaApi
+          in: query
+          description: Deve retornar na API cadastrada
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operacao'
+        '400':
+          description: Proposta ainda se encontra em processamento.
+        '500':
+          description: Erro interno. Deve-se entrar em contato com o banco.
+    post:
+      tags:
+        - Proposta
+      summary: Registrar proposta
+      description: Registra uma dada proposta e seus itens
+      operationId: registrarProposta
+      security:
+        - microservice_auth:
+            - ce-imp-api:write
+      requestBody:
+        description: Dados para a inserção
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Proposta'
+      responses:
+        '200':
+          description: Proposta registrada com sucesso.
+        '412':
+          description: Existem erros na proposta ou campos inválidos.content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erros'
+        '500':
+          description: Erro interno. Deve-se entrar em contato com o banco.
+components:
+  schemas:
+    Operacao:
+      type: object
+      properties:
+        proposta:
+          type: string
+          example: EXEMP11111
+          description: Identificador unico da proposta.
+        produtoId:
+          type: integer
+          format: int64
+          example: '1'
+          description: Codigo do produto a ser operado.
+        titulos:
+          type: array
+          items:
+            $ref: '#/components/schemas/TituloOperacao'
+      required:
+        - proposta
+        - produtoId
+        - titulos
+    TituloOperacao:
+      type: object
+      properties:
+        cnpjSacado:
+          type: string
+          minLength: 14
+          maxLength: 14
+          example: '11111111111111'
+          description: CNPJ do Sacado para tal titulo.
+        nomeSacado:
+          type: string
+          example: NOME EXEMPLO
+          description: Nome do Sacado para tal titulo.
+        cpfCnpjCedente:
+          type: string
+          minLength: 11
+          maxLength: 14
+          example: '11111111111111'
+          description: CPF/CNPJ do cende para tal titulo.
+        nomeCedente:
+          type: string
+          example: NOME EXEMPLO
+          description: Nome do cende para tal titulo.
+        bancoCodigo:
+          type: string
+          example: '077'
+          minLength: 3
+          maxLength: 3
+          description: Codigo do banco para credito da operação.
+        agenciaNumero:
+          type: string
+          minLength: 3
+          maxLength: 4
+          example: '001'
+          description: Numero da agencia atrelada a conta para credito da operação.
+        agenciaDigito:
+          type: string
+          example: '1'
+          minLength: 1
+          maxLength: 3
+          description: Digito da agencia para credito da operação.
+        contaCorrenteNumero:
+          type: string
+          example: '1234'
+          description: Numero da conta corrence para credito da operação.
+        contaCorrenteDigito:
+          type: string
+          example: NOME EXEMPLO
+          minLength: 1
+          maxLength: 3
+          description: Digito da conta para credito da operação.
+        dataVencimento:
+          type: string
+          format: date
+          description: Data de vencimento do titulo formato americano.
+          example: '2022-12-30'
+          pattern: ^\d{4}-\d{2}-\d{2}$
+        notaFiscalNumero:
+          type: string
+          nullable: false
+          example: '203918'
+          description: Numero da notafiscal.
+        notaFiscalSerie:
+          type: string
+          example: '0'
+          minLength: 1
+          maxLength: 3
+          description: Serie da nota fiscal.
+        notaFiscalChave:
+          type: string
+          example: '19293094029321039129303'
+          description: Chave da nota fiscal.
+        notaFiscalIdentificador:
+          type: string
+          example: EXEMP091839
+          description: Identificação do titulo no sistema do parceiro.
+        parcela:
+          type: integer
+          example: '1'
+          description: Parcela a ser antecipada.
+          default: 1
+        totalParcelas:
+          type: integer
+          example: '1'
+          description: Total de parcelas.
+          default: 1
+        valorLancamento:
+          type: number
+          example: '99999.99'
+          description: Valor Bruto do título.
+        valorLiquido:
+          type: number
+          example: '99998.99'
+          description: Valor Liquido do título.
+        taxaEfetiva:
+          type: number
+          example: '9.99'
+          description: Valor da Taxa efetiva do titulo.
+        taxaRebate:
+          type: number
+          example: '9.99'
+          description: Valor da Taxa do parceiro.
+        status:
+          type: string
+          enum:
+            - APROVADA
+            - REPROVADA
+            - PAGA
+          example: APROVADA
+          description: Status atual do titulo.
+      required:
+        - cnpjSacado
+        - nomeSacado
+        - cpfCnpjCedente
+        - nomeCedente
+        - bancoCodigo
+        - agenciaNumero
+        - agenciaDigito
+        - contaCorrenteNumero
+        - contaCorrenteDigito
+        - dataVencimento
+        - notaFiscalNumero
+        - notaFiscalSerie
+        - notaFiscalChave
+        - notaFiscalIdentificador
+        - valorLancamento
+        - valorLiquido
+        - taxaEfetiva
+        - taxaRebate
+        - parcela
+        - totalParcelas
+        - status
+    Proposta:
+      type: object
+      properties:
+        proposta:
+          type: string
+          example: EXEMP11111
+          description: Identificador unico da proposta.
+        produtoId:
+          type: integer
+          format: int64
+          example: '1'
+          description: Codigo do produto a ser operado.
+        produtoName:
+          type: string
+          example: EXEMP
+          description: Nome do produto a ser operado.
+        titulos:
+          type: array
+          items:
+            $ref: '#/components/schemas/TituloProposta'
+          uniqueItems: true
+      required:
+        - proposta
+        - produtoId
+        - produtoName
+        - titulos
+    TituloProposta:
+      type: object
+      properties:
+        cnpjSacado:
+          type: string
+          minLength: 14
+          maxLength: 14
+          example: '11111111111111'
+          description: CNPJ do Sacado para tal titulo.
+        nomeSacado:
+          type: string
+          example: NOME EXEMPLO
+          description: Nome do Sacado para tal titulo.
+        cpfCnpjCedente:
+          type: string
+          minLength: 11
+          maxLength: 14
+          example: '11111111111111'
+          description: CPF/CNPJ do cende para tal titulo.
+        nomeCedente:
+          type: string
+          example: NOME EXEMPLO
+          description: Nome do cende para tal titulo.
+        bancoCodigo:
+          type: string
+          example: '077'
+          minLength: 3
+          maxLength: 3
+          description: Codigo do banco para credito da operação.
+        agenciaNumero:
+          type: string
+          minLength: 3
+          maxLength: 4
+          example: '001'
+          description: Numero da agencia atrelada a conta para credito da operação.
+        agenciaDigito:
+          type: string
+          example: '1'
+          minLength: 1
+          maxLength: 3
+          description: Digito da agencia para credito da operação.
+        contaCorrenteNumero:
+          type: string
+          example: '1234'
+          description: Numero da conta corrence para credito da operação.
+        contaCorrenteDigito:
+          type: string
+          example: NOME EXEMPLO
+          minLength: 1
+          maxLength: 3
+          description: Digito da conta para credito da operação.
+        dataVencimento:
+          type: string
+          format: date
+          description: Data de vencimento do titulo formato americano.
+          example: '2022-12-30'
+          pattern: ^\d{4}-\d{2}-\d{2}$
+        notaFiscalNumero:
+          type: string
+          nullable: false
+          example: '203918'
+          description: Numero da notafiscal.
+        notaFiscalSerie:
+          type: string
+          example: '0'
+          minLength: 1
+          maxLength: 3
+          description: Serie da nota fiscal.
+        notaFiscalChave:
+          type: string
+          example: '19293094029321039129303'
+          description: Chave da nota fiscal.
+        notaFiscalIdentificador:
+          type: string
+          example: EXEMP091839
+          description: Identificação do titulo no sistema do parceiro. Valor deve ser único
+          uniqueItems: true
+        parcela:
+          type: integer
+          example: '1'
+          description: Parcela a ser antecipada.
+          default: 1
+        totalParcelas:
+          type: integer
+          example: '1'
+          description: Total de parcelas.
+          default: 1
+        valorLancamento:
+          type: number
+          example: '99999.99'
+          description: Valor Bruto do título.
+        valorLiquido:
+          type: number
+          example: '99998.99'
+          description: Valor Liquido do título.
+        taxaEfetiva:
+          type: number
+          example: '9.99'
+          description: Valor da Taxa efetiva do titulo.
+        taxaRebate:
+          type: number
+          example: '9.99'
+          description: Valor da Taxa do parceiro.
+      required:
+        - cnpjSacado
+        - nomeSacado
+        - cpfCnpjCedente
+        - nomeCedente
+        - bancoCodigo
+        - agenciaNumero
+        - agenciaDigito
+        - contaCorrenteNumero
+        - contaCorrenteDigito
+        - dataVencimento
+        - notaFiscalNumero
+        - notaFiscalSerie
+        - notaFiscalChave
+        - notaFiscalIdentificador
+        - valorLancamento
+        - valorLiquido
+        - taxaEfetiva
+        - taxaRebate
+        - parcela
+        - totalParcelas
+    Erros:
+      type: object
+      properties:
+        errosCount:
+          type: integer
+          example: '1'
+          description: Quantidade de erros encontrados.
+        erros:
+          type: array
+          items:
+            type: string
+          description: Mensagens de erro.
+  securitySchemes:
+    token:
+      type: apiKey
+      name: x-api-token
+      in: header
+    microservice_auth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.cre.uatesb.local/oauth/token
+          scopes:
+            ce-imp-api:read: Permissão para leitura segura
+            ce-imp-api:write: Permissão para escrita segura
+security:
+  - token: []

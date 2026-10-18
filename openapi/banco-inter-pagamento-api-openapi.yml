@@ -1,0 +1,1389 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Pagamento API
+  version: ''
+  description: 'Operations tagged Pagamento across 2 of this provider''s published API definitions: swagger-banking-yaml.yaml, banco-inter-banking-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj.partners.bancointer.com.br/banking/v2
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+  description: Servidor de Sandbox
+tags:
+- name: Pagamento
+paths:
+  /pagamento:
+    post:
+      summary: Incluir pagamento com código de barras
+      description: 'Método para inclusão de um pagamento imediato ou agendamento do
+
+        pagamento de boleto, convênio ou tributo com código de barras.
+
+
+        **Importante**: Dependendo das configurações da conta, este pagamento
+
+        pode exigir aprovação manual antes da execução.
+
+
+        As configurações de aprovação podem ser ajustadas pelo usuário master
+
+        via Internet Banking. Menu Superior > Aprovar > Gestão de Aprovações.
+
+
+        * Escopo requerido: pagamento-boleto.write
+
+        * Rate limite:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/pagamento
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/pagamento
+
+
+        Para o ambiente do **Sandbox**, poderão ser utilizados os seguintes códigos de barras:
+
+        * 03395988500000666539201493990000372830030102
+
+        * 82670000000653301602023123106000000002830894'
+      tags:
+      - Pagamento
+      operationId: pagarBoleto
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      requestBody:
+        $ref: '#/components/requestBodies/EfetuarPagamentoBody'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfetuarPagamentoResponse'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaPagamento'
+        '401':
+          $ref: '#/components/responses/NaoAutorizado'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '406':
+          $ref: '#/components/responses/NaoAceito'
+        '409':
+          $ref: '#/components/responses/Conflito'
+    get:
+      summary: Buscar pagamentos
+      description: 'Método para obter uma coleção de pagamentos de boletos.
+
+
+        * Escopo requerido: pagamento-boleto.read
+
+        * Rate limite:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/pagamento
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/pagamento
+
+
+        Para o ambiente do **Sandbox**, poderão ser utilizados os seguintes códigos de barras:
+
+        * 03395988500000666539201493990000372830030102
+
+        * 82670000000653301602023123106000000002830894'
+      tags:
+      - Pagamento
+      operationId: buscarInformacoesPagamentos
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - name: codBarraLinhaDigitavel
+        in: query
+        description: Código de barras ou Linha digitável do boleto
+        schema:
+          type: string
+          minLength: 44
+          maxLength: 48
+          example: 6.539000353864661e+46
+      - name: codigoTransacao
+        in: query
+        description: Código de transação UUID
+        schema:
+          type: string
+          minLength: 36
+          maxLength: 36
+          example: a928f403-0076-419b-9c99-432d52083d0a
+      - name: dataInicio
+        in: query
+        description: 'Data inicio, em acordo com o campo "filtrarDataPor"
+
+
+          Formato aceito: YYYY-MM-DD
+
+
+          * O campo dataInicio é opcional, mas, caso seja informado, o campo dataFim se torna obrigatório para determinar o intervalo da busca.
+
+
+          * Caso data inicio e fim seja nula, por default será consultado os últimos 30 dias por data de inclusão.
+
+
+          * Período máximo entre as datas inicio e fim é de 90 dias.
+
+          '
+        schema:
+          type: string
+        example: '2022-08-11'
+      - name: dataFim
+        in: query
+        description: 'Data Fim, em acordo com o campo "filtrarDataPor"
+
+
+          * O campo dataFim é opcional, mas, caso seja informado, o campo dataInicio se torna obrigatório para determinar o intervalo da busca.
+
+
+          Formato aceito: YYYY-MM-DD
+
+          '
+        schema:
+          type: string
+        example: '2022-08-12'
+      - name: filtrarDataPor
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - INCLUSAO
+          - PAGAMENTO
+          - VENCIMENTO
+          default: INCLUSAO
+        description: 'Os filtros de data inicial e data final se aplicarão a:
+
+          * `INCLUSAO` - Data da operação que foi solicitado o pagamento do título. (Default)
+
+          * `PAGAMENTO` - Data em que foi efetuado o pagamento do título
+
+          * `VENCIMENTO` - Data do vencimento do título de pagamento.
+
+          '
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InformacoesPagamento'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaPagamento'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /pagamento/darf:
+    post:
+      summary: Incluir pagamento de DARF
+      description: 'Método para inclusão de um pagamento imediato de DARF sem código de
+
+        barras.
+
+
+        **Importante**: Dependendo das configurações da conta, este pagamento
+
+        pode exigir aprovação manual antes da execução.
+
+
+        As configurações de aprovação podem ser ajustadas pelo usuário master
+
+        via Internet Banking. Menu Superior > Aprovar > Gestão de Aprovações.
+
+
+        * Escopo requerido: pagamento-darf.write
+
+        * Rate limite:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/pagamento/darf
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/pagamento/darf'
+      tags:
+      - Pagamento
+      operationId: pagamentosDarf
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      requestBody:
+        $ref: '#/components/requestBodies/DarfRequestBody'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DarfResponse'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaIncluirDarf'
+        '401':
+          $ref: '#/components/responses/NaoAutorizado'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    get:
+      summary: Buscar pagamentos de DARF
+      description: 'Método para obter informações de pagamento de DARF.
+
+
+        * Escopo requerido: pagamento-boleto.read
+
+        * Rate limite:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/pagamento/darf
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/pagamento/darf'
+      tags:
+      - Pagamento
+      operationId: buscarInformacoesPagamentoDarf
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - name: codigoSolicitacao
+        in: query
+        description: Código de solicitação UUID
+        schema:
+          type: string
+          minLength: 36
+          maxLength: 36
+          example: a928f403-0076-419b-9c99-432d52083d0a
+      - name: codigoReceita
+        in: query
+        description: Código da receita
+        schema:
+          type: string
+          example: '0211'
+      - name: dataInicio
+        in: query
+        description: 'Data inicio, em acordo com a data de pagamento da DARF.
+
+
+          * O campo dataInicio é opcional, mas, caso seja informado, o campo dataFim se torna obrigatório para determinar o intervalo da busca.
+
+
+          * Caso data inicio ou fim seja nula, por default será consultado os últimos 30 dias por data de inclusão.
+
+
+          Formato aceito: YYYY-MM-DD
+
+          '
+        schema:
+          type: string
+          format: date
+        example: '2022-08-11'
+      - name: dataFim
+        in: query
+        description: 'Data Fim, em acordo com a data de pagamento da DARF.
+
+
+          * O campo dataFim é opcional, mas, caso seja informado, o campo dataInicio se torna obrigatório para determinar o intervalo da busca.
+
+
+          Formato aceito: YYYY-MM-DD
+
+          '
+        schema:
+          type: string
+          format: date
+        example: '2022-08-12'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InformacoesPagamentoDarf'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaBuscarDarf'
+        '401':
+          $ref: '#/components/responses/NaoAutorizado'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /pagamento/lote:
+    post:
+      summary: Incluir pagamentos em lote
+      description: 'Método para inclusão de um lote de pagamentos.
+
+
+        * Escopo requerido: pagamento-lote.write
+
+        * Rate limite:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/pagamento/lote
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/pagamento/lote
+
+
+        Para o ambiente do **Sandbox**, poderão ser utilizados os seguintes códigos de barras:
+
+        * 03395988500000666539201493990000372830030102
+
+        * 82670000000653301602023123106000000002830894'
+      tags:
+      - Pagamento
+      operationId: pagamentosLote
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      requestBody:
+        $ref: '#/components/requestBodies/PagarLoteRequestBody'
+      responses:
+        '202':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagarLoteResponse'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaPagamento'
+        '401':
+          $ref: '#/components/responses/NaoAutorizado'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /pagamento/lote/{idLote}:
+    get:
+      summary: Buscar lote de pagamentos
+      description: 'Método para obter informações de um lote de pagamentos.
+
+
+        * Escopo requerido: pagamento-lote.read
+
+        * Rate limite:
+
+
+        * 20 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/pagamento/lote/{idLote}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/pagamento/lote/{idLote}'
+      tags:
+      - Pagamento
+      operationId: buscarInformacoesPagamentoLote
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - $ref: '#/components/parameters/idLoteParam'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObterLoteResponse'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /pagamento/{codigoTransacao}:
+    delete:
+      summary: Cancelar agendamento do pagamento
+      description: 'Método utilizado para cancelar o agendamento do pagamento de um boleto.
+
+
+        * Escopo requerido: pagamento-boleto.write
+
+        * Rate limite:
+
+
+        * 20 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/pagamento/{codigoTransacao}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/pagamento/{codigoTransacao}'
+      tags:
+      - Pagamento
+      operationId: cancelarAgendamentoBoleto
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - $ref: '#/components/parameters/CodigoTransacao'
+      responses:
+        '204':
+          description: Sucesso
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '422':
+          $ref: '#/components/responses/EntidadeImprocessavel'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+components:
+  schemas:
+    PagarLoteRequest:
+      type: object
+      required:
+      - pagamentos
+      properties:
+        meuIdentificador:
+          type: string
+          maxLength: 30
+          description: Identificador do lote para o cliente.
+        pagamentos:
+          type: array
+          maxItems: 150
+          minItems: 2
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/RequestBoletoLote'
+            - $ref: '#/components/schemas/RequestDarfLote'
+            discriminator:
+              propertyName: tipoPagamento
+              mapping:
+                BOLETO: '#/components/schemas/RequestBoletoLote'
+                DARF: '#/components/schemas/RequestDarfLote'
+          description: Pagamentos a serem efetuado.
+    Problema:
+      type: object
+      required:
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+        title:
+          type: string
+          description: Descrição resumida do problema.
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        timestamp:
+          type: string
+          description: Data no formato timestamp do erro
+    EfetuarPagamento:
+      type: object
+      required:
+      - codBarraLinhaDigitavel
+      - valorPagar
+      - dataVencimento
+      properties:
+        codBarraLinhaDigitavel:
+          type: string
+          description: Código de barras ou linha digitável.
+          example: 07797000000000000004501008460019310001802680
+        valorPagar:
+          type: string
+          description: 'Valor a ser pago.
+
+            '
+          example: '26.80'
+        dataPagamento:
+          type: string
+          description: 'Data para efetivar o pagamento. Se não informada, o pagamento será feito no mesmo dia.
+
+            Formato aceito: YYYY-MM-DD
+
+            '
+          example: '2023-08-18'
+        dataVencimento:
+          type: string
+          description: 'Data de vencimento do título.
+
+            Formato aceito: YYYY-MM-DD
+
+            '
+          example: '2021-07-27'
+        cpfCnpjBeneficiario:
+          type: string
+          pattern: ^[0-9]{11}$|^[0-9]{14}$
+          description: 'CPF/CNPJ do beneficiário! Caso informado, será realizada a validação do campo em questão. Formato aceito: 12345678912345
+
+            '
+          example: '12345678912345'
+    StatusPagamentoBoleto:
+      type: string
+      enum:
+      - EMPROCESSAMENTO
+      - REALIZADO
+      - AGENDADO
+      - AGUARDANDO_APROVACAO
+      - APROVADO
+      - CANCELADO
+      - REPROVADO
+      - ERRO
+      - NAO_COMPENSADO
+      - APROVADO_NOVO_PAGAMENTO
+      - APROVADO_AGUARDO_RETENTATIVA
+      - AGENDADO_REALIZADO
+      - AGENDADO_NAO_REALIZADO
+      - AGENDADO_CANCELADO
+      - APROVACAO_EXPIRADA
+      - ERRO_PAGAMENTO
+      - PAGO
+      - PAGAMENTO_AGENDADO
+      - PAGAMENTO_COBRANCA_AGENDADO
+      description: '* EMPROCESSAMENTO não representa um estado do serviço de pagamentos. É o estado inicial do pagamento
+
+        '
+    RequestBoletoLote:
+      allOf:
+      - $ref: '#/components/schemas/PagamentoRequestModelBase'
+      type: object
+      required:
+      - codBarraLinhaDigitavel
+      - valorPagar
+      - dataVencimento
+      properties:
+        codBarraLinhaDigitavel:
+          type: string
+          minLength: 44
+          maxLength: 48
+          description: Código de barras ou linha digitável
+          example: 07797000000000000004501008460019310001802680
+        valorPagar:
+          type: number
+          minimum: 0.01
+          description: 'Valor a ser pago.
+
+            '
+          example: '26.80'
+        dataPagamento:
+          type: string
+          format: date
+          description: 'Data em que será pago o título.
+
+            Formato aceito: YYYY-MM-DD
+
+            '
+          example: '2023-08-18'
+        dataVencimento:
+          type: string
+          format: date
+          description: 'Data de vencimento do título.
+
+            Formato aceito: YYYY-MM-DD
+
+            '
+          example: '2018-07-27'
+        cpfCnpjBeneficiario:
+          type: string
+          pattern: ^[0-9]{11}$|^[0-9]{14}$
+          description: 'CPF/CNPJ do beneficiário! Caso informado, será realizada a validação do campo em questão. Formato aceito: 12345678912345
+
+            '
+          example: '12345678912345'
+    DarfRequest:
+      type: object
+      required:
+      - cnpjCpf
+      - codigoReceita
+      - dataVencimento
+      - descricao
+      - nomeEmpresa
+      - periodoApuracao
+      - valorPrincipal
+      - referencia
+      properties:
+        cnpjCpf:
+          type: string
+          description: Campo para informar o cpf ou cnpj do pagador
+          minLength: 11
+          maxLength: 20
+          example: '90022400664'
+        codigoReceita:
+          type: string
+          description: Campo para informar o código da receita
+          minLength: 4
+          maxLength: 4
+          example: '0220'
+        dataVencimento:
+          type: string
+          format: date
+          description: 'Campo para informar a data de vencimento da DARF
+
+
+            Formato aceito: YYYY-MM-DD
+
+            '
+          example: '2022-01-30'
+        descricao:
+          type: string
+          description: Campo para informar a descrição
+          maxLength: 1000
+          example: Pagamento DARF Janeiro
+        nomeEmpresa:
+          type: string
+          description: Campo para informar o nome da empresa
+          maxLength: 100
+          example: Minha Empresa
+        telefoneEmpresa:
+          type: string
+          description: Campo para informar o telefone da empresa
+          maxLength: 50
+          example: 031999911111
+        periodoApuracao:
+          type: string
+          format: date
+          description: 'Campo para informar o período de apuração da DARF
+
+
+            Formato aceito: YYYY-MM-DD
+
+            '
+          example: '2020-01-31'
+        valorPrincipal:
+          type: number
+          description: Campo para informar o valor principal
+          example: 47.14
+        valorMulta:
+          type: number
+          description: Campo para informar o valor da multa
+          example: 27.48
+        valorJuros:
+          type: number
+          description: Campo para informar o valor do juros
+          example: 10.11
+        referencia:
+          type: string
+          description: Campo para informar a referência da DARF
+          maxLength: 30
+          pattern: '[0-9]'
+          example: '13609400849201739'
+    SituacaoPagamento:
+      type: string
+      enum:
+      - EMPROCESSAMENTO
+      - AGENDADO_CANCELADO
+      - AGUARDANDO_APROVACAO
+      - APROVADO
+      - CANCELADO
+      - AGENDADO
+      - REALIZADO
+      - ERRO
+      - APROVACAO_EXPIRADA
+      - REPROVADO
+      - NAO_COMPENSADO
+    ResponseBoletoLote:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PagamentoResponseModelBase'
+      properties:
+        codigoTransacao:
+          type: string
+          description: Identificador único do pagamento ao ser registrado.
+        status:
+          $ref: '#/components/schemas/StatusPagamentoBoleto'
+        codBarraLinhaDigitavel:
+          type: string
+          minLength: 44
+          maxLength: 48
+          description: Código de barras ou linha digitável
+          example: 07797000000000000004501008460019310001802680
+        valorPagar:
+          type: number
+          minimum: 0.01
+          description: 'Valor a ser pago.
+
+            '
+          example: '26.80'
+        dataPagamento:
+          type: string
+          format: date
+          description: 'Data em que será pago o título.
+
+            Formato aceito: YYYY-MM-DD
+
+            '
+          example: '2023-08-18'
+        dataVencimento:
+          type: string
+          format: date
+          description: 'Data de vencimento do título.
+
+            Formato aceito: YYYY-MM-DD
+
+            '
+          example: '2018-07-27'
+        nsu:
+          type: string
+          example: '82127399'
+          description: Número sequencial único, exclusivo para uso no Inter.
+    RequestDarfLote:
+      allOf:
+      - $ref: '#/components/schemas/PagamentoRequestModelBase'
+      type: object
+      required:
+      - cnpjCpf
+      - nomeEmpresa
+      - periodoApuracao
+      - codigoReceita
+      - referencia
+      - dataVencimento
+      - valorPrincipal
+      properties:
+        cnpjCpf:
+          type: string
+          example: '90022400664'
+          minLength: 11
+          maxLength: 20
+        codigoReceita:
+          type: string
+          maxLength: 10
+          example: '0220'
+        dataVencimento:
+          type: string
+          format: date
+          example: '2022-05-10'
+        descricao:
+          type: string
+          maxLength: 1000
+          example: Pagamento DARF Janeiro
+        nomeEmpresa:
+          type: string
+          example: Minha Empresa
+          maxLength: 100
+        telefoneEmpresa:
+          type: string
+          example: 031999911111
+        periodoApuracao:
+          type: string
+          format: date
+          example: '2020-01-31'
+        valorPrincipal:
+          type: number
+          format: int64
+          minimum: 0.1
+          example: 47.14
+        valorMulta:
+          type: number
+          format: int64
+          example: 27.48
+        valorJuros:
+          type: number
+          example: 10.11
+        referencia:
+          type: string
+          maxLength: 30
+          example: '13609400849201739'
+          pattern: '[0-9]'
+    ResponseDarfLote:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PagamentoResponseModelBase'
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusPagamentoDarf'
+        codigoSolicitacao:
+          type: string
+          example: 3414f226-36fb-4d87-811e-cfd99911d845
+          description: Identificador único do pagamento ao ser registrado.
+        tipoDarf:
+          type: string
+          example: PRETO
+        cnpjCpf:
+          type: string
+          example: '90022400664'
+        descricao:
+          type: string
+        nomeEmpresa:
+          type: string
+        telefoneEmpresa:
+          type: string
+        valor:
+          type: number
+          example: 50.96
+        valorMulta:
+          type: number
+          example: 0
+        valorJuros:
+          type: number
+          example: 0
+        valorTotal:
+          type: number
+          example: 50.96
+        periodoApuracao:
+          type: string
+          format: date
+          example: '2019-10-10'
+        dataPagamento:
+          type: string
+          format: date
+          example: '2019-10-10'
+        referencia:
+          type: string
+          example: 424562562565
+        dataVencimento:
+          type: string
+          format: date
+          example: '2019-10-10'
+        codigoReceita:
+          type: string
+          example: 190
+    ObterLoteResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PagarLoteResponse'
+      properties:
+        contaCorrente:
+          type: string
+          description: Conta corrente responsável pelo pagamento do lote.
+        dataCriacao:
+          type: string
+          format: date-time
+          description: Data em que o lote foi cadastrado.
+        pagamentos:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ResponseBoletoLote'
+            - $ref: '#/components/schemas/ResponseDarfLote'
+            discriminator:
+              propertyName: tipoPagamento
+              mapping:
+                BOLETO: '#/components/schemas/ResponseBoletoLote'
+                DARF: '#/components/schemas/ResponseDarfLote'
+    PagarLoteResponse:
+      type: object
+      required:
+      - idLote
+      - status
+      properties:
+        idLote:
+          type: string
+          minLength: 24
+          maxLength: 24
+          description: Id do pagamento de um lote específico.
+        status:
+          $ref: '#/components/schemas/StatusLoteEnum'
+        meuIdentificador:
+          type: string
+          description: Identificador do lote
+          example: Lote de pagamentos referente a despesas do condomínio
+        qtdePagamentos:
+          type: integer
+          format: int32
+          description: Qtde de pagamentos existentes no lote.
+    PagamentoRequestModelBase:
+      type: object
+      required:
+      - tipoPagamento
+      discriminator:
+        propertyName: tipoPagamento
+      properties:
+        tipoPagamento:
+          $ref: '#/components/schemas/TipoPagamentoEnum'
+    StatusPagamentoDarf:
+      type: string
+      enum:
+      - EMPROCESSAMENTO
+      - PAGO
+      - PAGAMENTO_AGENDADO
+      - AGENDAMENTO_CANCELADO
+      - NAO_COMPENSADO
+      - ERRO_PAGAMENTO
+      - AGUARDANDO_APROVACAO
+      - APROVADO
+      - CANCELADO
+      description: '* EMPROCESSAMENTO não representa um estado do serviço de pagamentos. É o estado inicial do pagamento
+
+        '
+    TipoRetornoEnum:
+      type: string
+      enum:
+      - PAGAMENTO
+      - AGENDAMENTO
+      - APROVACAO_PAGAMENTO
+      - APROVACAO_AGENDAMENTO
+    InformacoesPagamento:
+      title: InformacoesPagamento
+      type: object
+      properties:
+        codigoTransacao:
+          example: 3414f226-36fb-4d87-811e-cfd99911d845
+          type: string
+        codigoBarra:
+          type: string
+          example: 2.3791908400000545e+43
+        tipo:
+          type: string
+          example: Pagamento Xpto
+        dataVencimentoDigitada:
+          type: string
+          example: '2019-10-10 13:00:00'
+        dataVencimentoTitulo:
+          type: string
+          example: '2019-10-10 13:00:00'
+        dataInclusao:
+          type: string
+          example: '2019-10-10 13:00:00'
+        dataPagamento:
+          type: string
+          example: '2019-10-10 13:00:00'
+        valorPago:
+          type: number
+          example: 85.9
+        valorNominal:
+          type: number
+          example: 85.9
+        statusPagamento:
+          $ref: '#/components/schemas/SituacaoPagamento'
+        aprovacoesNecessarias:
+          type: number
+          example: 2
+          description: Aprovações necessárias para o pagamento ser aprovado.
+        aprovacoesRealizadas:
+          type: number
+          example: 2
+          description: Aprovações já realizadas.
+        cpfCnpjBeneficiario:
+          type: string
+          example: 123456789-01
+        nomeBeneficiario:
+          type: string
+          example: João 123
+        autenticacao:
+          type: string
+          example: 3.1408993599359996e+29
+        nsu:
+          type: string
+          example: '82127399'
+          description: Número sequencial único, exclusivo para uso no Inter.
+    StatusLoteEnum:
+      type: string
+      enum:
+      - EMPROCESSAMENTO
+      - PROCESSADOCOMERRO
+      - PROCESSADOSEMERRO
+    PagamentoResponseModelBase:
+      type: object
+      discriminator:
+        propertyName: tipoPagamento
+      required:
+      - seqId
+      properties:
+        tipoPagamento:
+          $ref: '#/components/schemas/TipoPagamentoEnum'
+        detalhe:
+          type: string
+    InformacoesPagamentoDarf:
+      title: InformacoesPagamento
+      type: object
+      properties:
+        codigoSolicitacao:
+          example: 3414f226-36fb-4d87-811e-cfd99911d845
+          type: string
+        tipoDarf:
+          type: string
+          example: PRETO
+        valor:
+          type: number
+          example: 50.96
+        valorMulta:
+          type: number
+          example: 0
+        valorJuros:
+          type: number
+          example: 0
+        valorTotal:
+          type: number
+          example: 50.96
+        tipo:
+          type: string
+          example: Darf
+        periodoApuracao:
+          type: string
+          example: '2019-10-10 13:00:00'
+        dataPagamento:
+          type: string
+          example: '2019-10-10 13:00:00'
+        referencia:
+          type: string
+          example: 424562562565
+        dataVencimento:
+          type: string
+          example: '2019-10-10 13:00:00'
+        codigoReceita:
+          type: string
+          example: 190
+          minLength: 4
+          maxLength: 4
+        statusPagamento:
+          $ref: '#/components/schemas/SituacaoPagamento'
+        dataInclusao:
+          type: string
+          example: '2019-10-10 13:00:00'
+        cnpjCpf:
+          type: string
+          example: '84668147010'
+        aprovacoesNecessarias:
+          type: integer
+          example: 4
+          description: Aprovações necessárias para o pagamento ser aprovado.
+        aprovacoesRealizadas:
+          type: integer
+          example: 2
+          description: Aprovações já realizadas.
+    DarfResponse:
+      type: object
+      properties:
+        quantidadeAprovadores:
+          type: integer
+          example: 4
+        autenticacao:
+          description: Autenticação da transação
+          example: '12345678910433'
+          type: string
+        dataPagamento:
+          description: Data de pagamento
+          example: 23/01/2022
+          type: string
+        tipoRetorno:
+          $ref: '#/components/schemas/TipoRetornoEnum'
+        codigoSolicitacao:
+          example: 8bbdede4-35db-4ec9-b652-e176841e62c8
+          type: string
+    EfetuarPagamentoResponse:
+      title: EfetuarPagamentoResponse
+      type: object
+      properties:
+        quantidadeAprovadores:
+          type: integer
+          format: int32
+          example: 2
+        dataAgendamento:
+          type: string
+          example: '2019-10-10 13:00:00'
+        statusPagamento:
+          $ref: '#/components/schemas/SituacaoPagamento'
+        codigoTransacao:
+          example: 8bbdede4-35db-4ec9-b652-e176841e62c8
+          type: string
+    TipoPagamentoEnum:
+      type: string
+      enum:
+      - BOLETO
+      - DARF
+  requestBodies:
+    DarfRequestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DarfRequest'
+    EfetuarPagamentoBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EfetuarPagamento'
+    PagarLoteRequestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PagarLoteRequest'
+  parameters:
+    CodigoTransacao:
+      name: codigoTransacao
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+    xContaCorrente:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação. Necessário somente quando a aplicação estiver associada a mais de uma conta corrente. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+      schema:
+        type: string
+        pattern: ^[1-9][0-9]*$
+    idLoteParam:
+      required: true
+      in: path
+      name: idLote
+      schema:
+        type: string
+        minLength: 24
+        maxLength: 24
+  responses:
+    RequisicaoInvalidaIncluirDarf:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida-example:
+              $ref: '#/components/examples/RequisicaoInvalidaIncluirDarfExample'
+    NaoAutorizado:
+      description: Requisição não autorizada.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            nao-autorizado-example:
+              $ref: '#/components/examples/NaoAutorizadoExample'
+    NaoAceito:
+      description: Requisição não aceita.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            nao-aceito-example:
+              $ref: '#/components/examples/NaoAceitoExample'
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            nao-encontrado-example:
+              $ref: '#/components/examples/NaoEncontradoExample'
+    ServicoIndisponivel:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            servico-indisponivel-example:
+              $ref: '#/components/examples/ServicoIndisponivelExample'
+    RequisicaoInvalidaBuscarDarf:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida-example:
+              $ref: '#/components/examples/RequisicaoInvalidaBuscarDarfExample'
+    EntidadeImprocessavel:
+      description: Não foi possível processar a requisição.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            entidade-improcessavel-example:
+              $ref: '#/components/examples/EntidadeImprocessavelExample'
+    AcessoNegado:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            acesso-negado-example:
+              $ref: '#/components/examples/AcessoNegadoExample'
+    Conflito:
+      description: Conflito com o recurso do servidor.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            conflito-example:
+              $ref: '#/components/examples/ConflitoExample'
+    RequisicaoInvalidaPagamento:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida-example:
+              $ref: '#/components/examples/RequisicaoInvalidaPagamentoExample'
+  examples:
+    EntidadeImprocessavelExample:
+      summary: Exemplo de payload para quando não for possivel processar a requisição
+      value:
+        title: Problema no cancelamento de agendamento de boleto
+        detail: O status atual do boleto é CANCELADO e não permite cancelamento
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+    NaoAceitoExample:
+      summary: Exemplo de payload para objeto não aceito
+      value:
+        title: Ocorreu um erro!
+        detail: Título já liquidado / baixado.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+    ConflitoExample:
+      summary: Exemplo de payload para conflito com recursos do servidor
+      value:
+        title: Ocorreu um erro!
+        detail: Algo deu errado! Nós já estamos resolvendo isso.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+    RequisicaoInvalidaPagamentoExample:
+      summary: Exemplo de erro de requisição inválida
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        violacoes:
+        - razao: O tamanho deve estar entre 44 e 48
+          propriedade: codBarraLinhaDigitavel
+    RequisicaoInvalidaBuscarDarfExample:
+      summary: Exemplo de erro de requisição inválida
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        violacoes:
+        - razao: O tamanho deve estar entre 36 e 36
+          propriedade: buscarInformacoesPagamentoDarf.codigoSolicitacao
+    RequisicaoInvalidaIncluirDarfExample:
+      summary: Exemplo de erro de requisição inválida
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        violacoes:
+        - razao: O valor não deve estar vazio
+          propriedade: cnpjCpf
+    AcessoNegadoExample:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Acesso Negado
+        status: '403'
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    ServicoIndisponivelExample:
+      summary: Exemplo de payload para erro de serviço indisponível
+      value:
+        title: Serviço Indisponível
+        status: '503'
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    NaoAutorizadoExample:
+      summary: Exemplo de payload para acesso não autorizado
+      value:
+        title: Acesso negado
+        status: '401'
+        detail: Login/senha inválido.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+    NaoEncontradoExample:
+      summary: Exemplo de payload para erro de objeto não encontrado
+      value:
+        title: Não Encontrado.
+        status: '404'
+        detail: Entidade não encontrada.
+x-refined-from:
+- swagger-banking-yaml.yaml
+- banco-inter-banking-openapi.yml

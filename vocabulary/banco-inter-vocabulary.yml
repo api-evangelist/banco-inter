@@ -1,0 +1,440 @@
+generated: '2026-10-18'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/banco-inter-banking-openapi.yml
+- openapi/banco-inter-cobranca-bolepix-openapi.yml
+- openapi/banco-inter-cobranca-openapi.yml
+- openapi/banco-inter-forum-openapi.yml
+- openapi/banco-inter-partners-credito-imobiliario-credito-openapi.yml
+vocabulary:
+  name: Banco Inter Domain Vocabulary
+  description: 'Terms declared by Banco Inter''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-18'
+  terms:
+  - term: Recorrência
+    definition: Essa seção apresenta os endpoints relacionados ao gerenciamento de recorrências do Pix Automático. Para que as cobranças sejam
+      geradas automaticamente para os clientes pagadores, devemos criar uma recorrência que o cliente pagador deverá autorizar. ---
+    tags:
+    - Resource Group
+    source: openapi/banco-inter-pix-automatico-openapi.yml
+  - term: Solicitar Recorrência
+    definition: Esta seção apresenta os endpoints relacionados ao gerenciamento de solicitações de confirmação de recorrência, que equivalem às
+      autorizações necessárias. Para que as recorrências tenham validade e possam gerar cobranças automaticamente, o cliente pagador precisa realizar
+      o aceite. Por meio dessa autorização, o cliente confirma que concorda com a recorrência estabelecida. ---
+    tags:
+    - Resource Group
+    source: openapi/banco-inter-pix-automatico-openapi.yml
+  - term: Cobrança Recorrente
+    definition: Esta seção apresenta os endpoints relacionados ao gerenciamento de cobranças associadas a uma recorrência. As cobranças só poderão
+      ser geradas utilizando este endpoint após a recorrência ser autorizada por meio da solicitação de recorrência (autorização). ---
+    tags:
+    - Resource Group
+    source: openapi/banco-inter-pix-automatico-openapi.yml
+  - term: Location da Recorrência
+    definition: Esta seção apresenta os endpoints relacionados ao gerenciamento de payloads associadas a uma recorrência. ---
+    tags:
+    - Resource Group
+    source: openapi/banco-inter-pix-automatico-openapi.yml
+  - term: Webhook de Recorrências
+    definition: Esta seção apresenta os endpoints relacionados ao gerenciamento do serviço de notificações acerca de recorrências. ---
+    tags:
+    - Resource Group
+    source: openapi/banco-inter-pix-automatico-openapi.yml
+  - term: Webhook de Cobranças Recorrentes
+    definition: Esta seção apresenta os endpoints relacionados ao gerenciamento do serviço de notificações de cobranças recorrentes. ---
+    tags:
+    - Resource Group
+    source: openapi/banco-inter-pix-automatico-openapi.yml
+  - term: EfetuarPagamento
+    definition: 'Object declared by the contract with fields: codBarraLinhaDigitavel, valorPagar, dataPagamento, dataVencimento, cpfCnpjBeneficiario.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/EfetuarPagamento
+  - term: EfetuarPagamentoResponse
+    definition: 'Object declared by the contract with fields: quantidadeAprovadores, dataAgendamento, statusPagamento, codigoTransacao.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/EfetuarPagamentoResponse
+  - term: SituacaoPagamento
+    definition: 'Enumeration declared by the contract with values: EMPROCESSAMENTO, AGENDADO_CANCELADO, AGUARDANDO_APROVACAO, APROVADO, CANCELADO,
+      AGENDADO, REALIZADO, ERRO, APROVACAO_EXPIRADA, REPROVADO, NAO_COMPENSADO.'
+    tags:
+    - Enumeration
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/SituacaoPagamento
+  - term: DadosBoleto
+    definition: 'Object declared by the contract with fields: beneficiario, pagador, valorNominal, desconto, multa, juros, valorPagar, valorMinimo,
+      valorMaximo, vencimento, statusPagamento, convenio. (14 more)'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/BoletoResponse
+  - term: Pessoa
+    definition: 'Object declared by the contract with fields: nome, cpfCnpj, nomeFantasia, razaoSocial.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/Pessoa
+  - term: StatusPagamento
+    definition: 'Object declared by the contract with fields: pago, data, permitePagamentoMultiplo, valor.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/StatusPagamento
+  - term: Convenio
+    definition: 'Object declared by the contract with fields: descricao, debitoAutomatico, segmento, codigoEmpresa, tipoConvenio, abrangenciaConvenio,
+      codigoMunicipio.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/Convenio
+  - term: InformacoesPagamento
+    definition: 'Object declared by the contract with fields: codigoTransacao, codigoBarra, tipo, dataVencimentoDigitada, dataVencimentoTitulo,
+      dataInclusao, dataPagamento, valorPago, valorNominal, statusPagamento, aprovacoesNecessarias, aprovacoesRealizadas. (4 more)'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/InformacoesPagamento
+  - term: InformacoesPagamento
+    definition: 'Object declared by the contract with fields: codigoSolicitacao, tipoDarf, valor, valorMulta, valorJuros, valorTotal, tipo, periodoApuracao,
+      dataPagamento, referencia, dataVencimento, codigoReceita. (5 more)'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/InformacoesPagamentoDarf
+  - term: Alerta
+    definition: 'Object declared by the contract with fields: titulo, mensagem.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/Alerta
+  - term: Saldo
+    definition: 'Object declared by the contract with fields: bloqueadoCheque, disponivel, bloqueadoJudicialmente, bloqueadoAdministrativo, limite,
+      dataReferencia.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/Saldo
+  - term: ListaTransacoes
+    definition: 'Object declared by the contract with fields: transacoes.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/ListaTransacoes
+  - term: ListaTransacoesCompletaPadrao
+    definition: 'Object declared by the contract with fields: totalPaginas, totalElementos, ultimaPagina, primeiraPagina, tamanhoPagina, numeroDeElementos,
+      transacoes.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/ListaTransacoesCompletaPadrao
+  - term: ListaTransacoesCompletaScroll
+    definition: Resposta para consultas usando modo scroll. Retornado quando headers `x-inter-scroll-enabled` ou `x-inter-scroll-id` são utilizados.
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/ListaTransacoesCompletaScroll
+  - term: PdfModel
+    definition: 'Object declared by the contract with fields: pdf.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/PdfModel
+  - term: TransacaoSimples
+    definition: 'Object declared by the contract with fields: cpmf, dataEntrada, tipoTransacao, tipoOperacao, valor, titulo, descricao.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoSimples
+  - term: TransacaoCompleta
+    definition: 'Object declared by the contract with fields: idTransacao, dataInclusao, dataTransacao, tipoTransacao, tipoOperacao, valor, titulo,
+      descricao, numeroDocumento, detalhes.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoCompleta
+  - term: TransacaoCompletaComDetalhe
+    definition: 'Object declared by the contract with fields: detalhes.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoCompletaComDetalhe
+  - term: Quantidade total de páginas
+    definition: Quantidade total de páginas disponíveis para consulta.
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/totalPaginas
+  - term: Quantidade total de itens
+    definition: Quantidade total de itens disponíveis de acordo com os parâmetros informados.
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/totalElementos
+  - term: ultimaPagina
+    definition: Última página
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/ultimaPagina
+  - term: primeiraPagina
+    definition: Primeira página
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/primeiraPagina
+  - term: Quantidade de itens por página
+    definition: Quantidade de registros por página, configurado na requisição.
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/tamanhoPagina
+  - term: Quantidade de itens na página atual
+    definition: Quantidade de registros retornado na página atual.
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/numeroDeElementos
+  - term: TransacaoBoletoCobranca
+    definition: detalhes de transações de BOLETO_COBRANCA
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoBoletoCobranca
+  - term: TransacaoPagamento
+    definition: detalhes de transações de PAGAMENTO
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoPagamento
+  - term: TransacaoPix
+    definition: detalhes de transações de PIX
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoPix
+  - term: TransacaoTransferencia
+    definition: detalhes de transações de PIX
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoTransferencia
+  - term: TransacaoCashback
+    definition: detalhes de transações de CASHBACK
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoCashback
+  - term: TransacaoDepositoBoleto
+    definition: detalhes de transações de DEPOSITO_BOLETO
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoDepositoBoleto
+  - term: TransacaoCompraDebito
+    definition: detalhes de transações de COMPRA_DEBITO
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoCompraDebito
+  - term: TransacaoCheque
+    definition: detalhes de transações de CHEQUE
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransacaoCheque
+  - term: Cheque
+    definition: 'Object declared by the contract with fields: agencia, numeroChequeBancario, contaBancaria, dataRetorno, motivoRetorno, descricaoChequeBancario,
+      nomeEmpresa, tipoDetalhe, codigoAfiliado.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DetalheCheque
+  - term: Compra Débito
+    definition: 'Object declared by the contract with fields: estabelecimento, tipoDetalhe.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DetalheCompraDebito
+  - term: Depósito Boleto
+    definition: 'Object declared by the contract with fields: dataVencimento, tipoDetalhe, dataEmissao, nossoNumero, codBarras.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DetalheDepositoBoleto
+  - term: Cashback
+    definition: 'Object declared by the contract with fields: valorCompra, produto, tipoDetalhe.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DetalheCashback
+  - term: Transferência
+    definition: 'Object declared by the contract with fields: contaBancariaPagador, descricaoTransferencia, agenciaPagador, bancoRecebedor, contaBancariaRecebedor,
+      cpfCnpjRecebedor, cpfCnpjPagador, nomePagador, nomeEmpresaPagador, nomeRecebedor, tipoDetalhe, idTransferencia. (2 more)'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DetalheTransferencia
+  - term: Pix
+    definition: 'Object declared by the contract with fields: txId, nomePagador, descricaoPix, cpfCnpjPagador, contaBancariaRecebedor, nomeEmpresaPagador,
+      tipoDetalhe, endToEndId, chavePixRecebedor, nomeEmpresaRecebedor, nomeRecebedor, agenciaRecebedor. (3 more)'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DetalhePix
+  - term: Pagamento
+    definition: 'Object declared by the contract with fields: valorTotal, detalheDescricao, contaBancaria, agencia, adicionado, dataVencimento,
+      codigoAfiliado, empresaEmissora, valorOriginal, desconto, cpfCnpj, valorPrincipal. (14 more)'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DetalhePagamento
+  - term: Boleto Cobrança
+    definition: 'Object declared by the contract with fields: dataVencimento, dataTransacao, nossoNumero, seuNumero, codBarras, juros, multa,
+      desconto1, desconto2, desconto3, nome, dataLimite. (4 more)'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DetalheBoletoCobranca
+  - term: Tarifa
+    definition: 'Object declared by the contract with fields: dataVencimento, dataEmissao, dataTransacao, nossoNumero, seuNumero, codBarras, endToEndId.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DetalheTarifa
+  - term: TransactionType
+    definition: 'Enumeration declared by the contract with values: BOLETO_COBRANCA, CAMBIO, ESTORNO, INVESTIMENTO, PAGAMENTO, PIX, TRANSFERENCIA,
+      CASHBACK, ANTECIPACAO_RECEBIVEIS_CARTAO, DEPOSITO_BOLETO, JUROS, TARIFA. (12 more)'
+    tags:
+    - Enumeration
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TransactionType
+  - term: Violação
+    definition: 'Object declared by the contract with fields: razao, propriedade, valor.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/Violacao
+  - term: Problema
+    definition: 'Object declared by the contract with fields: type, title, status, detail, timestamp.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/Problema
+  - term: EntidadeNaoProcessavel
+    definition: 'Object declared by the contract with fields: title, detail, timestamp.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/EntidadeNaoProcessavel
+  - term: DarfRequest
+    definition: 'Object declared by the contract with fields: cnpjCpf, codigoReceita, dataVencimento, descricao, nomeEmpresa, telefoneEmpresa,
+      periodoApuracao, valorPrincipal, valorMulta, valorJuros, referencia.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DarfRequest
+  - term: ResponseError
+    definition: Objeto para retorno do detalhamento do erro
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/ResponseError
+  - term: ErrorModel
+    definition: Objeto para retorno do detalhamento do erro
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/ErrorModel
+  - term: SucessoDarfResponse
+    definition: 'Object declared by the contract with fields: nroOperacao, tipoRetorno, mensagemDetalhe, codigo, autenticacao, dataPagamento.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/SucessoDarfResponse
+  - term: DarfResponse
+    definition: 'Object declared by the contract with fields: quantidadeAprovadores, autenticacao, dataPagamento, tipoRetorno, codigoSolicitacao.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DarfResponse
+  - term: TipoRetornoEnum
+    definition: 'Enumeration declared by the contract with values: PAGAMENTO, AGENDAMENTO, APROVACAO_PAGAMENTO, APROVACAO_AGENDAMENTO.'
+    tags:
+    - Enumeration
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TipoRetornoEnum
+  - term: TipoRetornoPagamentoPixEnum
+    definition: 'Enumeration declared by the contract with values: APROVACAO, PROCESSADO, AGENDADO.'
+    tags:
+    - Enumeration
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TipoRetornoPagamentoPixEnum
+  - term: PagarLoteRequest
+    definition: 'Object declared by the contract with fields: meuIdentificador, pagamentos.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/PagarLoteRequest
+  - term: PagamentoRequestModelBase
+    definition: 'Object declared by the contract with fields: tipoPagamento.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/PagamentoRequestModelBase
+  - term: PagamentoResponseModelBase
+    definition: 'Object declared by the contract with fields: tipoPagamento, detalhe.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/PagamentoResponseModelBase
+  - term: RequestBoletoLote
+    definition: 'Object declared by the contract with fields: codBarraLinhaDigitavel, valorPagar, dataPagamento, dataVencimento, cpfCnpjBeneficiario.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/RequestBoletoLote
+  - term: PagamentoPixRequestBody
+    definition: 'Object declared by the contract with fields: valor, dataPagamento, descricao, destinatario.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/PagamentoPixRequestBody
+  - term: DestinatarioBase
+    definition: 'Object declared by the contract with fields: tipo.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DestinatarioBase
+  - term: DestinatarioDadosBancarios
+    definition: 'Object declared by the contract with fields: contaCorrente, tipoConta, cpfCnpj, agencia, nome, instituicaoFinanceira.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DestinatarioDadosBancarios
+  - term: DestinatarioChave
+    definition: 'Object declared by the contract with fields: chave.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DestinatarioChave
+  - term: DestinatarioPixCopiaECola
+    definition: 'Object declared by the contract with fields: pixCopiaECola.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/DestinatarioPixCopiaECola
+  - term: TipoDestinatario
+    definition: Tipos de pagamentos que podem ser realizados. Por chave pix, dados bancários ou código Pix Copia E Cola.
+    tags:
+    - Enumeration
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TipoDestinatario
+  - term: TipoConta
+    definition: 'Enumeration declared by the contract with values: CONTA_CORRENTE, CONTA_POUPANCA, CONTA_SALARIO, CONTA_PAGAMENTO.'
+    tags:
+    - Enumeration
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TipoConta
+  - term: InstituicaoFinanceira
+    definition: 'Object declared by the contract with fields: ispb.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/InstituicaoFinanceira
+  - term: PagamentoPixResponse
+    definition: 'Object declared by the contract with fields: tipoRetorno, codigoSolicitacao, dataPagamento, dataOperacao.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/PagamentoPixResponse
+  - term: ConsultaPixAsyncResponse
+    definition: 'Object declared by the contract with fields: transacaoPix, historico.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/ConsultaPixAsyncResponse
+  - term: PixAsyncResponse
+    definition: 'Object declared by the contract with fields: contaCorrente, recebedor, erros, endToEnd, valor, status, dataHoraMovimento, dataHoraSolicitacao,
+      chave, codigoSolicitacao.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/PixAsyncResponse
+  - term: HistoricoResponse
+    definition: 'Object declared by the contract with fields: status, dataHoraEvento.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/HistoricoResponse
+  - term: StatusPix
+    definition: Status atual da transação Pix * `CRIADO` * `AGUARDANDO_APROVACAO` * `APROVADO` * `REPROVADO` * `EXPIRADO` * `CANCELADO` * `FALHA`
+      * `AGENDADO` * `PAGO` * `ENVIADO` * `CANCELADO_SEM_SALDO` * `DEBITADO` * `PARCIALMENTE_DEBITADO` * `PARCIALMENTE_PAGO` * `NAO_DEBITADO`
+      * `AGENDAMENTO_CANCELADO`
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/StatusPix
+  - term: StatusHistoricoPix
+    definition: Status atual da transação Pix * `CRIADO` * `AGUARDANDO_APROVACAO` * `APROVADO` * `REPROVADO` * `EXPIRADO` * `CANCELADO` * `FALHA`
+      * `AGENDADO` * `PAGO` * `ENVIADO` * `CANCELADO_SEM_SALDO` * `DEBITADO` * `PARCIALMENTE_DEBITADO` * `PARCIALMENTE_PAGO` * `NAO_DEBITADO`
+      * `AGENDAMENTO_CANCELADO`
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/StatusHistoricoPix
+  - term: RequestDarfLote
+    definition: 'Object declared by the contract with fields: cnpjCpf, codigoReceita, dataVencimento, descricao, nomeEmpresa, telefoneEmpresa,
+      periodoApuracao, valorPrincipal, valorMulta, valorJuros, referencia.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/RequestDarfLote
+  - term: PagarLoteResponse
+    definition: 'Object declared by the contract with fields: idLote, status, meuIdentificador, qtdePagamentos.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/PagarLoteResponse
+  - term: ObterLoteResponse
+    definition: 'Object declared by the contract with fields: contaCorrente, dataCriacao, pagamentos.'
+    tags:
+    - Object
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/ObterLoteResponse
+  - term: TipoPagamentoEnum
+    definition: 'Enumeration declared by the contract with values: BOLETO, DARF.'
+    tags:
+    - Enumeration
+    source: openapi/banco-inter-banking-openapi.yml#/components/schemas/TipoPagamentoEnum

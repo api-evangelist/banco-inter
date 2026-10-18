@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-cobrancas-response-schema.json",
+  "title": "Cobranças Consultadas",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-cobranca-bolepix-openapi.yml#/components/schemas/CobrancasResponse",
+  "type": "object",
+  "required": [
+    "cobrancas"
+  ],
+  "properties": {
+    "totalPaginas": {
+      "type": "integer",
+      "title": "Quantidade total de páginas",
+      "description": "Quantidade total de páginas disponíveis para consulta.",
+      "minimum": 1
+    },
+    "totalElementos": {
+      "type": "integer",
+      "format": "int32",
+      "title": "Quantidade total de itens",
+      "description": "Quantidade total de itens disponíveis de acordo com os parâmetros informados.",
+      "minimum": 0
+    },
+    "tamanhoPagina": {
+      "type": "integer",
+      "title": "Quantidade de itens por página",
+      "description": "Quantidade de registros por página, configurado na requisição.",
+      "minimum": 1
+    },
+    "primeiraPagina": {
+      "type": "boolean",
+      "description": "Primeira página"
+    },
+    "ultimaPagina": {
+      "type": "boolean",
+      "description": "Última página"
+    },
+    "numeroDeElementos": {
+      "type": "integer",
+      "title": "Quantidade de itens na página atual",
+      "description": "Quantidade de registros retornado na página atual.",
+      "minimum": 1
+    },
+    "cobrancas": {
+      "type": "array",
+      "title": "Lista de Cobranças consultadas",
+      "items": {
+        "$ref": "#/$defs/CobrancaResponse"
+      }
+    }
+  },
+  "$defs": {
+    "CobrancaResponse": {
+      "type": "object",
+      "title": "Cobrança",
+      "required": [
+        "cobranca"
+      ],
+      "properties": {
+        "cobranca": {
+          "$ref": "#/$defs/cobranca"
+        },
+        "boleto": {
+          "$ref": "#/$defs/boletoCobranca"
+        },
+        "pix": {
+          "$ref": "#/$defs/pixCobranca"
+        }
+      }
+    },
+    "OrigemRecebimentoEnum": {
+      "type": "string",
+      "title": "Origem do recebimento da cobrança",
+      "enum": [
+        "BOLETO",
+        "PIX"
+      ]
+    },
+    "SituacaoCobrancaEnum": {
+      "type": "string",
+      "enum": [
+        "RECEBIDO",
+        "A_RECEBER",
+        "MARCADO_RECEBIDO",
+        "ATRASADO",
+        "CANCELADO",
+        "EXPIRADO",
+        "FALHA_EMISSAO",
+        "EM_PROCESSAMENTO",
+        "PROTESTO"
+      ],
+      "description": "Possíveis situações de uma cobranca."
+    },
+    "boletoCobranca": {
+      "description": "Objeto com os dados da Cobrança gerada para pagamento via código de barras/linha digitável.\n\n<strong>Caso a cobrança esteja com a situação EM_PROCESSAMENTO, essa propriedade poderá não ser retornada.</strong>\n",
+      "type": "object",
+      "required": [
+        "linhaDigitavel",
+        "codigoBarras"
+      ],
+      "properties": {
+        "nossoNumero": {
+          "type": "string",
+          "title": "Nosso número",
+          "maxLength": 11,
+          "description": "<strong>Caso a cobrança esteja com a situação EM_PROCESSAMENTO, esse campo poderá não ser retornada.</strong>\n"
+        },
+        "linhaDigitavel": {
+          "type": "string",
+          "title": "Linha digitável da cobrança",
+          "minLength": 47,
+          "maxLength": 47
+        },
+        "codigoBarras": {
+          "type": "string",
+          "title": "Código de barras do boleto da cobrança",
+          "minLength": 44,
+          "maxLength": 44
+        }
+      }
+    },
+    "cobranca": {
+      "type": "object",
+      "required": [
+        "id",
+        "pagador",
+        "identificador",
+        "valorNominal",
+        "situacao"
+      ],
+      "properties": {
+        "codigoSolicitacao": {
+          "type": "string",
+          "format": "UUID",
+          "title": "Identificador único de uma cobrança"
+        },
+        "seuNumero": {
+          "type": "string",
+          "title": "Codigo da cobrança (seu número)",
+          "description": "Codigo da cobrança (seu número)"
+        },
+        "situacao": {
+          "$ref": "#/$defs/SituacaoCobrancaEnum"
+        },
+        "dataSituacao": {
+          "type": "string",
+          "format": "date",
+          "title": "Data da situação",
+          "description": "Data que a situação da cobrança sofreu alteração."
+        },
+        "dataEmissao": {
+          "type": "string",
+          "format": "date",
+          "title": "Data e hora de emissão",
+          "description": "Data e hora em que a cobrança foi emitida."
+        },
+        "dataVencimento": {
+          "type": "string",
+          "format": "date",
+          "title": "Data de vencimento da cobrança"
+        },
+        "valorNominal": {
+          "type": "string",
+          "title": "Valor da cobrança",
+          "pattern": "^\\\\d{1,10}\\\\.\\\\d{2}$",
+          "description": "Valor original da cobrança."
+        },
+        "valorTotalRecebido": {
+          "type": "string",
+          "title": "Valor total recebido",
+          "pattern": "^\\d{1,10}\\.\\d{2}$"
+        },
+        "origemRecebimento": {
+          "$ref": "#/$defs/OrigemRecebimentoEnum"
+        },
+        "tipoCobranca": {
+          "type": "string",
+          "title": "Tipo de cobrança",
+          "enum": [
+            "SIMPLES",
+            "PARCELADO",
+            "RECORRENTE"
+          ]
+        },
+        "pagador": {
+          "$ref": "#/$defs/pagadorCobranca"
+        }
+      }
+    },
+    "pagadorCobranca": {
+      "type": "object",
+      "required": [
+        "nome",
+        "cpfCnpj"
+      ],
+      "properties": {
+        "nome": {
+          "type": "string",
+          "title": "Nome do pagador"
+        },
+        "cpfCnpj": {
+          "type": "string",
+          "title": "Cpf/Cnpj da pessoa pagadora"
+        }
+      }
+    },
+    "pixCobranca": {
+      "description": "Objeto com os dados da Cobrança gerada para pagamento via QRCode.\n\n**Caso não seja possível gerar o Pix no momento, essa propriedade não será retornada.**\n",
+      "type": "object",
+      "required": [
+        "txid",
+        "pixCopiaECola"
+      ],
+      "properties": {
+        "pixCopiaECola": {
+          "type": "string",
+          "description": "QRCode de cobrança para pagamento"
+        },
+        "txid": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9]{26,35}$",
+          "description": "Txid da Cobrança PIX gerada"
+        }
+      }
+    }
+  }
+}

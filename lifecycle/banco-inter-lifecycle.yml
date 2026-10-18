@@ -1,0 +1,11 @@
+generated: '2026-10-18'
+method: searched
+source: https://developers.inter.co/changelog
+versioning: Major version changes in URL path (v2, v3)
+deprecation: Announced with deprecation dates in changelog
+status_page: null
+note: |
+  Banco Inter announces API version deprecations in their changelog with specific cutoff dates.
+  Example: API Boletos V2 was deprecated on 2025-05-18 and discontinued on 2026-05-18.
+  New API versions use URL path versioning (e.g., /cobranca/v3 replaces /boletos/v2).
+  Integration requests undergo validation process before certificates are issued for API access.

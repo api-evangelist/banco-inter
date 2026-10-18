@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-informacoes-pagamento-schema.json",
+  "title": "InformacoesPagamento",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-banking-openapi.yml#/components/schemas/InformacoesPagamento",
+  "type": "object",
+  "properties": {
+    "codigoTransacao": {
+      "type": "string"
+    },
+    "codigoBarra": {
+      "type": "string"
+    },
+    "tipo": {
+      "type": "string"
+    },
+    "dataVencimentoDigitada": {
+      "type": "string"
+    },
+    "dataVencimentoTitulo": {
+      "type": "string"
+    },
+    "dataInclusao": {
+      "type": "string"
+    },
+    "dataPagamento": {
+      "type": "string"
+    },
+    "valorPago": {
+      "type": "number"
+    },
+    "valorNominal": {
+      "type": "number"
+    },
+    "statusPagamento": {
+      "$ref": "#/$defs/SituacaoPagamento"
+    },
+    "aprovacoesNecessarias": {
+      "type": "number",
+      "description": "Aprovações necessárias para o pagamento ser aprovado."
+    },
+    "aprovacoesRealizadas": {
+      "type": "number",
+      "description": "Aprovações já realizadas."
+    },
+    "cpfCnpjBeneficiario": {
+      "type": "string"
+    },
+    "nomeBeneficiario": {
+      "type": "string"
+    },
+    "autenticacao": {
+      "type": "string"
+    },
+    "nsu": {
+      "type": "string",
+      "description": "Número sequencial único, exclusivo para uso no Inter."
+    }
+  },
+  "$defs": {
+    "SituacaoPagamento": {
+      "type": "string",
+      "enum": [
+        "EMPROCESSAMENTO",
+        "AGENDADO_CANCELADO",
+        "AGUARDANDO_APROVACAO",
+        "APROVADO",
+        "CANCELADO",
+        "AGENDADO",
+        "REALIZADO",
+        "ERRO",
+        "APROVACAO_EXPIRADA",
+        "REPROVADO",
+        "NAO_COMPENSADO"
+      ]
+    }
+  }
+}

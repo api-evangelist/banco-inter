@@ -1,0 +1,698 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-cob-rcompleta-schema.json",
+  "title": "Cobrança Recorrente Completa",
+  "description": "Dados completos da cobrança recorrente via API Pix",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-pix-automatico-openapi.yml#/components/schemas/CobRCompleta",
+  "type": "object",
+  "required": [
+    "idRec",
+    "txid",
+    "status",
+    "valor",
+    "recebedor",
+    "calendario"
+  ],
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "idRec": {
+          "$ref": "#/$defs/RecId"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "txid": {
+          "$ref": "#/$defs/TxId"
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/CobRBase"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "calendario": {
+          "$ref": "#/$defs/CobrCalendario"
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/CobRStatus"
+    },
+    {
+      "$ref": "#/$defs/CobRConfiguracao"
+    },
+    {
+      "$ref": "#/$defs/DadosDevedorRecorrencia"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "pix": {
+          "type": "array",
+          "title": "Pix recebidos",
+          "description": "Contendo `endToEndId`, `txid`, `valor`, `horario`, `infoPagador` e `devolucoes`",
+          "items": {
+            "$ref": "#/$defs/PixAutomatico"
+          }
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/CobRAtualizacao"
+    },
+    {
+      "$ref": "#/$defs/CobRTentativas"
+    }
+  ],
+  "$defs": {
+    "CobRAtualizacao": {
+      "type": "object",
+      "title": "Histórico de Atualização da Cobrança Recorrente",
+      "required": [
+        "atualizacao"
+      ],
+      "properties": {
+        "atualizacao": {
+          "type": "array",
+          "title": "Histórico de Status",
+          "description": "Histórico das mudanças de status das cobranças recorrentes.",
+          "items": {
+            "type": "object",
+            "required": [
+              "status",
+              "data"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "title": "Status da cobrança",
+                "description": "Status da cobrança recorrente:\n- `CRIADA`: A cobrança foi criada pelo usuário recebedor\n- `ATIVA`: O PSP Pagador recebeu e aceitou a cobrança, agendando o pagamento\n- `CONCLUIDA`: A cobrança foi paga com sucesso\n- `EXPIRADA`: A cobrança não foi liquidada após todas as tentativas de pagamento permitidas\n- `REJEITADA`: A cobrança foi rejeitada pelo PSP Pagador\n- `CANCELADA`: A cobrança foi cancelada com sucesso\n",
+                "enum": [
+                  "CRIADA",
+                  "ATIVA",
+                  "CONCLUIDA",
+                  "EXPIRADA",
+                  "REJEITADA",
+                  "CANCELADA"
+                ]
+              },
+              "data": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Data e hora do registro de status atualizado. Respeita RFC 3339."
+              }
+            }
+          }
+        },
+        "encerramento": {
+          "$ref": "#/$defs/CobREncerramento"
+        }
+      }
+    },
+    "CobRBase": {
+      "type": "object",
+      "title": "Cobrança Recorrente Base",
+      "required": [
+        "ajusteDiaUtil"
+      ],
+      "description": "Atributos de cobrança recorrente",
+      "properties": {
+        "infoAdicional": {
+          "type": "string",
+          "title": "Informações adicionais da fatura.",
+          "description": "Informações adicionais da fatura.",
+          "maxLength": 140
+        },
+        "calendario": {
+          "$ref": "#/$defs/CobRBaseCalendario"
+        },
+        "valor": {
+          "$ref": "#/$defs/CobRBaseValor"
+        },
+        "ajusteDiaUtil": {
+          "type": "boolean",
+          "title": "Ajuste data vencimento para próximo dia útil",
+          "default": true,
+          "description": "Campo de ativação do ajuste da data de vencimento para próximo dia útil caso o vencimento corrente seja um dia não útil. O PSP Pagador deverá considerar os feriados locais com base no código município do usuário pagador."
+        },
+        "recebedor": {
+          "$ref": "#/$defs/DadosBancariosRecebedor"
+        }
+      }
+    },
+    "CobRBaseCalendario": {
+      "type": "object",
+      "title": "Informações sobre calendário da cobrança",
+      "description": "Contendo `dataDeVencimento`",
+      "required": [
+        "dataDeVencimento"
+      ],
+      "properties": {
+        "dataDeVencimento": {
+          "type": "string",
+          "format": "date",
+          "title": "Data de vencimento da cobrança",
+          "description": "Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. É a data de expiração da cobrança."
+        }
+      }
+    },
+    "CobRBaseValor": {
+      "type": "object",
+      "title": "Valor da cobrança recorrente",
+      "required": [
+        "original"
+      ],
+      "description": "Contendo `valorOriginal`",
+      "properties": {
+        "original": {
+          "type": "string",
+          "title": "Valor",
+          "pattern": "\\d{1,10}\\.\\d{2}",
+          "description": "Valor original da cobrança."
+        }
+      }
+    },
+    "CobRCancelamento": {
+      "type": "object",
+      "title": "Informações sobre o cancelamento da cobrança",
+      "required": [
+        "solicitante",
+        "codigo",
+        "descricao"
+      ],
+      "description": "Informações sobre o cancelamento da cobrança",
+      "properties": {
+        "solicitante": {
+          "type": "string",
+          "title": "Solicitante do cancelamento",
+          "description": "Identifica quem solicitou o cancelamento:\n- `PSP_PAGADOR`: Cancelamento solicitado pelo PSP do pagador\n- `USUARIO_PAGADOR`: Cancelamento solicitado pelo usuário pagador\n- `PSP_RECEBEDOR`: Cancelamento solicitado pelo PSP do recebedor\n- `USUARIO_RECEBEDOR`: Cancelamento solicitado pelo usuário recebedor\n",
+          "enum": [
+            "PSP_PAGADOR",
+            "USUARIO_PAGADOR",
+            "PSP_RECEBEDOR",
+            "USUARIO_RECEBEDOR"
+          ]
+        },
+        "codigo": {
+          "type": "string",
+          "title": "Código do cancelamento",
+          "description": "Código do cancelamento. ACCT: Encerramento de uma conta transacional. BLCK: Bloqueio de uma conta transacional. CCLD: Cancelamento da autorização para pagamentos periódicos. FAIL: Cancelamento do agendamento por falha ou erro no fluxo de liquidação. OTHR: Cancelamento por outros motivos. SLBD: Solicitado pelo usuário pagador. SLCR: Solicitado pelo usuário destinatário.",
+          "maxLength": 4,
+          "enum": [
+            "ACCT",
+            "BLCK",
+            "CCLD",
+            "FAIL",
+            "OTHR",
+            "SLBD",
+            "SLCR"
+          ]
+        },
+        "descricao": {
+          "type": "string",
+          "title": "Descricao do cancelamento",
+          "description": "Descricao da causa do cancelamento",
+          "maxLength": 105
+        }
+      }
+    },
+    "CobRConfiguracao": {
+      "type": "object",
+      "title": "Configuração da Cobrança Recorrente",
+      "required": [
+        "politicaRetentativa"
+      ],
+      "properties": {
+        "politicaRetentativa": {
+          "type": "string",
+          "title": "Política de retentativa da cobrança recorrente",
+          "description": "NAO_PERMITE: Não permite retentativas.</br> PERMITE_3R_7D: Permite até 3 retentativas em dias diferentes no intervalo de até 7 dias corridos contados a partir da data de liquidação prevista na instrução de pagamento original.</br> As retentativas devem ser enviadas pelo recebedor. [Consulte a documentação](#tag/Cobranca-Recorrente/operation/cobrTxidRetentativaDataPost)",
+          "enum": [
+            "NAO_PERMITE",
+            "PERMITE_3R_7D"
+          ]
+        }
+      }
+    },
+    "CobREncerramento": {
+      "type": "object",
+      "title": "Detalhamento do encerramento da cobrança.",
+      "description": "Contendo `cancelamento` ou `rejeicao`",
+      "properties": {
+        "cancelamento": {
+          "$ref": "#/$defs/CobRCancelamento"
+        },
+        "rejeicao": {
+          "$ref": "#/$defs/CobRRejeicao"
+        }
+      }
+    },
+    "CobRRejeicao": {
+      "type": "object",
+      "title": "Informações sobre a rejeição da cobrança",
+      "required": [
+        "codigo",
+        "descricao"
+      ],
+      "description": "Informações sobre a rejeição da cobrança",
+      "properties": {
+        "codigo": {
+          "type": "string",
+          "title": "Código da rejeição",
+          "description": "Código da rejeição:<br> - **AB10**: Transação interrompida devido a erro no participante do usuário pagador.<br> - **AC05**: Conta transacional do usuário pagador encerrada.<br> - **AC06**: Conta transacional do usuário pagador bloqueada.<br> - **AG12**: Não é permitida solicitação de agendamento (pain.013) cujos recursos sejam transferidos de uma  conta transacional para outra em uma mesma instituição participante ou entre participantes que utilizem o serviço de liquidação de um mesmo participante liquidante no SPI.<br> - **AM02**: Valor da cobrança ultrapassa o valor máximo estabelecido pelo usuário pagador.<br> - **AM09**: Valor da cobrança não corresponde ao valor estabelecido na recorrência.<br> - **DENC**: CPF/CNPJ do usuário pagador não corresponde ao dado contido na recorrência/autorização.<br> - **DS27**: Participante não se encontra cadastrado ou ainda não iniciou a operação no SPI.<br> - **DTED**: Divergência entre a data de vencimento informada e a periodicidade da recorrência e/ou as regras do produto.<br> - **DTNT**: Novas tentativas de agendamento pós vencimento em desacordo com o limite de dias definido na  regra de negócio (a partir de D+8, considerando D0, a data do vencimento).<br> - **FBRD**: Pain.013 recebida fora do prazo para cumprimento das regras do negócio.<br> - **IRNT**: Cobrança recorrente não permite novas tentativas de agendamento pós vencimento (idRecorrencia  com característica que não permite novas tentativas).<br> - **MIDI**: idRecorrencia inexistente ou incorreto.<br> - **MSUC**: statusRecorrencia diferente de (CFDB - confirmado pelo usuário pagador).<br> - **NIEC**: Nova instrução de pagamento inválida pois a mesma cobrança já possui ordem de pagamento agendada ainda pendente de envio ao SPI para liquidação.<br> - **NIPA**: Nova instrução de pagamento inválida, pagamento já foi efetivado.<br> - **NITX**: Nova instrução de pagamento não corresponde a uma cobrança recorrente gerada anteriormente.<br> (IdConciliacaoDoRecebedor diferentes). Utilizada somente para as finalidades de agendamento 'NTAG' e 'RIFL'.<br> - **QUNT**: Quantidade de novas tentativas de agendamento pós vencimento excede o limite definido pela regra de negócio (mais de 3 tentativas em intervalo de 7 dias após o vencimento, considerando D0, a data do vencimento).<br> - **RC09**: ISPB do participante do usuário pagador inválido ou inexistente.<br> - **UDEI**: CPF/CNPJ do devedor incorreto.",
+          "maxLength": 4,
+          "enum": [
+            "AB10",
+            "AC05",
+            "AC06",
+            "AG12",
+            "AM02",
+            "AM09",
+            "DENC",
+            "DS27",
+            "DTED",
+            "DTNT",
+            "FBRD",
+            "IRNT",
+            "MIDI",
+            "MSUC",
+            "NIEC",
+            "NIPA",
+            "NITX",
+            "QUNT",
+            "RC09",
+            "UDEI"
+          ]
+        },
+        "descricao": {
+          "type": "string",
+          "title": "Descricao da rejeição",
+          "description": "Descricao da causa da rejeição",
+          "maxLength": 105
+        }
+      }
+    },
+    "CobRStatus": {
+      "type": "object",
+      "title": "Status da Cobrança Recorrente",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Status do registro da cobrança",
+          "description": "Status da cobrança recorrente:\n- `CRIADA`: A cobrança foi criada pelo usuário recebedor\n- `ATIVA`: O PSP Pagador recebeu e aceitou a cobrança, agendando o pagamento\n- `CONCLUIDA`: A cobrança foi paga com sucesso\n- `EXPIRADA`: A cobrança não foi liquidada após todas as tentativas de pagamento permitidas\n- `REJEITADA`: A cobrança foi rejeitada pelo PSP Pagador\n- `CANCELADA`: A cobrança foi cancelada com sucesso\n",
+          "enum": [
+            "CRIADA",
+            "ATIVA",
+            "CONCLUIDA",
+            "EXPIRADA",
+            "REJEITADA",
+            "CANCELADA"
+          ]
+        }
+      }
+    },
+    "CobRTentativas": {
+      "type": "object",
+      "title": "Histórico de Tentativas da Cobrança Recorrente",
+      "properties": {
+        "tentativas": {
+          "type": "array",
+          "title": "Histórico de Tentativas de Cobrança",
+          "description": "Histórico de Tentativas de Cobrança",
+          "items": {
+            "type": "object",
+            "required": [
+              "dataLiquidacao",
+              "tipo",
+              "endToEndId",
+              "status",
+              "atualizacao"
+            ],
+            "properties": {
+              "dataLiquidacao": {
+                "type": "string",
+                "format": "date",
+                "description": "Data da liquidação da cobrança. Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601."
+              },
+              "tipo": {
+                "type": "string",
+                "title": "Tipo da Tentativa",
+                "description": "AGND - Agendamento do débito original.</br> NTAG - Agendamento de nova tentativa após o vencimento.</br> RIFL - Reenvio da instrução de pagamento devido a erro na liquidação.",
+                "enum": [
+                  "AGND",
+                  "NTAG",
+                  "RIFL"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "title": "Status da Tentativa",
+                "description": "Status da tentativa da cobrança:\n- `SOLICITADA`: Cobrança agendada mas não paga até a data de vencimento.\n- `AGENDADA`: O PSP Pagador recebeu e aceitou a cobrança, agendando o pagamento.\n- `PAGA`: A cobrança foi paga com sucesso.\n- `CANCELADA`: A cobrança foi cancelada com sucesso.\n- `REJEITADA`: A cobrança foi rejeitada pelo PSP Pagador.\n- `EXPIRADA`: A cobrança não foi liquidada após todas as tentativas de pagamento permitidas.\n",
+                "enum": [
+                  "SOLICITADA",
+                  "AGENDADA",
+                  "PAGA",
+                  "CANCELADA",
+                  "REJEITADA",
+                  "EXPIRADA"
+                ]
+              },
+              "endToEndId": {
+                "$ref": "#/$defs/EndToEndId"
+              },
+              "atualizacao": {
+                "type": "array",
+                "title": "Histórico de Status da Tentativa",
+                "description": "Histórico das mudanças de status da tentativa de cobrança.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "title": "Status da Tentativa",
+                      "description": "Status da tentativa da cobrança:\n- `SOLICITADA`: Cobrança agendada mas não paga até a data de vencimento.\n- `AGENDADA`: O PSP Pagador recebeu e aceitou a cobrança, agendando o pagamento.\n- `PAGA`: A cobrança foi paga com sucesso.\n- `CANCELADA`: A cobrança foi cancelada com sucesso.\n- `REJEITADA`: A cobrança foi rejeitada pelo PSP Pagador.\n- `EXPIRADA`: A cobrança não foi liquidada após todas as tentativas de pagamento permitidas.\n",
+                      "enum": [
+                        "SOLICITADA",
+                        "AGENDADA",
+                        "PAGA",
+                        "CANCELADA",
+                        "REJEITADA",
+                        "EXPIRADA"
+                      ]
+                    },
+                    "data": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data e hora do registro de status atualizado. Respeita RFC 3339."
+                    }
+                  }
+                }
+              },
+              "rejeicao": {
+                "type": "object",
+                "title": "Informações sobre a rejeição da tentativa da cobrança",
+                "required": [
+                  "codigo",
+                  "descricao"
+                ],
+                "description": "Informações sobre a rejeição da tentativa da cobrança",
+                "properties": {
+                  "codigo": {
+                    "type": "string",
+                    "title": "Código da rejeição da tentativa",
+                    "description": "Código da rejeição:<br> - **AB10**: Transação interrompida devido a erro no participante do usuário pagador.<br> - **AC05**: Conta transacional do usuário pagador encerrada.<br> - **AC06**: Conta transacional do usuário pagador bloqueada.<br> - **AM02**: Valor da cobrança ultrapassa o valor máximo estabelecido pelo usuário pagador.<br> - **AM09**: Valor da cobrança não corresponde ao valor estabelecido na recorrência.<br> - **DENC**: CPF/CNPJ do usuário pagador não corresponde ao dado contido na recorrência/autorização.<br> - **DS27**: Participante não se encontra cadastrado ou ainda não iniciou a operação no SPI.<br> - **DTED**: Divergência entre a data de vencimento informada e a periodicidade da recorrência e/ou as regras do produto.<br> - **DTNT**: Novas tentativas de agendamento pós vencimento em desacordo com o limite de dias definido na  regra de negócio (a partir de D+8, considerando D0, a data do vencimento).<br> - **FBRD**: Pain.013 recebida fora do prazo para cumprimento das regras do negócio.<br> - **IRNT**: Cobrança recorrente não permite novas tentativas de agendamento pós vencimento (idRecorrencia  com característica que não permite novas tentativas).<br> - **MIDI**: idRecorrencia inexistente ou incorreto.<br> - **MSUC**: statusRecorrencia diferente de (CFDB - confirmado pelo usuário pagador).<br> - **NIEC**: Nova instrução de pagamento inválida pois a mesma cobrança já possui ordem de pagamento agendada ainda pendente de envio ao SPI para liquidação.<br> - **NIPA**: Nova instrução de pagamento inválida, pagamento já foi efetivado.<br> - **NITX**: Nova instrução de pagamento não corresponde a uma cobrança recorrente gerada anteriormente.<br> (IdConciliacaoDoRecebedor diferentes). Utilizada somente para as finalidades de agendamento 'NTAG' e 'RIFL'.<br> - **QUNT**: Quantidade de novas tentativas de agendamento pós vencimento excede o limite definido pela regra de negócio (mais de 3 tentativas em intervalo de 7 dias após o vencimento, considerando D0, a data do vencimento).<br> - **RC09**: ISPB do participante do usuário pagador inválido ou inexistente.<br> - **UDEI**: CPF/CNPJ do devedor incorreto.",
+                    "maxLength": 4,
+                    "enum": [
+                      "AB10",
+                      "AC05",
+                      "AC06",
+                      "AM02",
+                      "AM09",
+                      "DENC",
+                      "DS27",
+                      "DTED",
+                      "DTNT",
+                      "FBRD",
+                      "IRNT",
+                      "MIDI",
+                      "MSUC",
+                      "NIEC",
+                      "NIPA",
+                      "NITX",
+                      "QUNT",
+                      "RC09",
+                      "UDEI"
+                    ]
+                  },
+                  "descricao": {
+                    "type": "string",
+                    "title": "Descrição da rejeição",
+                    "description": "Descrição da causa da rejeição",
+                    "maxLength": 105
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "CobrCalendario": {
+      "type": "object",
+      "required": [
+        "criacao"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/CobRBaseCalendario"
+        }
+      ],
+      "description": "Contendo `dataDeVencimento` e `criacao`",
+      "properties": {
+        "criacao": {
+          "type": "string",
+          "format": "date",
+          "title": "Data de criação da cobrança",
+          "description": "Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. É a data de criação da cobrança."
+        }
+      }
+    },
+    "DadosBancariosRecebedor": {
+      "type": "object",
+      "title": "Dados bancários do recebedor",
+      "description": "Contendo `nome`, `cnpj`, `conta`, `tipoConta` e `agencia`",
+      "required": [
+        "conta",
+        "tipoConta"
+      ],
+      "properties": {
+        "conta": {
+          "type": "string",
+          "description": "Número da conta do usuário recebedor.",
+          "maxLength": 20
+        },
+        "tipoConta": {
+          "type": "string",
+          "title": "Tipo da conta do usuário recebedor",
+          "description": "Tipo da conta do usuário recebedor.",
+          "enum": [
+            "CORRENTE",
+            "POUPANCA",
+            "PAGAMENTO"
+          ]
+        },
+        "agencia": {
+          "type": "string",
+          "description": "Número da agência do usuário recebedor.",
+          "maxLength": 4
+        }
+      }
+    },
+    "DadosDevedorRecorrencia": {
+      "type": "object",
+      "properties": {
+        "devedor": {
+          "title": "Dados do devedor",
+          "description": "Contendo `email`, `logradouro`, `cidade`, `uf` e `cep`",
+          "properties": {
+            "email": {
+              "type": "string",
+              "title": "Email",
+              "description": "Email do usuário."
+            },
+            "logradouro": {
+              "type": "string",
+              "title": "Logradouro",
+              "description": "Logradouro do usuário.",
+              "maxLength": 200
+            },
+            "cidade": {
+              "type": "string",
+              "title": "Cidade",
+              "description": "Cidade do usuário.",
+              "maxLength": 200
+            },
+            "uf": {
+              "type": "string",
+              "title": "UF",
+              "description": "UF do usuário.",
+              "maxLength": 2
+            },
+            "cep": {
+              "type": "string",
+              "title": "CEP",
+              "description": "CEP do usuário.",
+              "pattern": "[0-9]{8}"
+            }
+          }
+        }
+      }
+    },
+    "DevolucaoId": {
+      "type": "string",
+      "title": "Id da Devolução",
+      "description": "Id gerado pelo cliente para representar unicamente uma devolução.",
+      "pattern": "[a-zA-Z0-9]{1,35}"
+    },
+    "DevolucaoNaturezaPixAutomatico": {
+      "type": "string",
+      "title": "Natureza da Devolução",
+      "description": "Indica qual é a natureza da devolução. Uma devolução pode ser relacionada a um Pix comum (com códigos possíveis: `MD06` e `FR01` da pacs.004 e `REFU` da pacs.008). Na ausência deste campo a natureza deve ser interpretada como\nsendo de um Pix comum (`ORIGINAL`).\n\nAs naturezas são assim definidas:\n  - `ORIGINAL`: quando a devolução é solicitada pelo usuário recebedor e se refere a um Pix comum (`MD06`);\n  - `MED_FRAUDE`: quando a devolução ocorre no âmbito do MED (Mecanismo Especial de Devolução) por fundada suspeita de fraude e se refere a um Pix comum (`FR01`).\n  - `MED_PIX_AUTOMATICO`: reembolso total ou parcial ao participante do usuário pagador no âmbito do MED (Mecanismo Especial de Devolução) para o Pix Automático pela utilização de recursos próprios para ressarcimento do usuário pagador.(`REFU`);\n\nOs valores de devoluções são sempre limitados aos valores máximos a seguir:\n- Pix comum: o valor da devolução é limitado ao valor do próprio Pix (a natureza nesse caso pode ser: ORIGINAL, MED_PIX_AUTOMATICO ou MED_FRAUDE);\n",
+      "enum": [
+        "ORIGINAL",
+        "MED_PIX_AUTOMATICO",
+        "MED_FRAUDE"
+      ]
+    },
+    "DevolucaoPixAutomatico": {
+      "type": "object",
+      "title": "Devolução",
+      "required": [
+        "id",
+        "rtrId",
+        "valor",
+        "horario",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/DevolucaoId"
+        },
+        "rtrId": {
+          "type": "string",
+          "title": "RtrId",
+          "description": "ReturnIdentification que transita na PACS004.",
+          "pattern": "[a-zA-Z0-9]{32}",
+          "minLength": 32,
+          "maxLength": 32
+        },
+        "valor": {
+          "type": "string",
+          "title": "Valor a devolver.",
+          "pattern": "\\d{1,10}\\.\\d{2}",
+          "description": "Valor a devolver."
+        },
+        "natureza": {
+          "$ref": "#/$defs/DevolucaoNaturezaPixAutomatico"
+        },
+        "descricao": {
+          "type": "string",
+          "title": "Mensagem ao pagador relativa à devolução.",
+          "maxLength": 140,
+          "description": "O campo `descricao`, opcional, determina um texto a ser apresentado ao pagador contendo informações sobre a devolução. Esse texto será preenchido, na pacs.004, pelo PSP do recebedor, no campo RemittanceInformation. O tamanho do campo na pacs.004 está limitado a 140 caracteres."
+        },
+        "horario": {
+          "type": "object",
+          "title": "Horário da devolução",
+          "description": "Contendo `solicitacao` e `liquidacao`",
+          "properties": {
+            "solicitacao": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Horário de solicitação",
+              "description": "Horário no qual a devolução foi solicitada no PSP."
+            },
+            "liquidacao": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Horário de liquidacao",
+              "description": "Horário no qual a devolução foi liquidada no PSP."
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "title": "Status",
+          "description": "Status da devolução.",
+          "enum": [
+            "EM_PROCESSAMENTO",
+            "DEVOLVIDO",
+            "NAO_REALIZADO"
+          ]
+        },
+        "motivo": {
+          "type": "string",
+          "title": "Descrição do status.",
+          "description": "# Status da Devolução\n\nCampo opcional que pode ser utilizado pelo PSP recebedor para detalhar os motivos\nde a devolução ter atingido o status em questão.\nPode ser utilizado, por exemplo, para detalhar o motivo de a devolução não ter sido realizada.\n",
+          "maxLength": 140
+        }
+      }
+    },
+    "EndToEndId": {
+      "type": "string",
+      "title": "Id fim a fim da transação",
+      "description": "Id único para identificação do Pix Cobrança.",
+      "pattern": "[a-zA-Z0-9]{32}"
+    },
+    "PixAutomatico": {
+      "type": "object",
+      "title": "Pix",
+      "required": [
+        "txid",
+        "endToEndId",
+        "valor",
+        "horario"
+      ],
+      "properties": {
+        "endToEndId": {
+          "$ref": "#/$defs/EndToEndId"
+        },
+        "txid": {
+          "$ref": "#/$defs/TxId"
+        },
+        "valor": {
+          "type": "string",
+          "title": "Valor do Pix.",
+          "pattern": "\\d{1,10}\\.\\d{2}",
+          "description": "Valor do Pix."
+        },
+        "horario": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Horário",
+          "description": "Horário em que o Pix foi processado no PSP."
+        },
+        "infoPagador": {
+          "type": "string",
+          "title": "Informação livre do pagador",
+          "maxLength": 140
+        },
+        "devolucoes": {
+          "type": "array",
+          "title": "Devoluções",
+          "description": "Contendo `id`, `rtrId`, `valor`, `natureza`, `descricao`, `horario`, `status` e `motivo` da devolução.",
+          "items": {
+            "$ref": "#/$defs/DevolucaoPixAutomatico"
+          }
+        }
+      }
+    },
+    "RecId": {
+      "type": "string",
+      "title": "ID Recorrência",
+      "description": "# Identificador da Recorrência\n\nRegra de formação:\n\n  - RAxxxxxxxxyyyyMMddzzzzzzzzzzz (29 caracteres; \"case sensitive\", isso\né, diferencia letras maiúsculas e minúsculas), sendo:\n  - \"R\":  fixo (1 caractere). \"R\" para a recorrência criada dentro do\nPix;\n  - \"A\": identificação da possibilidade de novas tentativas, sendo\npossíveis os valores \"R\" ou \"N\" (1 caractere). \"R\" caso a recorrência permita novas tentativas de pagamento pós vencimento, ou \"N\" caso não permita novas tentativas.\n  - \"xxxxxxxx\":  identificação do agente que presta serviço para o\nusuário recebedor que gerou o <Id>, podendo ser: o ISPB do participante direto, o ISPB do participante indireto ou os 8 primeiros dígitos do CNPJ do prestador de serviço de iniciação (8 caracteres numéricos [0-9]);\n  - \"yyyyMMdd\":  data (8 caracteres) de criação da recorrência;\n  - \"zzzzzzzzzzz\": sequencial criado pelo agente que gerou o <Id>\n(11 caracteres alfanuméricos [a-z|A-Z|0-9]). Deve ser único dentro de cada \"yyyyMMdd\".\nDessa forma, o ID da recorrência deve ser formado de acordo com um dos tipos a seguir:\n- \"RRxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que permite novas tentativas de pagamento pós vencimento; ou\n- \"RNxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que não permite novas tentativas de pagamento pós vencimento.\n",
+      "pattern": "[a-zA-Z0-9]{29}",
+      "minLength": 29,
+      "maxLength": 29
+    },
+    "TxId": {
+      "type": "string",
+      "title": "Id da Transação",
+      "description": "# Identificador da transação\n\nO campo txid determina o identificador da transação.\nO objetivo desse campo é ser um elemento que possibilite ao PSP do recebedor apresentar ao usuário recebedor a funcionalidade de conciliação de pagamentos.\n\nO txid é criado exclusivamente pelo usuário recebedor e está sob sua responsabilidade.\nO txid, no contexto de representação de uma cobrança, é único por CPF/CNPJ do usuário recebedor.\n",
+      "pattern": "[a-zA-Z0-9]{26,35}"
+    }
+  }
+}

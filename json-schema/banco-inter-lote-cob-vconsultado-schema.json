@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-lote-cob-vconsultado-schema.json",
+  "title": "Lote de solicitações de alteração ou criação de cobranças com vencimento",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-pix-openapi.yml#/components/schemas/LoteCobVConsultado",
+  "type": "object",
+  "required": [
+    "id",
+    "descricao",
+    "criacao",
+    "cobsv"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "format": "int64",
+      "title": "Id do lote"
+    },
+    "descricao": {
+      "type": "string",
+      "title": "Descrição do lote"
+    },
+    "criacao": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Data de criação do lote",
+      "description": "Timestamp que indica o momento em que foi criado o lote. Respeita o formato definido na RFC 3339."
+    },
+    "cobsv": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "txid",
+          "status"
+        ],
+        "properties": {
+          "txid": {
+            "type": "string",
+            "pattern": "[a-zA-Z0-9]{26,35}"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status da solicitação de criação/alteração da cobrança no contexto de criação via lote",
+            "enum": [
+              "EM_PROCESSAMENTO",
+              "CRIADA",
+              "NEGADA"
+            ]
+          },
+          "problema": {
+            "$ref": "#/$defs/Problema"
+          },
+          "criacao": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Data de Criação",
+            "description": "Data e hora em que a cobrança foi criada. Respeita RFC 3339.",
+            "readOnly": true
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Problema": {
+      "type": "object",
+      "required": [
+        "type",
+        "title",
+        "status"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "format": "uri",
+          "description": "URI de referência que identifica o tipo de problema. De acordo com a RFC 7807."
+        },
+        "title": {
+          "type": "string",
+          "description": "Descrição resumida do problema."
+        },
+        "status": {
+          "type": "integer",
+          "description": "Código HTTP do status retornado."
+        },
+        "detail": {
+          "type": "string",
+          "description": "Descrição completa do problema."
+        },
+        "correlationId": {
+          "type": "string",
+          "description": "Identificador de correlação do problema para fins de suporte"
+        },
+        "violacoes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Violacao"
+          }
+        }
+      }
+    },
+    "Violacao": {
+      "type": "object",
+      "title": "Violações",
+      "properties": {
+        "razao": {
+          "type": "string",
+          "title": "Descrição do erro",
+          "description": "Descrição do erro"
+        },
+        "propriedade": {
+          "type": "string",
+          "title": "Nome da propriedade",
+          "description": "Nome da propriedade"
+        },
+        "valor": {
+          "type": "string",
+          "title": "Valor da propriedade",
+          "description": "Valor da propriedade"
+        }
+      }
+    }
+  }
+}

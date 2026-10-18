@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-operacao-schema.json",
+  "title": "Operacao",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-partners-credito-imobiliario-credito-openapi.yml#/components/schemas/Operacao",
+  "type": "object",
+  "properties": {
+    "proposta": {
+      "type": "string",
+      "description": "Identificador unico da proposta."
+    },
+    "produtoId": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Codigo do produto a ser operado."
+    },
+    "titulos": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/TituloOperacao"
+      }
+    }
+  },
+  "required": [
+    "proposta",
+    "produtoId",
+    "titulos"
+  ],
+  "$defs": {
+    "TituloOperacao": {
+      "type": "object",
+      "properties": {
+        "cnpjSacado": {
+          "type": "string",
+          "minLength": 14,
+          "maxLength": 14,
+          "description": "CNPJ do Sacado para tal titulo."
+        },
+        "nomeSacado": {
+          "type": "string",
+          "description": "Nome do Sacado para tal titulo."
+        },
+        "cpfCnpjCedente": {
+          "type": "string",
+          "minLength": 11,
+          "maxLength": 14,
+          "description": "CPF/CNPJ do cende para tal titulo."
+        },
+        "nomeCedente": {
+          "type": "string",
+          "description": "Nome do cende para tal titulo."
+        },
+        "bancoCodigo": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 3,
+          "description": "Codigo do banco para credito da operação."
+        },
+        "agenciaNumero": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 4,
+          "description": "Numero da agencia atrelada a conta para credito da operação."
+        },
+        "agenciaDigito": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3,
+          "description": "Digito da agencia para credito da operação."
+        },
+        "contaCorrenteNumero": {
+          "type": "string",
+          "description": "Numero da conta corrence para credito da operação."
+        },
+        "contaCorrenteDigito": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3,
+          "description": "Digito da conta para credito da operação."
+        },
+        "dataVencimento": {
+          "type": "string",
+          "format": "date",
+          "description": "Data de vencimento do titulo formato americano.",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "notaFiscalNumero": {
+          "type": "string",
+          "nullable": false,
+          "description": "Numero da notafiscal."
+        },
+        "notaFiscalSerie": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3,
+          "description": "Serie da nota fiscal."
+        },
+        "notaFiscalChave": {
+          "type": "string",
+          "description": "Chave da nota fiscal."
+        },
+        "notaFiscalIdentificador": {
+          "type": "string",
+          "description": "Identificação do titulo no sistema do parceiro."
+        },
+        "parcela": {
+          "type": "integer",
+          "description": "Parcela a ser antecipada.",
+          "default": 1
+        },
+        "totalParcelas": {
+          "type": "integer",
+          "description": "Total de parcelas.",
+          "default": 1
+        },
+        "valorLancamento": {
+          "type": "number",
+          "description": "Valor Bruto do título."
+        },
+        "valorLiquido": {
+          "type": "number",
+          "description": "Valor Liquido do título."
+        },
+        "taxaEfetiva": {
+          "type": "number",
+          "description": "Valor da Taxa efetiva do titulo."
+        },
+        "taxaRebate": {
+          "type": "number",
+          "description": "Valor da Taxa do parceiro."
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "APROVADA",
+            "REPROVADA",
+            "PAGA"
+          ],
+          "description": "Status atual do titulo."
+        }
+      },
+      "required": [
+        "cnpjSacado",
+        "nomeSacado",
+        "cpfCnpjCedente",
+        "nomeCedente",
+        "bancoCodigo",
+        "agenciaNumero",
+        "agenciaDigito",
+        "contaCorrenteNumero",
+        "contaCorrenteDigito",
+        "dataVencimento",
+        "notaFiscalNumero",
+        "notaFiscalSerie",
+        "notaFiscalChave",
+        "notaFiscalIdentificador",
+        "valorLancamento",
+        "valorLiquido",
+        "taxaEfetiva",
+        "taxaRebate",
+        "parcela",
+        "totalParcelas",
+        "status"
+      ]
+    }
+  }
+}

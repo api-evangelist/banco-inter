@@ -1,0 +1,937 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-rec-completa-schema.json",
+  "title": "Recorrência Completa",
+  "description": "Atributos de Configuração de Recorrência",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-pix-automatico-openapi.yml#/components/schemas/RecCompleta",
+  "type": "object",
+  "required": [
+    "status",
+    "recebedor"
+  ],
+  "allOf": [
+    {
+      "$ref": "#/$defs/RecBase"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "idRec": {
+          "$ref": "#/$defs/RecId"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "recebedor": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/PessoaJuridicaRecorrencia"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "convenio": {
+                  "type": "string",
+                  "title": "Convênio",
+                  "maxLength": 60,
+                  "description": "Filtro pelo convênio associado."
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/DadosPagadorRec"
+    },
+    {
+      "$ref": "#/$defs/RecStatus"
+    },
+    {
+      "$ref": "#/$defs/RecConfiguracao"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "loc": {
+          "$ref": "#/$defs/PayloadLocationRecCompleta"
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/RecAtualizacao"
+    },
+    {
+      "$ref": "#/$defs/RecEncerramento"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "solicitacao": {
+          "type": "array",
+          "title": "Solicitações vinculadas",
+          "description": "Solicitações vinculadas às recorrências.",
+          "items": {
+            "$ref": "#/$defs/SolicRecCompleta"
+          }
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/RecAtivacao"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "dadosQR": {
+          "$ref": "#/$defs/DadosQRCode"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "CNPJ": {
+      "type": "string",
+      "title": "CNPJ",
+      "pattern": "\\\\d{14}",
+      "description": "CNPJ do usuário."
+    },
+    "CPF": {
+      "type": "string",
+      "title": "CPF",
+      "pattern": "\\\\d{11}",
+      "description": "CPF do usuário."
+    },
+    "DadosBancarios": {
+      "type": "object",
+      "description": "Contendo `conta`, `ìspbParticipante`, `agencia`  e `cpf` ou `cnpj` do pagador.",
+      "required": [
+        "conta",
+        "ispbParticipante",
+        "cpf",
+        "cnpj"
+      ],
+      "properties": {
+        "conta": {
+          "type": "string",
+          "title": "Conta do Usuário Pagador",
+          "description": "Número da conta do usuário pagador.",
+          "maxLength": 20
+        },
+        "ispbParticipante": {
+          "type": "string",
+          "title": "ISPB do usuário pagador.",
+          "description": "ISPB do usuário pagador.",
+          "pattern": "\\d{8}"
+        },
+        "agencia": {
+          "type": "string",
+          "title": "Agência do Usuário Pagador",
+          "description": "Número da agência do usuário pagador.",
+          "maxLength": 4
+        }
+      },
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "cpf": {
+              "$ref": "#/$defs/CPF"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "$ref": "#/$defs/CNPJ"
+            }
+          }
+        }
+      ]
+    },
+    "DadosPagadorRec": {
+      "type": "object",
+      "title": "Dados do Pagador",
+      "required": [
+        "ispbParticipante"
+      ],
+      "properties": {
+        "pagador": {
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "ispbParticipante": {
+                  "type": "string",
+                  "title": "ISPB do PSP pagador.",
+                  "description": "Código de 8 dígitos que identifica os bancos no sistema do Banco Central.",
+                  "pattern": "\\d{8}"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "codMun": {
+                  "title": "Código do município",
+                  "description": "Código baseado na Tabela de Códigos de Municípios do __[IBGE](https://www.ibge.gov.br/explica/codigos-dos-municipios.php)__\nque apresenta a lista dos municípios brasileiros associados a um código composto de 7 dígitos, sendo os dois primeiros referentes ao código da Unidade da Federação.\n",
+                  "type": "string",
+                  "pattern": "/^\\d{7}$/"
+                }
+              }
+            }
+          ],
+          "oneOf": [
+            {
+              "type": "object",
+              "title": "CPF",
+              "required": [
+                "cpf"
+              ],
+              "properties": {
+                "cpf": {
+                  "type": "string",
+                  "title": "CPF",
+                  "pattern": "\\d{11}",
+                  "description": "CPF do usuário."
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "cnpj"
+              ],
+              "title": "CNPJ",
+              "properties": {
+                "cnpj": {
+                  "type": "string",
+                  "title": "CNPJ",
+                  "pattern": "\\d{14}",
+                  "description": "CNPJ do usuário."
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "DadosQRCode": {
+      "type": "object",
+      "title": "Informações do QR Composto.",
+      "description": "##### Informações relacionadas aos parâmetros `idRec` e `txid` informados na requisição.\nAo consultar uma recorrência via endpoint GET `/rec/{idRec}?txid={txid}`, o usuário recebedor pode optar pela consulta sem\no `txid` ou por compor a requisição com um `txid` de uma cobrança imediata, ou cobrança com vencimento, de forma a obter o QR Composto\npara a jornada de interesse.\n\nOs `dadosQR` retornados variam de acordo com a jornada desejada, indicada pela presença dos parâmetros de interesse, conforme a tabela abaixo:\n<table  >\n<tr><td width=\"15%\">idRec</td><td  width=\"15%\">txid de Cob</td><td width=\"15%\">txid de CobV</td><td width=\"100%\">Conteúdo esperado</td></tr>\n<tr><td>X</td><td>-</td><td>-</td><td><pre>{ jornada: \"JORNADA_2\", pixCopiaECola: \"QR Composto da recorrência\" }</pre></td></tr>\n<tr><td>X</td><td>X</td><td>-</td><td><pre>{ jornada: \"JORNADA_3\", pixCopiaECola: \"QR Composto da cobrança imediata + recorrência\" }</pre></td></tr>\n<tr><td>X</td><td>-</td><td>X</td><td><pre>{ jornada: \"JORNADA_4\", pixCopiaECola: \"QR Composto da cobrança com vencimento + recorrência\" }</pre></td></tr>\n</table>\n\nOs campos `dadosQR.jornada` e `dadosQR.pixCopiaECola` só serão retornados se as respectivas locations necessárias para a construção do QR Composto\nestiverem preenchidas na recorrência e na eventual cobrança, a depender da jornada desejada.\n",
+      "properties": {
+        "jornada": {
+          "type": "string",
+          "title": "Jornada de ativação",
+          "description": "Jornada de ativação da recorrência:\n- `JORNADA_2`: Usuário pagador aceitou a recorrência através de leitura de QR Code de recorrência\n- `JORNADA_3`: Usuário pagador iniciou a recorrência através de leitura de QR Code composto e pagamento de cobrança imediata\n- `JORNADA_4`: Usuário pagador escolheu aderir à recorrência através de leitura de QR Code composto relacionado à cobrança com vencimento\n",
+          "enum": [
+            "JORNADA_2",
+            "JORNADA_3",
+            "JORNADA_4"
+          ]
+        },
+        "pixCopiaECola": {
+          "type": "string",
+          "title": "Pix Copia e Cola correspondente à Recorrência.",
+          "description": "Este campo retorna o valor do Pix Copia e Cola correspondente à recorrência. Trata-se da sequência de caracteres que representa o BR Code.",
+          "maxLength": 512
+        }
+      }
+    },
+    "PayloadLocationRecCompleta": {
+      "type": "object",
+      "title": "Location do Payload Completa",
+      "description": "Contendo `id`, `location`, `criacao` e `idRec`.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/PayloadLocationRecGerada"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "idRec": {
+              "$ref": "#/$defs/RecId"
+            }
+          }
+        }
+      ]
+    },
+    "PayloadLocationRecGerada": {
+      "type": "object",
+      "title": "Location do Payload Completa",
+      "description": "Identificador da localização do payload completo.",
+      "required": [
+        "id",
+        "location",
+        "tipo",
+        "criacao"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/PayloadLocationRecId"
+        },
+        "location": {
+          "type": "string",
+          "title": "Localização do payload",
+          "description": "Localização do Payload a ser informada na criação da recorrência.",
+          "maxLength": 77,
+          "format": "uri",
+          "readOnly": true
+        },
+        "criacao": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Data de Criação",
+          "description": "Data e hora em que a location foi criada. Respeita RFC 3339.",
+          "readOnly": true
+        }
+      }
+    },
+    "PayloadLocationRecId": {
+      "type": "integer",
+      "format": "int64",
+      "title": "Id da location",
+      "description": "Identificador da location a ser informado na criação de uma recorrência."
+    },
+    "PessoaJuridicaRecorrencia": {
+      "type": "object",
+      "description": "Contendo `nome`, `CNPJ` e `convenio` do recebedor.",
+      "required": [
+        "nome",
+        "cnpj"
+      ],
+      "title": "Pessoa Jurídica",
+      "properties": {
+        "cnpj": {
+          "type": "string",
+          "title": "CNPJ",
+          "pattern": "\\d{14}",
+          "description": "CNPJ do usuário."
+        },
+        "nome": {
+          "type": "string",
+          "title": "Nome",
+          "description": "Nome do usuário.",
+          "maxLength": 140
+        }
+      }
+    },
+    "RecAtivacao": {
+      "type": "object",
+      "title": "Dados relacionados à confirmação da ativação da recorrência.",
+      "properties": {
+        "ativacao": {
+          "$ref": "#/$defs/RecAtivacaoConfirmacao"
+        }
+      }
+    },
+    "RecAtivacaoConfirmacao": {
+      "type": "object",
+      "title": "Dados relacionados à confirmação da ativação da recorrência.",
+      "required": [
+        "tipoJornada"
+      ],
+      "description": "Contendo `tipojornada`e `dadosJornada`",
+      "properties": {
+        "tipoJornada": {
+          "type": "string",
+          "title": "Jornada de ativação",
+          "description": "Dado relacionado ao caminho percorrido pelo processo de adesão à recorrência pelo usuário pagador:\n- `JORNADA_1`: Usuário pagador aceitou a recorrência através de notificação externa.\n- `JORNADA_2`: Usuário pagador aceitou a recorrência através de leitura de QR Code de recorrência.\n- `JORNADA_3`: Usuário pagador iniciou a recorrência através de leitura de QR Code composto e pagamento de cobrança imediata.\n- `JORNADA_4`: Usuário pagador escolheu aderir à recorrência através de leitura de QR Code composto relacionado à cobrança com vencimento.\n- `AGUARDANDO_DEFINICAO`: Valor inicial posterior à criação e anterior à ativação da recorrência.\n",
+          "enum": [
+            "JORNADA_1",
+            "JORNADA_2",
+            "JORNADA_3",
+            "JORNADA_4",
+            "AGUARDANDO_DEFINICAO"
+          ]
+        },
+        "dadosJornada": {
+          "$ref": "#/$defs/RecAtivacaoJornada"
+        }
+      }
+    },
+    "RecAtivacaoJornada": {
+      "type": "object",
+      "required": [
+        "txid"
+      ],
+      "title": "Dados de confirmação da jornada e início da recorrência",
+      "description": "Contendo `txid`",
+      "properties": {
+        "txid": {
+          "$ref": "#/$defs/TxId"
+        }
+      }
+    },
+    "RecAtualizacao": {
+      "type": "object",
+      "title": "Histórico de atualização da recorrência.",
+      "required": [
+        "atualizacao"
+      ],
+      "properties": {
+        "atualizacao": {
+          "type": "array",
+          "title": "Histórico de Status",
+          "description": "Contendo `status`e `data`.",
+          "items": {
+            "type": "object",
+            "required": [
+              "status",
+              "data"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "title": "Status da recorrência",
+                "description": "Status da recorrência:\n- `CRIADA`: Recorrência criada, aguardando aprovação do pagador\n- `APROVADA`: Recorrência aprovada pelo pagador e ativa\n- `REJEITADA`: Recorrência rejeitada pelo pagador\n- `EXPIRADA`: Recorrência expirou sem aprovação\n- `CANCELADA`: Recorrência cancelada pelo recebedor ou pagador\n",
+                "enum": [
+                  "CRIADA",
+                  "APROVADA",
+                  "REJEITADA",
+                  "EXPIRADA",
+                  "CANCELADA"
+                ]
+              },
+              "data": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Data e hora do registro de status atualizado. Respeita RFC 3339."
+              }
+            }
+          }
+        }
+      }
+    },
+    "RecBase": {
+      "title": "Recorrência Base",
+      "type": "object",
+      "required": [
+        "calendario",
+        "vinculo"
+      ],
+      "description": "Atributos de Configuração de Recorrência",
+      "properties": {
+        "vinculo": {
+          "$ref": "#/$defs/RecBaseObjeto"
+        },
+        "calendario": {
+          "$ref": "#/$defs/RecBaseCalendario"
+        },
+        "valor": {
+          "type": "object",
+          "description": "Contendo `valorRec`e `ValorMinimoRecebedor`",
+          "properties": {
+            "valorRec": {
+              "type": "string",
+              "pattern": "\\d{1,10}\\.\\d{2}",
+              "title": "Valor da recorrência",
+              "description": "Campo opcional, deve ser preenchido apenas quando o valor dos pagamentos for fixo ou não for sujeito a alteração durante a vigência da autorização."
+            },
+            "valorMinimoRecebedor": {
+              "type": "string",
+              "pattern": "\\d{1,10}\\.\\d{2}",
+              "title": "Valor mínimo da recorrência",
+              "description": "Campo opcional. Valor definido pelo usuário recebedor. Se o usuário pagador atribuir um valor máximo para os pagamentos daquela autorização, ele não poderá ser inferior ao piso definido pelo usuário recebedor. Não pode ser preenchido nas autorizações de valor fixo, ou seja, com campo valor preenchido."
+            }
+          }
+        }
+      }
+    },
+    "RecBaseCalendario": {
+      "type": "object",
+      "title": "Informações sobre calendário da recorrência",
+      "description": "Contendo `dataInicial`, `dataFinal` e `periodicidade` da recorrência.",
+      "required": [
+        "dataInicial",
+        "periodicidade"
+      ],
+      "properties": {
+        "dataInicial": {
+          "type": "string",
+          "format": "date",
+          "x-future-or-present": true,
+          "title": "Data estimada de primeiro pagamento.",
+          "description": "Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. Data estimada de primeiro pagamento."
+        },
+        "dataFinal": {
+          "type": "string",
+          "format": "date",
+          "x-future-or-present": true,
+          "title": "Data final da vigência.",
+          "description": "Campo opcional que deve ser preenchido para autorizações com vigência pré-definida, devendo ser compatível com os valores informados em tipoFrequencia e a dataInicialRecorrencia. Não deve ser preenchido para autorizações por tempo indeterminado. Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601."
+        },
+        "periodicidade": {
+          "type": "string",
+          "title": "Periodicidade das cobranças recorrentes.",
+          "enum": [
+            "SEMANAL",
+            "MENSAL",
+            "TRIMESTRAL",
+            "SEMESTRAL",
+            "ANUAL"
+          ]
+        }
+      }
+    },
+    "RecBaseObjeto": {
+      "type": "object",
+      "title": "Descrição do Objeto da Recorrência",
+      "required": [
+        "contrato",
+        "devedor"
+      ],
+      "description": "Contendo `objeto`, `devedor` e `contrato`.",
+      "properties": {
+        "objeto": {
+          "type": "string",
+          "title": "Identificador do objeto de vínculo",
+          "description": "Campo de texto livre para informações referentes ao contrato que permitam ao usuário pagador reconhecer o objeto dos pagamentos periódicos por meio do Pix Automático.",
+          "maxLength": 35
+        },
+        "devedor": {
+          "title": "Informações sobre o devedor da recorrência",
+          "description": "Contendo `nome` e `cpf` ou `cnpj`",
+          "required": [
+            "nome",
+            "cpf",
+            "cnpj"
+          ],
+          "oneOf": [
+            {
+              "type": "object",
+              "title": "nome e CPF",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "title": "Nome",
+                  "description": "Nome do devedor.",
+                  "maxLength": 140
+                },
+                "cpf": {
+                  "type": "string",
+                  "title": "CPF",
+                  "pattern": "\\d{11}",
+                  "description": "CPF do devedor."
+                }
+              }
+            },
+            {
+              "type": "object",
+              "title": "nome e CNPJ",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "title": "Nome",
+                  "description": "Nome do devedor.",
+                  "maxLength": 140
+                },
+                "cnpj": {
+                  "type": "string",
+                  "title": "CNPJ",
+                  "pattern": "\\d{14}",
+                  "description": "CNPJ do devedor."
+                }
+              }
+            }
+          ]
+        },
+        "contrato": {
+          "type": "string",
+          "title": "Objeto da autorização",
+          "description": "Número, identificador, ou código que representa o objeto da autorização (contrato, pedido etc.).",
+          "maxLength": 35
+        }
+      }
+    },
+    "RecConfiguracao": {
+      "type": "object",
+      "title": "Configuração da Recorrência",
+      "required": [
+        "politicaRetentativa"
+      ],
+      "properties": {
+        "politicaRetentativa": {
+          "type": "string",
+          "title": "Política de retentativa pós vencimento da recorrência",
+          "description": "NAO_PERMITE: Não permite retentativas.</br> PERMITE_3R_7D: Permite até 3 retentativas em dias diferentes no intervalo de até 7 dias corridos contados a partir da data de liquidação prevista na instrução de pagamento original.</br> As retentativas devem ser enviadas pelo recebedor. [Consulte a documentação](#tag/Cobranca-Recorrente/operation/cobrTxidRetentativaDataPost)",
+          "enum": [
+            "NAO_PERMITE",
+            "PERMITE_3R_7D"
+          ]
+        }
+      }
+    },
+    "RecEncerramento": {
+      "type": "object",
+      "title": "Detalhamento do encerramento da recorrência.",
+      "properties": {
+        "encerramento": {
+          "type": "object",
+          "description": "Detalha o encerramento da recorrência, seja por `rejeicao` ou `cancelamento`",
+          "properties": {
+            "rejeicao": {
+              "$ref": "#/$defs/RecEncerramentoRejeicao"
+            },
+            "cancelamento": {
+              "$ref": "#/$defs/RecEncerramentoCancelamento"
+            }
+          }
+        }
+      }
+    },
+    "RecEncerramentoCancelamento": {
+      "type": "object",
+      "title": "Informações sobre o cancelamento da recorrência",
+      "required": [
+        "solicitante",
+        "codigo",
+        "descricao"
+      ],
+      "description": "Contendo `solicitante`, `codigo` e `descricao` do cancelamento.",
+      "properties": {
+        "solicitante": {
+          "type": "string",
+          "title": "Solicitante do cancelamento",
+          "description": "Identifica quem solicitou o cancelamento:\n- `PSP_PAGADOR`: Cancelamento solicitado pelo PSP do pagador\n- `USUARIO_PAGADOR`: Cancelamento solicitado pelo usuário pagador\n- `PSP_RECEBEDOR`: Cancelamento solicitado pelo PSP do recebedor\n- `USUARIO_RECEBEDOR`: Cancelamento solicitado pelo usuário recebedor\n",
+          "enum": [
+            "PSP_PAGADOR",
+            "USUARIO_PAGADOR",
+            "PSP_RECEBEDOR",
+            "USUARIO_RECEBEDOR"
+          ]
+        },
+        "codigo": {
+          "type": "string",
+          "title": "Código do cancelamento",
+          "description": "Razão para a mudança de status. Valores possíveis:\n- **ACCL**: Cancelamento motivado por encerramento de conta\n- **CPCL**: Cancelamento motivado por encerramento de empresa\n- **DCSD**: Cancelamento motivado por falecimento\n- **ERSL**: Cancelamento solicitado pelo usuário recebedor ou pelo seu participante por erro na solicitação de confirmação\n- **FRUD**: Cancelamento motivado por fraude\n- **PCFD**: Cancelamento solicitado pelo PSP recebedor por ausência de resposta à pain.009 dentro do prazo regulamentar\n- **SLCR**: Cancelamento solicitado pelo participante do usuário recebedor porque a mesma recorrência foi confirmada por meio de outra jornada, por exemplo, via QR Code\n- **SLDB**: Cancelamento solicitado pelo usuário recebedor\n",
+          "enum": [
+            "ACCL",
+            "CPCL",
+            "DCSD",
+            "ERSL",
+            "FRUD",
+            "PCFD",
+            "SLCR",
+            "SLDB"
+          ],
+          "maxLength": 4
+        },
+        "descricao": {
+          "type": "string",
+          "title": "Descricao do cancelamento",
+          "description": "Descricao do cancelamento.",
+          "maxLength": 105
+        }
+      }
+    },
+    "RecEncerramentoRejeicao": {
+      "type": "object",
+      "title": "Informações sobre a rejeição da recorrência",
+      "required": [
+        "codigo",
+        "descricao"
+      ],
+      "description": "Contendo `codigo` e `descricao` da causa da rejeição.",
+      "properties": {
+        "codigo": {
+          "type": "string",
+          "title": "Código da rejeição",
+          "description": "Código da rejeição.</br>AC01: Conta não localizada ou não pertencente ao usuário pagador.</br>AC04: Conta transacional do usuário pagador encontra-se encerrada.</br>AC06: Conta transacional do usuário pagador encontra-se bloqueada.</br>AG12: Não é permitido o envio da solicitação de autorização de recorrência, de cancelamento de recorrência, de confirmação de recorrência ou de cancelamento de pain.009 para uma conta transacional na mesma instituição ou em participante que utilize o serviço de liquidação de um mesmo participante liquidante no SPI.</br>AM05: Solicitação de confirmação de recorrência para pagamentos periódicos já confirmada previamente ou com status 'PDNG'.</br>AP01: Divergência no campo de atualização dos dados da recorrência para os pagamentos periódicos e o status da recorrência para os pagamentos periódicos (ex.: falta de sincronização).</br>AP02: CPF/CNPJ do usuário pagador não localizado ou diferente do constante na pain.009 original. Ou, no caso de cancelamento, o CPF/CNPJ usuário pagador não coincide com o contido nos dados da recorrência para os pagamentos periódicos.</br>AP03: Agência do usuário pagador não localizada.</br>AP04: ID da recorrência inválido ou não corresponde ao original.</br>AP05: Status da recorrência para os pagamentos periódicos inconsistente.</br>AP06: CPF/CNPJ do usuário recebedor diferente do constante na pain.009 ou do payload. Ou, no caso de cancelamento, o CPF/CNPJ usuário recebedor não coincide com o contido nos dados da recorrência para os pagamentos periódicos.</br>AP07: Confirmação da recorrência pelo usuário pagador realizada após a expiração ou cancelamento da solicitação de confirmação (pain.009).</br>AP08: Primeiro pagamento imediato associado à recorrência não foi identificado. (Válido apenas para a Jornada 3 de autorização.).</br>AP09: Solicitação de confirmação de recorrência para pagamentos periódicos não foi identificada para viabilizar seu cancelamento.</br>AP10: CPF/CNPJ do solicitante do cancelamento não corresponde à identificação do usuário pagador/recebedor ou do PSP pagador/recebedor contidos na recorrência para os pagamentos periódicos.</br>AP11: ISPB do PSP pagador diverge da informação contida na recorrência para pagamentos periódicos.</br>AP12: ISPB do PSP recebedor diverge da informação contida na recorrência para pagamentos periódicos.</br>AP13: Solicitação de confirmação da recorrência para os pagamentos periódicos rejeitada pelo usuário pagador por não reconhecimento do usuário recebedor.</br>AP14: Solicitação de confirmação da recorrência para os pagamentos periódicos rejeitada pelo usuário pagador por não ter interesse no uso do Pix Automático para o usuário recebedor.</br>AP15: Solicitação de confirmação da recorrência para os pagamentos periódicos rejeitada pelo participante do usuário pagador que optou por não oferecer uso do Pix Automático para cliente pessoa jurídica.</br>CH16: Preenchimento do conteúdo da mensagem incorreto ou incompatível com as regras de negócio.</br>DS27: Participante não se encontra cadastrado ou ainda não iniciou a operação no SPI.</br>MD01: Recorrência objeto da solicitação de cancelamento não existe. Não deve ser utilizado para solicitações de cancelamento de pain.009 com status = 'PDNG'. Ou seja, uma recorrência com status = 'PDNG' deve ser considerada como uma recorrência existente.</br>MD20: Recorrência objeto da solicitação de cancelamento já expirou.</br>RC09: ISPB do participante do usuário pagador inválido ou inexistente.</br>RC10: ISPB do participante do usuário recebedor inválido ou inexistente.",
+          "enum": [
+            "AC01",
+            "AC04",
+            "AC06",
+            "AG12",
+            "AM05",
+            "AP01",
+            "AP02",
+            "AP03",
+            "AP04",
+            "AP05",
+            "AP06",
+            "AP07",
+            "AP08",
+            "AP09",
+            "AP10",
+            "AP11",
+            "AP12",
+            "AP13",
+            "AP14",
+            "AP15",
+            "CH16",
+            "DS27",
+            "MD01",
+            "MD20",
+            "RC09",
+            "RC10"
+          ],
+          "maxLength": 4
+        },
+        "descricao": {
+          "type": "string",
+          "title": "Descricao da rejeição",
+          "description": "Descricao da causa da rejeição",
+          "maxLength": 105
+        }
+      }
+    },
+    "RecId": {
+      "type": "string",
+      "title": "ID Recorrência",
+      "description": "# Identificador da Recorrência\n\nRegra de formação:\n\n  - RAxxxxxxxxyyyyMMddzzzzzzzzzzz (29 caracteres; \"case sensitive\", isso\né, diferencia letras maiúsculas e minúsculas), sendo:\n  - \"R\":  fixo (1 caractere). \"R\" para a recorrência criada dentro do\nPix;\n  - \"A\": identificação da possibilidade de novas tentativas, sendo\npossíveis os valores \"R\" ou \"N\" (1 caractere). \"R\" caso a recorrência permita novas tentativas de pagamento pós vencimento, ou \"N\" caso não permita novas tentativas.\n  - \"xxxxxxxx\":  identificação do agente que presta serviço para o\nusuário recebedor que gerou o <Id>, podendo ser: o ISPB do participante direto, o ISPB do participante indireto ou os 8 primeiros dígitos do CNPJ do prestador de serviço de iniciação (8 caracteres numéricos [0-9]);\n  - \"yyyyMMdd\":  data (8 caracteres) de criação da recorrência;\n  - \"zzzzzzzzzzz\": sequencial criado pelo agente que gerou o <Id>\n(11 caracteres alfanuméricos [a-z|A-Z|0-9]). Deve ser único dentro de cada \"yyyyMMdd\".\nDessa forma, o ID da recorrência deve ser formado de acordo com um dos tipos a seguir:\n- \"RRxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que permite novas tentativas de pagamento pós vencimento; ou\n- \"RNxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que não permite novas tentativas de pagamento pós vencimento.\n",
+      "pattern": "[a-zA-Z0-9]{29}",
+      "minLength": 29,
+      "maxLength": 29
+    },
+    "RecPayload": {
+      "type": "object",
+      "title": "Payload da Recorrência",
+      "required": [
+        "idRec",
+        "atualizacao",
+        "recebedor"
+      ],
+      "description": "Atributos de Configuração de Recorrência:\n\n`vinculo`, `calendario`, `valor`, `idRec`, `recebedor`, `politicaRetentativa` e `atualizacao`",
+      "allOf": [
+        {
+          "$ref": "#/$defs/RecBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "idRec": {
+              "$ref": "#/$defs/RecId"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "recebedor": {
+              "type": "object",
+              "required": [
+                "nome",
+                "cnpj",
+                "ispbParticipante"
+              ],
+              "title": "Recebedor",
+              "description": "Dados do recebedor `cnpj`, `nome` e `ispbParticipante`",
+              "properties": {
+                "cnpj": {
+                  "type": "string",
+                  "title": "CNPJ",
+                  "pattern": "\\d{14}",
+                  "description": "CNPJ do usuário."
+                },
+                "nome": {
+                  "type": "string",
+                  "title": "Nome",
+                  "description": "Nome do usuário.",
+                  "maxLength": 140
+                },
+                "ispbParticipante": {
+                  "type": "string",
+                  "title": "ISPB do usuário recebedor.",
+                  "description": "ISPB do usuário recebedor.",
+                  "pattern": "\\d{8}"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/RecConfiguracao"
+        },
+        {
+          "$ref": "#/$defs/RecAtualizacao"
+        }
+      ]
+    },
+    "RecStatus": {
+      "type": "object",
+      "title": "Status da Recorrência",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Status do registro da recorrência",
+          "description": "Status do registro da recorrência:\n- `CRIADA`: Recorrência criada, aguardando aprovação do pagador\n- `APROVADA`: Recorrência aprovada pelo pagador e ativa\n- `REJEITADA`: Recorrência rejeitada pelo pagador\n- `EXPIRADA`: Recorrência expirou sem aprovação\n- `CANCELADA`: Recorrência cancelada pelo recebedor ou pagador\n",
+          "enum": [
+            "CRIADA",
+            "APROVADA",
+            "REJEITADA",
+            "EXPIRADA",
+            "CANCELADA"
+          ]
+        }
+      }
+    },
+    "SolicRecAtualizacao": {
+      "type": "object",
+      "title": "Histórico de Status da Solicitação de Recorrência",
+      "required": [
+        "atualizacao"
+      ],
+      "properties": {
+        "atualizacao": {
+          "type": "array",
+          "title": "Histórico de Status da Solicitação de Recorrência",
+          "description": "Contendo `status`e `data`",
+          "items": {
+            "type": "object",
+            "required": [
+              "status",
+              "data"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "title": "Status do registro da solicitação de recorrência",
+                "description": "Status da solicitação de recorrência:\n- `CRIADA`: Solicitação criada, aguardando envio\n- `ENVIADA`: Solicitação enviada ao pagador\n- `RECEBIDA`: Solicitação recebida pelo pagador\n- `REJEITADA`: Solicitação rejeitada pelo pagador\n- `ACEITA`: Solicitação aceita pelo pagador\n- `EXPIRADA`: Solicitação expirou sem resposta\n- `CANCELADA`: Solicitação cancelada\n",
+                "enum": [
+                  "CRIADA",
+                  "ENVIADA",
+                  "RECEBIDA",
+                  "REJEITADA",
+                  "ACEITA",
+                  "EXPIRADA",
+                  "CANCELADA"
+                ]
+              },
+              "data": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Data e hora do registro de status atualizado. Respeita RFC 3339."
+              }
+            }
+          }
+        }
+      }
+    },
+    "SolicRecBase": {
+      "type": "object",
+      "title": "Solicitação de Recorrência Base",
+      "required": [
+        "calendario",
+        "idRec",
+        "destinatario"
+      ],
+      "description": "Dados criados ou alterados da cobrança recorrente via API Pix",
+      "properties": {
+        "idRec": {
+          "$ref": "#/$defs/RecId"
+        },
+        "calendario": {
+          "$ref": "#/$defs/SolicrecBaseCalendario"
+        },
+        "destinatario": {
+          "$ref": "#/$defs/DadosBancarios"
+        }
+      }
+    },
+    "SolicRecCompleta": {
+      "type": "object",
+      "title": "Solicitação de Recorrência Completa",
+      "required": [
+        "rec"
+      ],
+      "description": "Dados criados ou alterados da solicitação da recorrência",
+      "allOf": [
+        {
+          "$ref": "#/$defs/SolicRecBase"
+        },
+        {
+          "$ref": "#/$defs/SolicRecId"
+        },
+        {
+          "$ref": "#/$defs/SolicRecStatus"
+        },
+        {
+          "$ref": "#/$defs/SolicRecAtualizacao"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "recPayload": {
+              "$ref": "#/$defs/RecPayload"
+            }
+          }
+        }
+      ]
+    },
+    "SolicRecId": {
+      "type": "object",
+      "title": "Id da Solicitação de recorrência",
+      "required": [
+        "idSolicRec"
+      ],
+      "description": "Dados criados ou alterados da cobrança recorrente via API Pix",
+      "properties": {
+        "idSolicRec": {
+          "type": "string",
+          "title": "ID Solicitação da Recorrência",
+          "description": "# Identificador da Solicitação da Recorrência\n\nRegra de formação:\n- SCxxxxxxxxyyyyMMddzzzzzzzzzzz (29 caracteres; “case sensitive”, isso é, diferencia letras maiúsculas e minúsculas), sendo:\n  - SC - fixo (2 caracteres);\n  - xxxxxxxx – ISPB do agente que envia a mensagem pain.009 de\nsolicitação de confirmação da recorrência;\n  - yyyyMMdd – data (8 caracteres) de criação da mensagem pain.009\nde solicitação de confirmação da recorrência;\n  - zzzzzzzzzzz – sequencial criado pelo agente que gerou a\nmensagem de solicitação de confirmação da recorrência (11 caracteres alfanuméricos [a-z|A-Z|0-9]). Deve ser único dentro de cada “yyyyMMdd”.\n",
+          "pattern": "[a-zA-Z0-9]{29}",
+          "minLength": 29,
+          "maxLength": 29
+        }
+      }
+    },
+    "SolicRecStatus": {
+      "type": "object",
+      "title": "Status da Solicitação de Recorrência",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Status do registro da solicitação de recorrência",
+          "description": "Status da solicitação de recorrência:\n- `CRIADA`: Solicitação criada, aguardando envio\n- `ENVIADA`: Solicitação enviada ao pagador\n- `RECEBIDA`: Solicitação recebida pelo pagador\n- `REJEITADA`: Solicitação rejeitada pelo pagador\n- `ACEITA`: Solicitação aceita pelo pagador\n- `EXPIRADA`: Solicitação expirou sem resposta\n- `CANCELADA`: Solicitação cancelada\n",
+          "enum": [
+            "CRIADA",
+            "ENVIADA",
+            "RECEBIDA",
+            "REJEITADA",
+            "ACEITA",
+            "EXPIRADA",
+            "CANCELADA"
+          ]
+        }
+      }
+    },
+    "SolicrecBaseCalendario": {
+      "type": "object",
+      "title": "Informações de calendário da solicitação da recorrência",
+      "description": "Contendo `dataExpiracaoSolicitacao` da solicitação de recorrência.",
+      "required": [
+        "dataExpiracaoSolicitacao"
+      ],
+      "properties": {
+        "dataExpiracaoSolicitacao": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Data de expiração da solicitação",
+          "description": "Data de expiração da solicitação de recorrência. Respeita RFC 3339."
+        }
+      }
+    },
+    "TxId": {
+      "type": "string",
+      "title": "Id da Transação",
+      "description": "# Identificador da transação\n\nO campo txid determina o identificador da transação.\nO objetivo desse campo é ser um elemento que possibilite ao PSP do recebedor apresentar ao usuário recebedor a funcionalidade de conciliação de pagamentos.\n\nO txid é criado exclusivamente pelo usuário recebedor e está sob sua responsabilidade.\nO txid, no contexto de representação de uma cobrança, é único por CPF/CNPJ do usuário recebedor.\n",
+      "pattern": "[a-zA-Z0-9]{26,35}"
+    }
+  }
+}

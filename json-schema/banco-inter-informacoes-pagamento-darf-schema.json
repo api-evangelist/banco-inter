@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-informacoes-pagamento-darf-schema.json",
+  "title": "InformacoesPagamento",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-banking-openapi.yml#/components/schemas/InformacoesPagamentoDarf",
+  "type": "object",
+  "properties": {
+    "codigoSolicitacao": {
+      "type": "string"
+    },
+    "tipoDarf": {
+      "type": "string"
+    },
+    "valor": {
+      "type": "number"
+    },
+    "valorMulta": {
+      "type": "number"
+    },
+    "valorJuros": {
+      "type": "number"
+    },
+    "valorTotal": {
+      "type": "number"
+    },
+    "tipo": {
+      "type": "string"
+    },
+    "periodoApuracao": {
+      "type": "string"
+    },
+    "dataPagamento": {
+      "type": "string"
+    },
+    "referencia": {
+      "type": "string"
+    },
+    "dataVencimento": {
+      "type": "string"
+    },
+    "codigoReceita": {
+      "type": "string",
+      "minLength": 4,
+      "maxLength": 4
+    },
+    "statusPagamento": {
+      "$ref": "#/$defs/SituacaoPagamento"
+    },
+    "dataInclusao": {
+      "type": "string"
+    },
+    "cnpjCpf": {
+      "type": "string"
+    },
+    "aprovacoesNecessarias": {
+      "type": "integer",
+      "description": "Aprovações necessárias para o pagamento ser aprovado."
+    },
+    "aprovacoesRealizadas": {
+      "type": "integer",
+      "description": "Aprovações já realizadas."
+    }
+  },
+  "$defs": {
+    "SituacaoPagamento": {
+      "type": "string",
+      "enum": [
+        "EMPROCESSAMENTO",
+        "AGENDADO_CANCELADO",
+        "AGUARDANDO_APROVACAO",
+        "APROVADO",
+        "CANCELADO",
+        "AGENDADO",
+        "REALIZADO",
+        "ERRO",
+        "APROVACAO_EXPIRADA",
+        "REPROVADO",
+        "NAO_COMPENSADO"
+      ]
+    }
+  }
+}

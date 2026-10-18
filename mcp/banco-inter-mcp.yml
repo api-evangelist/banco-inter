@@ -1,0 +1,94 @@
+type: MCPServer
+name: Inter MCP (inter-mcp)
+generated: '2026-10-18'
+method: probed
+status: official
+source:
+  - https://developers.inter.co/docs/mcp/visao-geral
+  - https://developers.inter.co/docs/mcp/cadastrar-em-uma-ide
+  - https://developers.inter.co/docs/mcp/uso-pratico
+  - https://developers.inter.co/docs/mcp/limites-e-seguranca
+  - https://developers.inter.co/docs/mcp/solucao-de-problemas
+  - https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp/health
+  - https://cdpj-sandbox.partners.uatinter.co/.well-known/oauth-protected-resource
+description: >-
+  Official Banco Inter (Inter Empresas) remote MCP server, documented on the developer portal as an
+  "integration copilot" for developers using the Inter Empresas APIs. It answers from the official
+  documentation and versioned catalogs: integration playbooks, endpoint catalogs for Banking, Pix and
+  Cobrança BolePix, request examples and response hints, client blueprints, OAuth/scope/mTLS guidance,
+  webhook setup, HTTP error diagnosis, Sandbox/homologation checklists and client coverage validation.
+  The docs state it is NOT an SDK, does not execute production transactions on the account, and must not
+  receive certificates, private keys or unnecessary tokens. Only a Sandbox endpoint is published.
+deployment:
+  mode: remote
+  endpoint: https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp
+  transport: streamable-http
+  environment: sandbox
+  auth: oauth
+  verified: probed
+  health: https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp/health
+  local_bridge: >-
+    For IntelliJ IDEA the docs use `npx -y mcp-remote https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp 3334
+    --static-oauth-client-info {"client_id":"pj-dev-portal-client"} --static-oauth-client-metadata {"scope":"openid sandbox.write"}`
+    (the generic mcp-remote adapter, not an Inter package; port 3334 is the only allowed login callback).
+auth:
+  type: oauth2
+  client_id: pj-dev-portal-client
+  scopes: [openid, sandbox.write]
+  dynamic_client_registration: false
+  note: 'Login is a browser OAuth flow with the developer-portal account; the static CLIENT_ID and scopes must be configured (docs: missing auth block yields "does not support dynamic client registration").'
+  protected_resource_metadata:
+    url: https://cdpj-sandbox.partners.uatinter.co/.well-known/oauth-protected-resource
+    resource: https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp
+    authorization_servers: [https://accounts.uatbi.com.br/generic/oauth]
+    scopes_supported: [openid, sandbox.write]
+server:
+  name: digital-account-mcp-server
+  version: 1.0.10
+  products_covered: [Banking, Pix, Cobrança BolePix]
+  client_config_example: |
+    {"mcpServers":{"inter-mcp":{"type":"streamable-http","url":"https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp","auth":{"CLIENT_ID":"pj-dev-portal-client","scopes":["openid","sandbox.write"]}}}}
+probes:
+  - url: https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp/health
+    status: 200
+    body: '{"status":"healthy","service":"digital-account-mcp-server","version":"1.0.10"}'
+  - url: https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp
+    request: POST initialize (no token)
+    status: 401
+    body: 'curityOauth: missing token'
+  - url: https://cdpj-sandbox.partners.uatinter.co/.well-known/oauth-protected-resource
+    status: 200
+tools:
+  gated: true
+  names_published: false
+  note: >-
+    tools/list requires a developer-portal OAuth login (401 without a token) and the docs publish no tool
+    names, only tool CATEGORIES: integration playbook; Sandbox onboarding and test recipe; hosts, token URL,
+    environment and mTLS; Banking/Pix/Cobrança BolePix catalog; request examples and response hints; OAuth
+    and scope strategy; webhooks; HTTP errors and common pitfalls; client coverage validation. No tool names
+    are recorded here because none were observed.
+  documented_categories:
+    - integration-playbook
+    - sandbox-onboarding-and-test-recipe
+    - environment-hosts-token-url-mtls
+    - api-catalog (Banking, Pix, Cobrança BolePix)
+    - request-examples-and-response-hints
+    - oauth-and-scope-strategy
+    - webhooks
+    - http-errors-and-pitfalls
+    - client-coverage-validation
+limits:
+  - name: Sandbox rate limit
+    note: HTTP 429 when the Sandbox call limit is reached; docs say wait one minute and retry.
+    source: https://developers.inter.co/docs/mcp/solucao-de-problemas
+community_servers:
+  - name: mcp-banco-inter
+    official: false
+    author: SamuelMoraesF
+    package: https://www.npmjs.com/package/mcp-banco-inter
+    version: 1.0.3
+    published: '2026-02-12'
+    deployment: {mode: both, install: npx -y samuelmoraesf/mcp-banco-inter, transports: [stdio, streamable-http (self-hosted)], verified: searched}
+    note: Third-party server that calls the Banking and Cobrança APIs with the user's own client credentials and mTLS certificate. Tool names taken from its npm README.
+    tools: [consultar_saldo, consultar_extrato, baixar_pdf_extrato, listar_boletos, emitir_boleto, baixar_pdf_boleto, cancelar_boleto, sumario_boletos]
+    source: https://registry.npmjs.org/mcp-banco-inter

@@ -1,0 +1,41 @@
+generated: '2026-10-18'
+method: derived
+source: openapi/banco-inter-token-openapi.yml
+name: Banco Inter rate limits
+limits:
+  - name: Token API rate limit
+    limit_text: 5 chamadas por minuto
+    window: minute
+    max: 5
+    scope: per API key
+    plan: null
+    endpoint: POST /token
+    kind: standard
+  - name: Banking API rate limit
+    limit_text: 10 chamadas por minuto
+    window: minute
+    max: 10
+    scope: per API key
+    plan: null
+    endpoint: Banking API endpoints
+    kind: standard
+  - name: Sandbox Token API rate limit
+    limit_text: 5 chamadas por minuto
+    window: minute
+    max: 5
+    scope: per API key
+    plan: null
+    endpoint: POST /token (Sandbox)
+    kind: standard
+  - name: Sandbox Banking API rate limit
+    limit_text: 10 chamadas por minuto
+    window: minute
+    max: 10
+    scope: per API key
+    plan: null
+    endpoint: Banking API endpoints (Sandbox)
+    kind: standard
+response_headers:
+  - Retry-After (on HTTP 429)
+status_code: 429
+note: Rate limits extracted from OpenAPI documentation. Limits vary by endpoint and environment (Production vs Sandbox). HTTP 429 status code used for rate limit signaling.

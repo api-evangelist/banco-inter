@@ -1,0 +1,45 @@
+generated: '2026-10-18'
+method: searched
+source: https://developers.inter.co/docs/sdks/sdk-intro
+packages:
+  - name: banco-inter
+    registry: npm
+    url: https://www.npmjs.com/package/banco-inter
+    language: JavaScript
+    official: false
+    version: '0.0.3'
+    published: '2022-10-12'
+    note: Third-party npm package for Banco Inter API
+  - name: inter-sdk-java
+    registry: github
+    url: https://github.com/inter-co/pj-sdk-java
+    language: Java
+    official: true
+    version: null
+    published: null
+    note: Official Java SDK available as JAR file download from developer portal
+  - name: inter-sdk-csharp
+    registry: github
+    url: https://github.com/inter-co/pj-sdk-csharp
+    language: C#
+    official: true
+    version: null
+    published: null
+    note: Official C# SDK available as DLL and NuGet package download from developer portal
+  - name: inter-sdk-python
+    registry: github
+    url: https://github.com/inter-co/pj-sdk-python
+    language: Python
+    official: true
+    version: null
+    published: null
+    note: Official Python SDK available from GitHub
+  - name: inter-sdk-php
+    registry: github
+    url: https://github.com/inter-co/pj-sdk-php
+    language: PHP
+    official: true
+    version: null
+    published: null
+    note: Official PHP SDK available from GitHub
+note: Banco Inter provides official SDKs for Java, C#, Python, and PHP through their GitHub organization. SDKs are distributed as downloadable binaries (JAR, DLL) and source code rather than through package registries.

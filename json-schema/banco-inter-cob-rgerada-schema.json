@@ -1,0 +1,290 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-cob-rgerada-schema.json",
+  "title": "Cobrança Recorrente Gerada",
+  "description": "Dados criados ou alterados da cobrança recorrente via API Pix",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-pix-automatico-openapi.yml#/components/schemas/CobRGerada",
+  "type": "object",
+  "required": [
+    "idRec",
+    "txid",
+    "status",
+    "valor",
+    "recebedor",
+    "calendario"
+  ],
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "idRec": {
+          "$ref": "#/$defs/RecId"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "txid": {
+          "$ref": "#/$defs/TxId"
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/CobRBase"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "calendario": {
+          "$ref": "#/$defs/CobrCalendario"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "recebedor": {
+          "$ref": "#/$defs/DadosBancariosRecebedorCompleto"
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/CobRStatus"
+    },
+    {
+      "$ref": "#/$defs/DadosDevedorRecorrencia"
+    }
+  ],
+  "$defs": {
+    "CobRBase": {
+      "type": "object",
+      "title": "Cobrança Recorrente Base",
+      "required": [
+        "ajusteDiaUtil"
+      ],
+      "description": "Atributos de cobrança recorrente",
+      "properties": {
+        "infoAdicional": {
+          "type": "string",
+          "title": "Informações adicionais da fatura.",
+          "description": "Informações adicionais da fatura.",
+          "maxLength": 140
+        },
+        "calendario": {
+          "$ref": "#/$defs/CobRBaseCalendario"
+        },
+        "valor": {
+          "$ref": "#/$defs/CobRBaseValor"
+        },
+        "ajusteDiaUtil": {
+          "type": "boolean",
+          "title": "Ajuste data vencimento para próximo dia útil",
+          "default": true,
+          "description": "Campo de ativação do ajuste da data de vencimento para próximo dia útil caso o vencimento corrente seja um dia não útil. O PSP Pagador deverá considerar os feriados locais com base no código município do usuário pagador."
+        },
+        "recebedor": {
+          "$ref": "#/$defs/DadosBancariosRecebedor"
+        }
+      }
+    },
+    "CobRBaseCalendario": {
+      "type": "object",
+      "title": "Informações sobre calendário da cobrança",
+      "description": "Contendo `dataDeVencimento`",
+      "required": [
+        "dataDeVencimento"
+      ],
+      "properties": {
+        "dataDeVencimento": {
+          "type": "string",
+          "format": "date",
+          "title": "Data de vencimento da cobrança",
+          "description": "Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. É a data de expiração da cobrança."
+        }
+      }
+    },
+    "CobRBaseValor": {
+      "type": "object",
+      "title": "Valor da cobrança recorrente",
+      "required": [
+        "original"
+      ],
+      "description": "Contendo `valorOriginal`",
+      "properties": {
+        "original": {
+          "type": "string",
+          "title": "Valor",
+          "pattern": "\\d{1,10}\\.\\d{2}",
+          "description": "Valor original da cobrança."
+        }
+      }
+    },
+    "CobRStatus": {
+      "type": "object",
+      "title": "Status da Cobrança Recorrente",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Status do registro da cobrança",
+          "description": "Status da cobrança recorrente:\n- `CRIADA`: A cobrança foi criada pelo usuário recebedor\n- `ATIVA`: O PSP Pagador recebeu e aceitou a cobrança, agendando o pagamento\n- `CONCLUIDA`: A cobrança foi paga com sucesso\n- `EXPIRADA`: A cobrança não foi liquidada após todas as tentativas de pagamento permitidas\n- `REJEITADA`: A cobrança foi rejeitada pelo PSP Pagador\n- `CANCELADA`: A cobrança foi cancelada com sucesso\n",
+          "enum": [
+            "CRIADA",
+            "ATIVA",
+            "CONCLUIDA",
+            "EXPIRADA",
+            "REJEITADA",
+            "CANCELADA"
+          ]
+        }
+      }
+    },
+    "CobrCalendario": {
+      "type": "object",
+      "required": [
+        "criacao"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/CobRBaseCalendario"
+        }
+      ],
+      "description": "Contendo `dataDeVencimento` e `criacao`",
+      "properties": {
+        "criacao": {
+          "type": "string",
+          "format": "date",
+          "title": "Data de criação da cobrança",
+          "description": "Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. É a data de criação da cobrança."
+        }
+      }
+    },
+    "DadosBancariosRecebedor": {
+      "type": "object",
+      "title": "Dados bancários do recebedor",
+      "description": "Contendo `nome`, `cnpj`, `conta`, `tipoConta` e `agencia`",
+      "required": [
+        "conta",
+        "tipoConta"
+      ],
+      "properties": {
+        "conta": {
+          "type": "string",
+          "description": "Número da conta do usuário recebedor.",
+          "maxLength": 20
+        },
+        "tipoConta": {
+          "type": "string",
+          "title": "Tipo da conta do usuário recebedor",
+          "description": "Tipo da conta do usuário recebedor.",
+          "enum": [
+            "CORRENTE",
+            "POUPANCA",
+            "PAGAMENTO"
+          ]
+        },
+        "agencia": {
+          "type": "string",
+          "description": "Número da agência do usuário recebedor.",
+          "maxLength": 4
+        }
+      }
+    },
+    "DadosBancariosRecebedorCompleto": {
+      "type": "object",
+      "description": "O objeto recebedor organiza as informações sobre o recebedor da cobrança.",
+      "required": [
+        "conta",
+        "tipoConta"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/DadosBancariosRecebedor"
+        },
+        {
+          "$ref": "#/$defs/PessoaJuridicaRecorrencia"
+        }
+      ]
+    },
+    "DadosDevedorRecorrencia": {
+      "type": "object",
+      "properties": {
+        "devedor": {
+          "title": "Dados do devedor",
+          "description": "Contendo `email`, `logradouro`, `cidade`, `uf` e `cep`",
+          "properties": {
+            "email": {
+              "type": "string",
+              "title": "Email",
+              "description": "Email do usuário."
+            },
+            "logradouro": {
+              "type": "string",
+              "title": "Logradouro",
+              "description": "Logradouro do usuário.",
+              "maxLength": 200
+            },
+            "cidade": {
+              "type": "string",
+              "title": "Cidade",
+              "description": "Cidade do usuário.",
+              "maxLength": 200
+            },
+            "uf": {
+              "type": "string",
+              "title": "UF",
+              "description": "UF do usuário.",
+              "maxLength": 2
+            },
+            "cep": {
+              "type": "string",
+              "title": "CEP",
+              "description": "CEP do usuário.",
+              "pattern": "[0-9]{8}"
+            }
+          }
+        }
+      }
+    },
+    "PessoaJuridicaRecorrencia": {
+      "type": "object",
+      "description": "Contendo `nome`, `CNPJ` e `convenio` do recebedor.",
+      "required": [
+        "nome",
+        "cnpj"
+      ],
+      "title": "Pessoa Jurídica",
+      "properties": {
+        "cnpj": {
+          "type": "string",
+          "title": "CNPJ",
+          "pattern": "\\d{14}",
+          "description": "CNPJ do usuário."
+        },
+        "nome": {
+          "type": "string",
+          "title": "Nome",
+          "description": "Nome do usuário.",
+          "maxLength": 140
+        }
+      }
+    },
+    "RecId": {
+      "type": "string",
+      "title": "ID Recorrência",
+      "description": "# Identificador da Recorrência\n\nRegra de formação:\n\n  - RAxxxxxxxxyyyyMMddzzzzzzzzzzz (29 caracteres; \"case sensitive\", isso\né, diferencia letras maiúsculas e minúsculas), sendo:\n  - \"R\":  fixo (1 caractere). \"R\" para a recorrência criada dentro do\nPix;\n  - \"A\": identificação da possibilidade de novas tentativas, sendo\npossíveis os valores \"R\" ou \"N\" (1 caractere). \"R\" caso a recorrência permita novas tentativas de pagamento pós vencimento, ou \"N\" caso não permita novas tentativas.\n  - \"xxxxxxxx\":  identificação do agente que presta serviço para o\nusuário recebedor que gerou o <Id>, podendo ser: o ISPB do participante direto, o ISPB do participante indireto ou os 8 primeiros dígitos do CNPJ do prestador de serviço de iniciação (8 caracteres numéricos [0-9]);\n  - \"yyyyMMdd\":  data (8 caracteres) de criação da recorrência;\n  - \"zzzzzzzzzzz\": sequencial criado pelo agente que gerou o <Id>\n(11 caracteres alfanuméricos [a-z|A-Z|0-9]). Deve ser único dentro de cada \"yyyyMMdd\".\nDessa forma, o ID da recorrência deve ser formado de acordo com um dos tipos a seguir:\n- \"RRxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que permite novas tentativas de pagamento pós vencimento; ou\n- \"RNxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que não permite novas tentativas de pagamento pós vencimento.\n",
+      "pattern": "[a-zA-Z0-9]{29}",
+      "minLength": 29,
+      "maxLength": 29
+    },
+    "TxId": {
+      "type": "string",
+      "title": "Id da Transação",
+      "description": "# Identificador da transação\n\nO campo txid determina o identificador da transação.\nO objetivo desse campo é ser um elemento que possibilite ao PSP do recebedor apresentar ao usuário recebedor a funcionalidade de conciliação de pagamentos.\n\nO txid é criado exclusivamente pelo usuário recebedor e está sob sua responsabilidade.\nO txid, no contexto de representação de uma cobrança, é único por CPF/CNPJ do usuário recebedor.\n",
+      "pattern": "[a-zA-Z0-9]{26,35}"
+    }
+  }
+}

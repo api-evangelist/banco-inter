@@ -1,0 +1,210 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for API Pix Automático
+  version: 1.0.0
+  x-generated: '2026-10-18'
+  x-method: derived
+  x-source: openapi/banco-inter-pix-automatico-openapi.yml
+extends: ../openapi/_original/banco-inter-pix-automatico-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-10-18'
+    x-provider: Banco Inter S.A.
+    x-docs: https://developers.inter.co/
+- target: $.components
+  update:
+    securitySchemes:
+      interOAuth:
+        type: oauth2
+        description: 'OAuth 2.0 client credentials (POST /oauth/v2/token, see openapi/banco-inter-token-openapi.yml) over mTLS: every call must
+          present the integration certificate and key issued in Internet Banking PJ. Scopes are those named in each operation description.'
+        flows:
+          clientCredentials:
+            tokenUrl: https://cdpj.partners.bancointer.com.br/oauth/v2/token
+            scopes:
+              cobr.read: Scope named in the operation descriptions
+              cobr.write: Scope named in the operation descriptions
+              payloadlocationrec.read: Scope named in the operation descriptions
+              payloadlocationrec.write: Scope named in the operation descriptions
+              pix.write: Scope named in the operation descriptions
+              rec.read: Scope named in the operation descriptions
+              rec.write: Scope named in the operation descriptions
+              solicrec.read: Scope named in the operation descriptions
+              solicrec.write: Scope named in the operation descriptions
+              webhookcobr.read: Scope named in the operation descriptions
+              webhookcobr.write: Scope named in the operation descriptions
+              webhookrec.read: Scope named in the operation descriptions
+              webhookrec.write: Scope named in the operation descriptions
+        x-sandbox-tokenUrl: https://cdpj-sandbox.partners.uatinter.co/oauth/v2/token
+      interMutualTLS:
+        type: mutualTLS
+        description: Client certificate + key from the Inter Empresas integration.
+- target: $.paths['/rec'].post
+  update:
+    security:
+    - interOAuth:
+      - rec.write
+      interMutualTLS: []
+- target: $.paths['/rec'].get
+  update:
+    security:
+    - interOAuth:
+      - rec.read
+      interMutualTLS: []
+- target: $.paths['/rec/{idRec}'].get
+  update:
+    security:
+    - interOAuth:
+      - rec.read
+      interMutualTLS: []
+- target: $.paths['/rec/{idRec}'].patch
+  update:
+    security:
+    - interOAuth:
+      - rec.write
+      interMutualTLS: []
+- target: $.paths['/sandbox/rec/{idRec}/status'].patch
+  update:
+    security:
+    - interOAuth:
+      - pix.write
+      interMutualTLS: []
+- target: $.paths['/sandbox/cob/pagamento'].post
+  update:
+    security:
+    - interOAuth:
+      - pix.write
+      interMutualTLS: []
+- target: $.paths['/solicrec'].post
+  update:
+    security:
+    - interOAuth:
+      - solicrec.write
+      interMutualTLS: []
+- target: $.paths['/solicrec/{idSolicRec}'].get
+  update:
+    security:
+    - interOAuth:
+      - solicrec.read
+      interMutualTLS: []
+- target: $.paths['/solicrec/{idSolicRec}'].patch
+  update:
+    security:
+    - interOAuth:
+      - solicrec.write
+      interMutualTLS: []
+- target: $.paths['/sandbox/solicrec/{idRec}/status'].patch
+  update:
+    security:
+    - interOAuth:
+      - solicrec.write
+      interMutualTLS: []
+- target: $.paths['/cobr'].post
+  update:
+    security:
+    - interOAuth:
+      - cobr.write
+      interMutualTLS: []
+- target: $.paths['/cobr'].get
+  update:
+    security:
+    - interOAuth:
+      - cobr.read
+      interMutualTLS: []
+- target: $.paths['/cobr/{txid}/retentativa/{data}'].post
+  update:
+    security:
+    - interOAuth:
+      - cobr.write
+      interMutualTLS: []
+- target: $.paths['/cobr/{txid}'].get
+  update:
+    security:
+    - interOAuth:
+      - cobr.read
+      interMutualTLS: []
+- target: $.paths['/cobr/{txid}'].put
+  update:
+    security:
+    - interOAuth:
+      - cobr.write
+      interMutualTLS: []
+- target: $.paths['/cobr/{txid}'].patch
+  update:
+    security:
+    - interOAuth:
+      - cobr.write
+      interMutualTLS: []
+- target: $.paths['/sandbox/cobr/{txId}/status'].patch
+  update:
+    security:
+    - interOAuth:
+      - cobr.write
+      interMutualTLS: []
+- target: $.paths['/sandbox/cobr/pagamento'].post
+  update:
+    security:
+    - interOAuth:
+      - cobr.write
+      interMutualTLS: []
+- target: $.paths['/locrec'].post
+  update:
+    security:
+    - interOAuth:
+      - payloadlocationrec.write
+      interMutualTLS: []
+- target: $.paths['/locrec'].get
+  update:
+    security:
+    - interOAuth:
+      - payloadlocationrec.read
+      interMutualTLS: []
+- target: $.paths['/locrec/{id}'].get
+  update:
+    security:
+    - interOAuth:
+      - payloadlocationrec.read
+      interMutualTLS: []
+- target: $.paths['/locrec/{id}/idRec'].delete
+  update:
+    security:
+    - interOAuth:
+      - payloadlocationrec.write
+      interMutualTLS: []
+- target: $.paths['/webhookrec'].put
+  update:
+    security:
+    - interOAuth:
+      - webhookrec.write
+      interMutualTLS: []
+- target: $.paths['/webhookrec'].get
+  update:
+    security:
+    - interOAuth:
+      - webhookrec.read
+      interMutualTLS: []
+- target: $.paths['/webhookrec'].delete
+  update:
+    security:
+    - interOAuth:
+      - webhookrec.write
+      interMutualTLS: []
+- target: $.paths['/webhookcobr'].put
+  update:
+    security:
+    - interOAuth:
+      - webhookcobr.write
+      interMutualTLS: []
+- target: $.paths['/webhookcobr'].get
+  update:
+    security:
+    - interOAuth:
+      - webhookcobr.read
+      interMutualTLS: []
+- target: $.paths['/webhookcobr'].delete
+  update:
+    security:
+    - interOAuth:
+      - webhookcobr.write
+      interMutualTLS: []

@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-obter-lote-response-schema.json",
+  "title": "ObterLoteResponse",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-banking-openapi.yml#/components/schemas/ObterLoteResponse",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/$defs/PagarLoteResponse"
+    }
+  ],
+  "properties": {
+    "contaCorrente": {
+      "type": "string",
+      "description": "Conta corrente responsável pelo pagamento do lote."
+    },
+    "dataCriacao": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data em que o lote foi cadastrado."
+    },
+    "pagamentos": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ResponseBoletoLote"
+          },
+          {
+            "$ref": "#/$defs/ResponseDarfLote"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "PagamentoResponseModelBase": {
+      "type": "object",
+      "required": [
+        "seqId"
+      ],
+      "properties": {
+        "tipoPagamento": {
+          "$ref": "#/$defs/TipoPagamentoEnum"
+        },
+        "detalhe": {
+          "type": "string"
+        }
+      }
+    },
+    "PagarLoteResponse": {
+      "type": "object",
+      "required": [
+        "idLote",
+        "status"
+      ],
+      "properties": {
+        "idLote": {
+          "type": "string",
+          "minLength": 24,
+          "maxLength": 24,
+          "description": "Id do pagamento de um lote específico."
+        },
+        "status": {
+          "$ref": "#/$defs/StatusLoteEnum"
+        },
+        "meuIdentificador": {
+          "type": "string",
+          "description": "Identificador do lote"
+        },
+        "qtdePagamentos": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Qtde de pagamentos existentes no lote."
+        }
+      }
+    },
+    "ResponseBoletoLote": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/PagamentoResponseModelBase"
+        }
+      ],
+      "properties": {
+        "codigoTransacao": {
+          "type": "string",
+          "description": "Identificador único do pagamento ao ser registrado."
+        },
+        "status": {
+          "$ref": "#/$defs/StatusPagamentoBoleto"
+        },
+        "codBarraLinhaDigitavel": {
+          "type": "string",
+          "minLength": 44,
+          "maxLength": 48,
+          "description": "Código de barras ou linha digitável"
+        },
+        "valorPagar": {
+          "type": "number",
+          "minimum": 0.01,
+          "description": "Valor a ser pago.\n"
+        },
+        "dataPagamento": {
+          "type": "string",
+          "format": "date",
+          "description": "Data em que será pago o título.\nFormato aceito: YYYY-MM-DD\n"
+        },
+        "dataVencimento": {
+          "type": "string",
+          "format": "date",
+          "description": "Data de vencimento do título.\nFormato aceito: YYYY-MM-DD\n"
+        },
+        "nsu": {
+          "type": "string",
+          "description": "Número sequencial único, exclusivo para uso no Inter."
+        }
+      }
+    },
+    "ResponseDarfLote": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/PagamentoResponseModelBase"
+        }
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/StatusPagamentoDarf"
+        },
+        "codigoSolicitacao": {
+          "type": "string",
+          "description": "Identificador único do pagamento ao ser registrado."
+        },
+        "tipoDarf": {
+          "type": "string"
+        },
+        "cnpjCpf": {
+          "type": "string"
+        },
+        "descricao": {
+          "type": "string"
+        },
+        "nomeEmpresa": {
+          "type": "string"
+        },
+        "telefoneEmpresa": {
+          "type": "string"
+        },
+        "valor": {
+          "type": "number"
+        },
+        "valorMulta": {
+          "type": "number"
+        },
+        "valorJuros": {
+          "type": "number"
+        },
+        "valorTotal": {
+          "type": "number"
+        },
+        "periodoApuracao": {
+          "type": "string",
+          "format": "date"
+        },
+        "dataPagamento": {
+          "type": "string",
+          "format": "date"
+        },
+        "referencia": {
+          "type": "string"
+        },
+        "dataVencimento": {
+          "type": "string",
+          "format": "date"
+        },
+        "codigoReceita": {
+          "type": "string"
+        }
+      }
+    },
+    "StatusLoteEnum": {
+      "type": "string",
+      "enum": [
+        "EMPROCESSAMENTO",
+        "PROCESSADOCOMERRO",
+        "PROCESSADOSEMERRO"
+      ]
+    },
+    "StatusPagamentoBoleto": {
+      "type": "string",
+      "enum": [
+        "EMPROCESSAMENTO",
+        "REALIZADO",
+        "AGENDADO",
+        "AGUARDANDO_APROVACAO",
+        "APROVADO",
+        "CANCELADO",
+        "REPROVADO",
+        "ERRO",
+        "NAO_COMPENSADO",
+        "APROVADO_NOVO_PAGAMENTO",
+        "APROVADO_AGUARDO_RETENTATIVA",
+        "AGENDADO_REALIZADO",
+        "AGENDADO_NAO_REALIZADO",
+        "AGENDADO_CANCELADO",
+        "APROVACAO_EXPIRADA",
+        "ERRO_PAGAMENTO",
+        "PAGO",
+        "PAGAMENTO_AGENDADO",
+        "PAGAMENTO_COBRANCA_AGENDADO"
+      ],
+      "description": "* EMPROCESSAMENTO não representa um estado do serviço de pagamentos. É o estado inicial do pagamento\n"
+    },
+    "StatusPagamentoDarf": {
+      "type": "string",
+      "enum": [
+        "EMPROCESSAMENTO",
+        "PAGO",
+        "PAGAMENTO_AGENDADO",
+        "AGENDAMENTO_CANCELADO",
+        "NAO_COMPENSADO",
+        "ERRO_PAGAMENTO",
+        "AGUARDANDO_APROVACAO",
+        "APROVADO",
+        "CANCELADO"
+      ],
+      "description": "* EMPROCESSAMENTO não representa um estado do serviço de pagamentos. É o estado inicial do pagamento\n"
+    },
+    "TipoPagamentoEnum": {
+      "type": "string",
+      "enum": [
+        "BOLETO",
+        "DARF"
+      ]
+    }
+  }
+}

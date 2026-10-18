@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-callback-attempt-page-schema.json",
+  "title": "CallbackAttemptPage",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-cobranca-bolepix-openapi.yml#/components/schemas/CallbackAttemptPage",
+  "type": "object",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "totalElementos": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Quantidade total de itens disponíveis de acordo com os parâmetros informados"
+    },
+    "totalPaginas": {
+      "type": "integer",
+      "description": "Quantidade total de páginas disponíveis para consulta."
+    },
+    "primeiraPagina": {
+      "description": "Informa se é a primeira página",
+      "type": "boolean"
+    },
+    "ultimaPagina": {
+      "description": "Informa se é a última página",
+      "type": "boolean"
+    },
+    "data": {
+      "description": "Dados de cada notificação de callback.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CallbackAttemptPageItem"
+      }
+    }
+  },
+  "$defs": {
+    "CallbackAttemptPageItem": {
+      "type": "object",
+      "required": [
+        "payload",
+        "numeroTentativa",
+        "dataEnvio",
+        "sucesso"
+      ],
+      "properties": {
+        "webhookUrl": {
+          "type": "string",
+          "description": "URL do webhook no momento do disparo.",
+          "format": "uri"
+        },
+        "payload": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CallbackCobranca"
+          }
+        },
+        "numeroTentativa": {
+          "description": "Qual o índice da tentativa de disparo.",
+          "type": "integer"
+        },
+        "dataHoraDisparo": {
+          "description": "Data/hora da tentativa de disparo do callback.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sucesso": {
+          "type": "boolean",
+          "description": "Informa se obteve sucesso no disparo do callback."
+        },
+        "httpStatus": {
+          "description": "Resposta da chamada ao endpoint do webhook.",
+          "type": "integer"
+        },
+        "mensagemErro": {
+          "description": "Mensagem de erro em caso de falha no dispardo do callback.",
+          "type": "string"
+        }
+      }
+    },
+    "CallbackCobranca": {
+      "type": "object",
+      "required": [
+        "codigoSolicitacao",
+        "dataHoraSituacao",
+        "situacao"
+      ],
+      "properties": {
+        "codigoSolicitacao": {
+          "type": "string",
+          "description": "Identificador único da cobrança"
+        },
+        "seuNumero": {
+          "type": "string",
+          "description": "Seu Número, enviado na requisição para inclusão do título.",
+          "maxLength": 15
+        },
+        "situacao": {
+          "$ref": "#/$defs/SituacaoCobrancaCallbackEnum"
+        },
+        "dataHoraSituacao": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "valorTotalRecebido": {
+          "type": "string",
+          "pattern": "^\\\\d{1,10}\\\\.\\\\d{2}$"
+        },
+        "origemRecebimento": {
+          "$ref": "#/$defs/OrigemRecebimentoEnum"
+        },
+        "nossoNumero": {
+          "type": "string",
+          "description": "Nosso Número, atribuído automaticamente ao longo da inclusão do título.",
+          "maxLength": 11
+        },
+        "codigoBarras": {
+          "type": "string",
+          "description": "Dígitos que compõem o código de barras do boleto (44 posições preenchidas)",
+          "minLength": 44,
+          "maxLength": 44
+        },
+        "linhaDigitavel": {
+          "type": "string",
+          "description": "Dígitos que compõem a linha digitável do boleto, sem formatação (47 posições preenchidas)",
+          "minLength": 47,
+          "maxLength": 47
+        },
+        "txid": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9]{26,35}$",
+          "description": "Txid da Cobrança PIX gerada"
+        },
+        "pixCopiaECola": {
+          "type": "string",
+          "description": "QRCode de cobrança para pagamento"
+        }
+      }
+    },
+    "OrigemRecebimentoEnum": {
+      "type": "string",
+      "title": "Origem do recebimento da cobrança",
+      "enum": [
+        "BOLETO",
+        "PIX"
+      ]
+    },
+    "SituacaoCobrancaCallbackEnum": {
+      "type": "string",
+      "enum": [
+        "RECEBIDO",
+        "A_RECEBER",
+        "MARCADO_RECEBIDO",
+        "CANCELADO",
+        "EXPIRADO",
+        "FALHA_EMISSAO"
+      ],
+      "description": "Possíveis situações de uma cobranca."
+    }
+  }
+}

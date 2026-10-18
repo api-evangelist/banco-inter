@@ -1,0 +1,523 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Location da Recorrência API
+  version: ''
+  description: 'Operations tagged Location da Recorrência across 2 of this provider''s published API definitions: swagger-api-pix-automatico-yaml.yaml, banco-inter-pix-automatico-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj.partners.bancointer.com.br/pix/v2
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+  description: Servidor de Sandbox
+tags:
+- name: Location da Recorrência
+  description: 'Esta seção apresenta os endpoints relacionados ao gerenciamento de payloads associadas a uma recorrência.
+
+
+    ---'
+paths:
+  /locrec:
+    post:
+      tags:
+      - Location da Recorrência
+      summary: Criar location do payload
+      operationId: addLocrec
+      description: 'Endpoint utilizado para criar o payload location da recorrência.
+
+
+        * Escopo requerido: payloadlocationrec.write
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/locrec
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/locrec'
+      responses:
+        '201':
+          description: Dados da location do Payload.
+          headers:
+            location:
+              schema:
+                type: string
+                format: uri
+                title: Identificador da location criada.
+                description: Identificador da location criada.
+                example: pix.example.com/api/loc/1234567
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayloadLocationRecGerada'
+              examples:
+                response1:
+                  $ref: '#/components/examples/payloadLocationRecResponse2'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    get:
+      parameters:
+      - in: query
+        name: inicio
+        required: true
+        schema:
+          $ref: '#/components/schemas/Inicio'
+      - in: query
+        name: fim
+        required: true
+        schema:
+          $ref: '#/components/schemas/Fim'
+      - name: idRecPresente
+        in: query
+        schema:
+          type: boolean
+      - name: convenio
+        in: query
+        schema:
+          type: string
+          title: Convênio
+          maxLength: 60
+          description: Filtro pelo convênio associado.
+      - $ref: '#/components/parameters/paginaAtual'
+      - $ref: '#/components/parameters/itensPorPagina'
+      tags:
+      - Location da Recorrência
+      summary: Consultar locations cadastradas
+      operationId: findAllLocrec
+      description: 'Endpoint utilizado para consultar as locations de recorrência cadastradas.
+
+
+        * Escopo requerido: payloadlocationrec.read
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/locrec
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/locrec'
+      responses:
+        '200':
+          description: lista dos locations cadastrados de acordo com o critério de busca.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayloadLocationRecConsultadas'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+  /locrec/{id}:
+    get:
+      tags:
+      - Location da Recorrência
+      summary: Recuperar location do payload
+      operationId: findLocrecById
+      parameters:
+      - $ref: '#/components/parameters/idLocRec'
+      description: 'Endpoint utilizado para recuperar a location do payload
+
+        * Escopo requerido: payloadlocationrec.read
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/locrec/{id}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/locrec/{id}'
+      responses:
+        '200':
+          description: Dados da location do Payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayloadLocationRecCompleta'
+              examples:
+                response1:
+                  $ref: '#/components/examples/payloadLocationRecResponse1'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+  /locrec/{id}/idRec:
+    delete:
+      tags:
+      - Location da Recorrência
+      operationId: deleteLocrec
+      summary: Desvincular uma recorrência de uma location
+      description: 'Endpoint destinado para desvincular uma recorrência de uma location.
+
+
+        Se executado com sucesso, a entidade `loc` não apresentará mais uma recorrência, se apresentava anteriormente à chamada.
+
+
+        Adicionalmente, a entidade associada ao recurso desvinculado também passará a não mais apresentar um _location_.
+
+
+        Esta operação não altera o `status` do recurso em questão.
+
+        * Escopo requerido: payloadlocationrec.write
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/locrec/{id}/idRec
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/locrec/{id}/idRec'
+      parameters:
+      - $ref: '#/components/parameters/idLocRec'
+      responses:
+        '200':
+          description: Entidade representada pelo recurso informado desvinculada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayloadLocationRecCompleta'
+              examples:
+                response1:
+                  $ref: '#/components/examples/payloadLocationRecResponse2'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+components:
+  schemas:
+    Problema:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+          example: https://pix.bcb.gov.br/api/v2/error/NaoEncontrado
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Not found
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        correlationId:
+          type: string
+          description: Identificador de correlação do problema para fins de suporte
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao'
+    Fim:
+      type: string
+      format: date-time
+      title: Data de fim
+      description: Filtra os registros cuja data de criação seja menor ou igual que a data de fim. Respeita RFC 3339.
+    Paginacao:
+      type: object
+      title: Paginação
+      required:
+      - paginaAtual
+      - itensPorPagina
+      - quantidadeDePaginas
+      - quantidadeTotalDeItens
+      properties:
+        paginaAtual:
+          type: integer
+          title: Página atual
+          description: Número da página recuperada.
+          minimum: 0
+        itensPorPagina:
+          type: integer
+          title: Itens por página
+          description: Quantidade de registros retornado na página.
+          minimum: 1
+        quantidadeDePaginas:
+          type: integer
+          title: Quantidade de páginas
+          description: Quantidade de páginas disponíveis para consulta.
+          minimum: 1
+        quantidadeTotalDeItens:
+          type: integer
+          title: Quantidade total de itens
+          description: Quantidade total de itens disponíveis de acordo com os parâmetros informados.
+          minimum: 0
+    PayloadLocationRecId:
+      type: integer
+      format: int64
+      title: Id da location
+      description: Identificador da location a ser informado na criação de uma recorrência.
+    Inicio:
+      type: string
+      format: date-time
+      title: Data de início
+      description: Filtra os registros cuja data de criação seja maior ou igual que a data de início. Respeita RFC 3339.
+    PayloadLocationRecConsultadas:
+      type: object
+      title: Locations Consultadas
+      required:
+      - parametros
+      - loc
+      properties:
+        parametros:
+          $ref: '#/components/schemas/ParametrosConsultaPayloadLocationRec'
+        loc:
+          type: array
+          title: Lista de locations cadastradas
+          description: Contendo `id`, `location`, `criacao` e `idRec`.
+          items:
+            $ref: '#/components/schemas/PayloadLocationRecCompleta'
+    ParametrosConsultaPayloadLocationRec:
+      type: object
+      title: Parâmetros de consulta de locations
+      description: Contendo `ìnicio`, `fim`, `idRecPresente` e `paginacao`.
+      required:
+      - inicio
+      - fim
+      - paginacao
+      properties:
+        inicio:
+          type: string
+          format: date-time
+          title: Data de Início
+          description: Data inicial utilizada na consulta. Respeita RFC 3339.
+          example: '2020-01-01T00:00:00Z'
+        fim:
+          type: string
+          format: date-time
+          title: Data de Fim
+          description: Data de fim utilizada na consulta. Respeita RFC 3339.
+          example: '2020-12-01T17:00:00Z'
+        idRecPresente:
+          type: boolean
+          description: Filtro pela existência de id da recorrência.
+        recebedor:
+          type: object
+          title: Recebedor
+          properties:
+            convenio:
+              type: string
+              title: Convênio
+              description: Convênio entre usuÃ¡rio e participante recebedor.
+              maxLength: 60
+        paginacao:
+          $ref: '#/components/schemas/Paginacao'
+    PayloadLocationRecCompleta:
+      type: object
+      title: Location do Payload Completa
+      description: Contendo `id`, `location`, `criacao` e `idRec`.
+      allOf:
+      - $ref: '#/components/schemas/PayloadLocationRecGerada'
+      - type: object
+        properties:
+          idRec:
+            $ref: '#/components/schemas/RecId'
+    PayloadLocationRecGerada:
+      type: object
+      title: Location do Payload Completa
+      description: Identificador da localização do payload completo.
+      required:
+      - id
+      - location
+      - tipo
+      - criacao
+      properties:
+        id:
+          $ref: '#/components/schemas/PayloadLocationRecId'
+        location:
+          type: string
+          title: Localização do payload
+          description: Localização do Payload a ser informada na criação da recorrência.
+          maxLength: 77
+          format: uri
+          example: pix.example.com/qr/v2/rec/2353c790eefb11eaadc10242ac120002
+          readOnly: true
+        criacao:
+          type: string
+          format: date-time
+          title: Data de Criação
+          description: Data e hora em que a location foi criada. Respeita RFC 3339.
+          readOnly: true
+    Violacao:
+      type: object
+      title: Violações
+      properties:
+        razao:
+          type: string
+          title: Descrição do erro
+          description: Descrição do erro
+          example: Valor da cobrança não pode ser 0.00
+        propriedade:
+          type: string
+          title: Nome da propriedade
+          description: Nome da propriedade
+          example: cob.chave
+        valor:
+          type: string
+          title: Valor da propriedade
+          description: Valor da propriedade
+          example: 61996671234
+    RecId:
+      type: string
+      title: ID Recorrência
+      description: "# Identificador da Recorrência\n\nRegra de formação:\n\n  - RAxxxxxxxxyyyyMMddzzzzzzzzzzz (29 caracteres; \"case sensitive\", isso\né, diferencia letras maiúsculas e minúsculas), sendo:\n  - \"R\":  fixo (1 caractere). \"R\" para a recorrência criada dentro do\nPix;\n  - \"A\": identificação da possibilidade de novas tentativas, sendo\npossíveis os valores \"R\" ou \"N\" (1 caractere). \"R\" caso a recorrência permita novas tentativas de pagamento pós vencimento, ou \"N\" caso não permita novas tentativas.\n  - \"xxxxxxxx\":  identificação do agente que presta serviço para o\nusuário recebedor que gerou o <Id>, podendo ser: o ISPB do participante direto, o ISPB do participante indireto ou os 8 primeiros dígitos do CNPJ do prestador de serviço de iniciação (8 caracteres numéricos [0-9]);\n  - \"yyyyMMdd\":  data (8 caracteres) de criação da recorrência;\n  - \"zzzzzzzzzzz\": sequencial criado pelo agente que gerou o <Id>\n(11 caracteres alfanuméricos [a-z|A-Z|0-9]). Deve ser único dentro de cada \"yyyyMMdd\".\nDessa forma, o ID da recorrência deve ser formado de acordo com um dos tipos a seguir:\n- \"RRxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que permite novas tentativas de pagamento pós vencimento; ou\n- \"RNxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que não permite novas tentativas de pagamento pós vencimento.\n"
+      pattern: '[a-zA-Z0-9]{29}'
+      minLength: 29
+      maxLength: 29
+      example: RR1234567820240115abcdefghijk
+  examples:
+    payloadLocationRecResponse2:
+      summary: Exemplo de Payload Location de Recorrência 1
+      value:
+        id: 12069
+        location: pix.example.com/qr/v2/rec/2353c790eefb11eaadc10242ac120002
+        criacao: '2023-12-20T12:38:28.774Z'
+    NaoEncontradoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/NaoEncontrado
+        title: Não Encontrado
+        status: 404
+        detail: Entidade não encontrada.
+    AcessoNegadoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/AcessoNegado
+        title: Acesso Negado
+        status: 403
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    ServicoIndisponivelExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/ServicoIndisponivel
+        title: Serviço Indisponível
+        status: 503
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    payloadLocationRecResponse1:
+      summary: Exemplo de Payload Location de Recorrência 1
+      value:
+        id: 12069
+        location: pix.example.com/qr/v2/rec/2353c790eefb11eaadc10242ac120002
+        criacao: '2023-12-20T12:38:28.774Z'
+        idRec: RR123456782024011510056892226
+  responses:
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/NaoEncontradoExample1'
+    ServicoIndisponivel:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/ServicoIndisponivelExample1'
+    AcessoNegado:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/AcessoNegadoExample1'
+  parameters:
+    itensPorPagina:
+      in: query
+      name: paginacao.itensPorPagina
+      required: false
+      schema:
+        type: integer
+        format: int32
+        title: Itens por Página
+        maximum: 1000
+        default: 100
+        description: Quantidade máxima de registros retornados em cada página. Apenas a última página pode conter uma quantidade menor de registros.
+    idLocRec:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        title: Id da location cadastrada para servir um payload
+    paginaAtual:
+      in: query
+      name: paginacao.paginaAtual
+      required: false
+      schema:
+        type: integer
+        format: int32
+        title: Página atual
+        default: 0
+        description: Página a ser retornada pela consulta. Se não for informada, o PSP assumirá que será 0.
+x-refined-from:
+- swagger-api-pix-automatico-yaml.yaml
+- banco-inter-pix-automatico-openapi.yml

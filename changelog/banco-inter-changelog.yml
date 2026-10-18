@@ -1,0 +1,35 @@
+generated: '2026-10-18'
+method: searched
+source: https://developers.inter.co/changelog
+scheme: Date-based changelog (DD/MM/YYYY)
+current_version: 'Not specified (URL versioning: v2, v3)'
+entries:
+  - version: API Boletos V2 deprecation
+    date: '2026-05-18'
+    breaking: true
+    highlights:
+      - API Boletos V2 discontinued
+      - Migration to Cobrança V3 required
+      - New base URL: https://cdpj.partners.bancointer.com.br/cobranca/v3
+      - Automatic Pix QR code generation
+      - Performance and scalability improvements
+  - version: Integration validation process
+    date: '2026-04-10'
+    breaking: false
+    highlights:
+      - New integration analysis process implemented
+      - Regulatory compliance checks
+      - Certificate issuance after validation
+  - version: API Pix and Banking reactivation
+    date: '2026-03-12'
+    breaking: false
+    highlights:
+      - API Pix and Banking APIs reactivated for new integrations
+      - Integration requests via Internet Banking PJ
+      - Status tracking during validation period
+  - version: API Cobrança update
+    date: '2026-01-15'
+    breaking: false
+    highlights:
+      - API Cobrança updates
+note: Banco Inter maintains a detailed changelog with date-based entries. Recent entries show API version deprecations and new integration processes.

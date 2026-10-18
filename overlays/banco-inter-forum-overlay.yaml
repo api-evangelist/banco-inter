@@ -1,0 +1,61 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for API Forum (Gerenciamento de publicações no Forum)
+  version: 1.0.0
+  x-generated: '2026-10-18'
+  x-method: derived
+  x-source: openapi/banco-inter-forum-openapi.yml
+extends: ../openapi/_original/banco-inter-forum-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-10-18'
+    x-provider: Banco Inter S.A.
+    x-docs: https://developers.inter.co/
+- target: $.components
+  update:
+    securitySchemes:
+      interOAuth:
+        type: oauth2
+        description: 'OAuth 2.0 client credentials (POST /oauth/v2/token, see openapi/banco-inter-token-openapi.yml) over mTLS: every call must
+          present the integration certificate and key issued in Internet Banking PJ. Scopes are those named in each operation description.'
+        flows:
+          clientCredentials:
+            tokenUrl: https://cdpj.partners.bancointer.com.br/oauth/v2/token
+            scopes:
+              publication.read: Scope named in the operation descriptions
+              publication.write: Scope named in the operation descriptions
+        x-sandbox-tokenUrl: https://cdpj-sandbox.partners.uatinter.co/oauth/v2/token
+      interMutualTLS:
+        type: mutualTLS
+        description: Client certificate + key from the Inter Empresas integration.
+- target: $.paths['/publication'].get
+  update:
+    security:
+    - interOAuth:
+      - publication.read
+      interMutualTLS: []
+- target: $.paths['/publication'].post
+  update:
+    security:
+    - interOAuth:
+      - publication.write
+      interMutualTLS: []
+- target: $.paths['/publication'].put
+  update:
+    security:
+    - interOAuth:
+      - publication.write
+      interMutualTLS: []
+- target: $.paths['/publications'].get
+  update:
+    security:
+    - interOAuth:
+      - publication.read
+      interMutualTLS: []
+- target: $.paths['/media/upload-url'].post
+  update:
+    security:
+    - interOAuth:
+      - publication.write
+      interMutualTLS: []

@@ -1,0 +1,437 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-publication-response-schema.json",
+  "title": "PublicationResponse",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-forum-openapi.yml#/components/schemas/PublicationResponse",
+  "type": "object",
+  "properties": {
+    "type": {
+      "$ref": "#/$defs/PostType"
+    },
+    "id": {
+      "type": "string",
+      "description": "ID da publicação"
+    },
+    "text": {
+      "type": "string",
+      "description": "Conteúdo da publicação"
+    },
+    "mediasInformation": {
+      "$ref": "#/$defs/MediasInformationUpdate"
+    },
+    "card": {
+      "$ref": "#/$defs/CardInfo"
+    },
+    "poll": {
+      "$ref": "#/$defs/PollResponse"
+    },
+    "likes": {
+      "type": "integer",
+      "format": "int64",
+      "default": 0,
+      "description": "Quantidade de curtidas"
+    },
+    "comments": {
+      "type": "integer",
+      "format": "int64",
+      "default": 0,
+      "description": "Quantidade de comentários"
+    },
+    "reposts": {
+      "type": "integer",
+      "format": "int64",
+      "default": 0,
+      "description": "Quantidade de reposts"
+    },
+    "quotes": {
+      "type": "integer",
+      "format": "int64",
+      "default": 0,
+      "description": "Quantidade de citações"
+    },
+    "answers": {
+      "type": "integer",
+      "format": "int64",
+      "default": 0,
+      "description": "Quantidade de respostas"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora da publicação"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora da última atualização"
+    }
+  },
+  "$defs": {
+    "CardBodyInfo": {
+      "type": "object",
+      "description": "Corpo do card",
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CardTagInfo"
+          }
+        },
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        },
+        "oldPrice": {
+          "type": "string"
+        },
+        "installment": {
+          "type": "string"
+        },
+        "cashback": {
+          "type": "string"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "button": {
+          "$ref": "#/$defs/CardButtonInfo"
+        },
+        "grid": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CardGridCellInfo"
+          }
+        },
+        "table": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CardTableCellInfo"
+          }
+        },
+        "chart": {
+          "$ref": "#/$defs/CardChartInfo"
+        }
+      }
+    },
+    "CardButtonActionInfo": {
+      "type": "object",
+      "description": "Ação do botão do card",
+      "properties": {
+        "route": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "CardButtonInfo": {
+      "type": "object",
+      "description": "Botão do card",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "style": {
+          "$ref": "#/$defs/Style"
+        },
+        "isEnable": {
+          "type": "boolean",
+          "default": true
+        },
+        "icon": {
+          "$ref": "#/$defs/CardIconInfo"
+        },
+        "action": {
+          "$ref": "#/$defs/CardButtonActionInfo"
+        }
+      }
+    },
+    "CardChartInfo": {
+      "type": "object",
+      "description": "Gráfico do card",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "variations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CardChartVariationInfo"
+          }
+        },
+        "lineColor": {
+          "type": "string"
+        },
+        "labelCount": {
+          "type": "integer"
+        },
+        "forceLabelCount": {
+          "type": "boolean"
+        },
+        "typeOfCurrency": {
+          "type": "string"
+        }
+      }
+    },
+    "CardChartVariationInfo": {
+      "type": "object",
+      "description": "Variação do gráfico",
+      "properties": {
+        "value": {
+          "type": "number",
+          "format": "double"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "CardFooterInfo": {
+      "type": "object",
+      "description": "Rodapé do card",
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "CardGridCellInfo": {
+      "type": "object",
+      "description": "Célula do grid do card",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "textColor": {
+          "type": "string",
+          "description": "Código hexadecimal da cor do texto"
+        },
+        "icon": {
+          "$ref": "#/$defs/CardIconInfo"
+        }
+      }
+    },
+    "CardHeaderInfo": {
+      "type": "object",
+      "description": "Cabeçalho do card",
+      "properties": {
+        "tag": {
+          "$ref": "#/$defs/CardTagInfo"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "CardIconInfo": {
+      "type": "object",
+      "description": "Ícone do card",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "CardInfo": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Card Genérico",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/CardTypeInfo"
+        },
+        "header": {
+          "$ref": "#/$defs/CardHeaderInfo"
+        },
+        "body": {
+          "$ref": "#/$defs/CardBodyInfo"
+        },
+        "footer": {
+          "$ref": "#/$defs/CardFooterInfo"
+        },
+        "action": {
+          "$ref": "#/$defs/CardButtonActionInfo"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "CardTableCellAlignInfo": {
+      "description": "Alinhamento da célula da tabela do card",
+      "type": "string",
+      "enum": [
+        "LEFT",
+        "RIGHT"
+      ]
+    },
+    "CardTableCellInfo": {
+      "type": "object",
+      "description": "Célula da tabela do card",
+      "properties": {
+        "align": {
+          "$ref": "#/$defs/CardTableCellAlignInfo"
+        },
+        "title": {
+          "type": "string"
+        },
+        "icon": {
+          "$ref": "#/$defs/CardIconInfo"
+        },
+        "text": {
+          "type": "string"
+        },
+        "textColor": {
+          "type": "string",
+          "description": "Código hexadecimal da cor do texto"
+        }
+      }
+    },
+    "CardTagInfo": {
+      "type": "object",
+      "description": "Tag do card",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "textColor": {
+          "type": "string",
+          "description": "Código hexadecimal da cor do texto"
+        },
+        "backgroundColor": {
+          "type": "string",
+          "description": "Código hexadecimal da cor do fundo"
+        }
+      }
+    },
+    "CardTypeInfo": {
+      "type": "string",
+      "enum": [
+        "ASSET",
+        "SHOPPING",
+        "GENERIC",
+        "BASIC"
+      ],
+      "description": "Tipo de card"
+    },
+    "MediaInformationUpdate": {
+      "type": "object",
+      "description": "Arquivo de mídia para atualizar na publicação",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "A url do arquivo"
+        },
+        "position": {
+          "type": "integer",
+          "description": "A posição do arquivo na publicação",
+          "default": 0
+        }
+      }
+    },
+    "MediasInformationUpdate": {
+      "type": "object",
+      "description": "Arquivos de mídia para manter na publicação",
+      "properties": {
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/MediaInformationUpdate"
+          },
+          "description": "Imagens para manter na publicação"
+        },
+        "videos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/MediaInformationUpdate"
+          },
+          "description": "Vídeos para manter na publicação"
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/MediaInformationUpdate"
+          },
+          "description": "Documentos para manter na publicação"
+        }
+      }
+    },
+    "OptionPoll": {
+      "type": "object",
+      "description": "Opção da enquete",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "A label da opção"
+        },
+        "totalAnswer": {
+          "type": "integer",
+          "description": "O total de votos para esta opção"
+        }
+      }
+    },
+    "PollResponse": {
+      "type": "object",
+      "description": "Enquete",
+      "properties": {
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data e hora da expiração da enquete"
+        },
+        "multipleChoice": {
+          "type": "boolean",
+          "description": "Se a enquete permite múltiplas escolhas"
+        },
+        "optionsPoll": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OptionPoll"
+          },
+          "description": "As opções da enquete"
+        }
+      }
+    },
+    "PostType": {
+      "type": "string",
+      "enum": [
+        "POST",
+        "POLL"
+      ],
+      "default": "POST",
+      "description": "Tipo da publicação"
+    },
+    "Style": {
+      "type": "string",
+      "description": "Estilo do botão do card",
+      "enum": [
+        "PRIMARY",
+        "SECONDARY",
+        "GHOST"
+      ]
+    }
+  }
+}

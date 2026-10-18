@@ -1,0 +1,473 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-cob-vgerada-schema.json",
+  "title": "Cobrança com vencimento gerada",
+  "description": "Dados criados ou alterados da cobrança com vencimento via API Pix",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-pix-openapi.yml#/components/schemas/CobVGerada",
+  "type": "object",
+  "required": [
+    "location",
+    "txid",
+    "devedor",
+    "calendario",
+    "revisao",
+    "status",
+    "valor",
+    "chave",
+    "recebedor"
+  ],
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "calendario": {
+          "required": [
+            "validadeAposVencimento"
+          ],
+          "title": "CalendarioCobV",
+          "description": "Os campos aninhados sob o identificador calendário organizam informações a respeito de controle de tempo da cobrança.",
+          "properties": {
+            "criacao": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Data de Criação"
+            },
+            "dataDeVencimento": {
+              "type": "string",
+              "format": "date",
+              "title": "Data de vencimento da cobrança",
+              "description": "Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. É a data de vencimento da cobrança. A cobrança pode ser honrada até esse dia, inclusive, em qualquer horário do dia."
+            },
+            "validadeAposVencimento": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Validade após vencimento",
+              "description": "Trata-se da quantidade de dias corridos após calendario.dataDeVencimento,\nem que a cobrança poderá ser paga.\n\nAplica-se este campo sobre o vencimento original da cobrança acrescentando-se o\nnúmero de dias corridos nos quais a cobrança ainda poderá ser paga, após vencida.\nEste valor não se sobrepõe à possibilidade de pagamento em data posterior ao vencimento\noriginal por [força de lei](http://www.planalto.gov.br/ccivil_03/LEIS/L7089.htm).\nNesse sentido, um vencimento determinado para um dia não útil deverá ser acatado\nno primeiro dia útil subsequente mesmo que exceda o número de dias definido neste campo.\n\nPara ilustrar o funcionamento, seguem alguns exemplos:\n\nExemplo A:\n\n```txt\ndataDeVencimento: 2020-10-20, terça-feira.\nvalidadeAposVencimento: 4\n\nTenta-se pagar no dia 2020-10-23, sexta: aceito.\nTenta-se pagar no dia 2020-10-24, sábado: aceito.\nTenta-se pagar no dia 2020-10-25, domingo: negado.\n```\n\nExemplo B:\n\n```txt\ndataDeVencimento: 2020-12-25, sexta-feira, feriado.\nvalidadeAposVencimento: 0\n\nTenta-se pagar no dia 2020-12-25, sexta: aceito.\nTenta-se pagar no dia 2020-12-26, sábado: aceito.\nTenta-se pagar no dia 2020-12-27, domingo: aceito.\nTenta-se pagar no dia 2020-12-28, segunda: aceito.\nTenta-se pagar no dia 2020-12-29, terça: negado.\n```\n\nExemplo C:\n\n```txt\ndataDeVencimento: 2020-12-25, sexta-feira, feriado.\nvalidadeAposVencimento: 1\n\nTenta-se pagar no dia 2020-12-25, sexta: aceito.\nTenta-se pagar no dia 2020-12-26, sábado: aceito.\nTenta-se pagar no dia 2020-12-27, domingo: aceito.\nTenta-se pagar no dia 2020-12-28, segunda: aceito.\nTenta-se pagar no dia 2020-12-29, terça: negado.\n```\n\nExemplo D:\n\n```txt\ndataDeVencimento: 2020-12-25, sexta-feira, feriado.\nvalidadeAposVencimento: 3\n\nTenta-se pagar no dia 2020-12-25, sexta: aceito.\nTenta-se pagar no dia 2020-12-26, sábado: aceito.\nTenta-se pagar no dia 2020-12-27, domingo: aceito.\nTenta-se pagar no dia 2020-12-28, segunda: aceito.\nTenta-se pagar no dia 2020-12-29, terça: negado.\n```\n\nExemplo E:\n\n\n```txt\ndataDeVencimento: 2020-12-25, sexta-feira, feriado.\nvalidadeAposVencimento: 4\n\nTenta-se pagar no dia 2020-12-25, sexta: aceito.\nTenta-se pagar no dia 2020-12-26, sábado: aceito.\nTenta-se pagar no dia 2020-12-27, domingo: aceito.\nTenta-se pagar no dia 2020-12-28, segunda: aceito.\nTenta-se pagar no dia 2020-12-29, terça: aceito.\nTenta-se pagar no dia 2020-12-30, quarta: negado.\n```\n",
+              "default": 30
+            }
+          }
+        },
+        "txid": {
+          "$ref": "#/$defs/TxId"
+        },
+        "revisao": {
+          "$ref": "#/$defs/Revisao"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "devedor": {
+          "description": "Não é permitido que o campo devedor.cpf e campo devedor.cnpj estejam preenchidos ao mesmo tempo. Se o campo devedor.nome está preenchido, então deve existir ou um devedor.cpf ou um campo devedor.cnpj preenchido.\n\nOs campos aninhados sob o objeto devedor são opcionais e identificam a pessoa ou a instituição a quem a cobrança está endereçada. Não identifica, necessariamente, quem irá efetivamente realizar o pagamento.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/PessoaFisica"
+            },
+            {
+              "$ref": "#/$defs/PessoaJuridica"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "recebedor": {
+          "description": "Os campos aninhados sob o objeto devedor são opcionais e identificam o devedor, ou seja, a pessoa ou a instituição a quem a cobrança está endereçada. Não identifica, necessariamente, quem irá efetivamente realizar o pagamento. Um CPF pode ser o devedor de uma cobrança, mas pode acontecer de outro CPF realizar, efetivamente, o pagamento do documento. Não é permitido que o campo devedor.cpf e campo devedor.cnpj estejam preenchidos ao mesmo tempo. Se o campo devedor.cnpj está preenchido, então o campo devedor.cpf não pode estar preenchido, e vice-versa. Se o campo devedor.nome está preenchido, então deve existir ou um devedor.cpf ou um campo devedor.cnpj preenchido.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/PessoaFisica"
+            },
+            {
+              "$ref": "#/$defs/PessoaJuridica"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "loc": {
+          "required": [
+            "id",
+            "txid",
+            "tipoCob",
+            "criacao"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/PayloadLocation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Status da Cobrança",
+          "enum": [
+            "ATIVA",
+            "CONCLUIDA",
+            "REMOVIDA_PELO_USUARIO_RECEBEDOR",
+            "REMOVIDA_PELO_PSP"
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "valor": {
+          "required": [
+            "original"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/CobVValor"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/CobBaseCopiaCola"
+    }
+  ],
+  "$defs": {
+    "CobBase": {
+      "type": "object",
+      "title": "Cobrança Base",
+      "description": "Atributos comuns a todas entidades de Cobrança",
+      "properties": {
+        "chave": {
+          "type": "string",
+          "title": "Chave DICT do recebedor",
+          "description": "* O campo chave determina a chave Pix do recebedor que será utilizada para a cobrança.\n* Os tipos de chave podem ser: telefone, e-mail, cpf/cnpj ou EVP.\n* O formato das chaves pode ser encontrado na seção \"Formatação das chaves do DICT no BR Code\" do [Manual de Padrões para iniciação do Pix](https://www.bcb.gov.br/estabilidadefinanceira/pagamentosinstantaneos).\n",
+          "maxLength": 77,
+          "minLength": 1
+        },
+        "solicitacaoPagador": {
+          "type": "string",
+          "title": "Solicitação ao pagador",
+          "description": "O campo solicitacaoPagador determina um texto a ser apresentado ao pagador para que ele possa digitar uma informação correlata, em formato livre, a ser enviada ao recebedor. Esse texto está limitado a 140 caracteres.",
+          "maxLength": 140,
+          "minLength": 1
+        },
+        "infoAdicionais": {
+          "type": "array",
+          "title": "Informações adicionais",
+          "description": "Cada respectiva informação adicional contida na lista (nome e valor) deve ser apresentada ao pagador.",
+          "maximum": 50,
+          "items": {
+            "type": "object",
+            "required": [
+              "nome",
+              "valor"
+            ],
+            "properties": {
+              "nome": {
+                "type": "string",
+                "title": "Nome",
+                "description": "Nome do campo.",
+                "maxLength": 50,
+                "minLength": 1
+              },
+              "valor": {
+                "type": "string",
+                "title": "Valor",
+                "description": "Dados do campo.",
+                "maxLength": 200,
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "CobBaseCopiaCola": {
+      "type": "object",
+      "title": "Cobrança Base com Copia e Cola",
+      "description": "Atributos comuns a todas entidades de Cobrança que possuem informação de Copia e Cola",
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "pixCopiaECola": {
+              "type": "string",
+              "title": "Pix Copia e Cola correspondente à cobrança.",
+              "description": "Este campo retorna o valor do Pix Copia e Cola correspondente à cobrança. Trata-se da sequência de caracteres que representa o BR Code.",
+              "maxLength": 512
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/CobBase"
+        }
+      ]
+    },
+    "CobVValor": {
+      "type": "object",
+      "title": "Valor da cobrança com vencimento",
+      "description": "Valores monetários.",
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "original": {
+              "type": "string",
+              "title": "Valor",
+              "description": "Valor original da cobrança."
+            },
+            "multa": {
+              "type": "object",
+              "title": "Multa",
+              "description": "Multa aplicada à cobrança",
+              "properties": {
+                "modalidade": {
+                  "type": "integer",
+                  "format": "int32",
+                  "title": "Modalidade da multa",
+                  "minimum": 1,
+                  "maximum": 2,
+                  "description": "##### Modalidade da multa, conforme tabela de domínios.\n<table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor Fixo</td><td>1</td></tr><tr><td>Percentual</td><td>2</td></tr></table>\n"
+                },
+                "valorPerc": {
+                  "type": "string",
+                  "title": "Valor da multa absoluta",
+                  "description": "Multa do documento em valor absoluto ou percentual, conforme \"valor.multa.modalidade\".",
+                  "pattern": "\\d{1,10}\\.\\d{2}"
+                }
+              }
+            },
+            "juros": {
+              "type": "object",
+              "title": "Juro",
+              "description": "Juro aplicado à cobrança",
+              "properties": {
+                "modalidade": {
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 1,
+                  "maximum": 8,
+                  "title": "Modalidade de juros",
+                  "description": "##### Modalidade de juros, conforme tabela de domínios.\n<table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor (dias corridos)</td><td>1</td></tr><tr><td>Percentual ao dia (dias corridos)</td><td>2</td></tr><tr><td>Percentual ao mês (dias corridos)</td><td>3</td></tr><tr><td>Percentual ao ano (dias corridos)</td><td>4</td></tr><tr><td>Valor (dias úteis)</td><td>5</td></tr><tr><td>Percentual ao dia (dias úteis)</td><td>6</td></tr><tr><td>Percentual ao mês (dias úteis)</td><td>7</td></tr><tr><td>Percentual ao ano (dias úteis)</td><td>8</td></tr></table>\n"
+                },
+                "valorPerc": {
+                  "type": "string",
+                  "title": "Valor",
+                  "pattern": "\\d{1,10}\\.\\d{2}"
+                }
+              }
+            },
+            "abatimento": {
+              "title": "Abatimento",
+              "required": [
+                "modalidade",
+                "valorPerc"
+              ],
+              "description": "Abatimento aplicado à cobrança",
+              "properties": {
+                "modalidade": {
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 1,
+                  "maximum": 2,
+                  "title": "Modalidade de abatimentos",
+                  "description": "##### Modalidade de abatimentos, conforme tabela de domínios.\n<table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor Fixo</td><td>1</td></tr><tr><td>Percentual</td><td>2</td></tr></table>\n"
+                },
+                "valorPerc": {
+                  "type": "string",
+                  "title": "Abatimentos",
+                  "description": "Abatimentos ou outras deduções aplicadas ao documento, em valor absoluto ou percentual do valor original do documento.",
+                  "pattern": "\\d{1,10}\\.\\d{2}"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "desconto": {
+              "title": "Desconto",
+              "required": [
+                "modalidade"
+              ],
+              "description": "Descontos aplicados à cobrança",
+              "properties": {
+                "modalidade": {
+                  "type": "string",
+                  "title": "Modalidade de descontos",
+                  "description": "##### Modalidade de desconto, conforme tabela de domínios.\n<table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor Fixo até a[s] data[s] informada[s]</td><td>1</td></tr><tr><td>Percentual até a[s] data[s] informada[s]</td><td>2</td></tr><tr><td>Valor por antecipação dia corrido</td><td>3</td></tr><tr><td>Valor por antecipação dia útil</td><td>4</td></tr><tr><td>Percentual por antecipação dia corrido</td><td>5</td></tr><tr><td>Percentual por antecipação dia útil</td><td>6</td></tr></table>\n"
+                }
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/ValorPerc"
+                },
+                {
+                  "$ref": "#/$defs/DescontoDataFixa"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "DescontoDataFixa": {
+      "type": "object",
+      "properties": {
+        "descontoDataFixa": {
+          "title": "Lista de Descontos",
+          "description": "Descontos absolutos aplicados à cobrança.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "allOf": [
+              {
+                "properties": {
+                  "data": {
+                    "title": "Data limite para o desconto absoluto da cobrança",
+                    "description": "Descontos por pagamento antecipado, com data fixa. Matriz com até três elementos, sendo que cada elemento é composto por um par \"data e valorPerc\", para estabelecer descontos percentuais ou absolutos, até aquela data de pagamento. Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. A data de desconto obrigatoriamente deverá ser menor que a data de vencimento da cobrança.",
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "valorPerc": {
+                    "type": "string",
+                    "title": "Valor do desconto absoluto",
+                    "description": "Desconto em valor absoluto ou percentual por dia, útil ou corrido, conforme valor.desconto.modalidade",
+                    "pattern": "\\d{1,10}\\.\\d{2}"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "PayloadLocation": {
+      "type": "object",
+      "title": "Location do Payload",
+      "description": "Identificador da localização do payload.",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/PayloadLocationId"
+        },
+        "location": {
+          "type": "string",
+          "title": "Localização do payload",
+          "description": "Localização do Payload a ser informada na criação da cobrança.",
+          "maxLength": 77,
+          "format": "uri",
+          "readOnly": true
+        },
+        "tipoCob": {
+          "type": "string",
+          "title": "Tipo da cobrança",
+          "enum": [
+            "cob",
+            "cobv"
+          ]
+        },
+        "criacao": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Data de Criação",
+          "description": "Data e hora em que a location foi criada. Respeita RFC 3339.",
+          "readOnly": true
+        }
+      }
+    },
+    "PayloadLocationId": {
+      "type": "integer",
+      "format": "int64",
+      "title": "Id da location",
+      "description": "Identificador da location a ser informada na criação da cobrança ."
+    },
+    "PessoaFisica": {
+      "type": "object",
+      "required": [
+        "cpf",
+        "nome"
+      ],
+      "title": "Pessoa Física",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "title": "Nome",
+          "description": "Nome do usuário.",
+          "maxLength": 200
+        },
+        "cpf": {
+          "type": "string",
+          "title": "CPF",
+          "pattern": "\\d{11}",
+          "description": "CPF do usuário."
+        }
+      }
+    },
+    "PessoaJuridica": {
+      "type": "object",
+      "required": [
+        "cnpj",
+        "nome"
+      ],
+      "title": "Pessoa Jurídica",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "title": "Nome",
+          "description": "Nome do usuário.",
+          "maxLength": 200
+        },
+        "cnpj": {
+          "type": "string",
+          "title": "CNPJ",
+          "pattern": "\\d{14}",
+          "description": "CNPJ do usuário."
+        }
+      }
+    },
+    "Revisao": {
+      "type": "integer",
+      "format": "int32",
+      "title": "Revisão",
+      "description": "# O campo `revisao`\n\nDenota a revisão da cobrança.  Sempre começa em zero. Sempre varia em acréscimos de 1.\n\nO incremento em uma cobrança deve ocorrer sempre que um objeto da cobrança em questão for alterado.\nO campo `loc` é uma exceção a esta regra.\n\nSe em uma determinada alteração em uma cobrança, o único campo alterado for o campo `loc`,\nentão esta operação não incrementa a revisão da cobrança.\n\nO campo `loc` não ocasiona uma alteração na cobrança em si.\nNão é necessário armazenar histórico das alterações do campo `loc` para uma determinada cobrança.\nPara os outros campos da cobrança, registra-se histórico.\n",
+      "readOnly": true
+    },
+    "TxId": {
+      "type": "string",
+      "title": "Id da Transação",
+      "description": "# Identificador da transação\n\nO campo txid determina o identificador da transação.\nO objetivo desse campo é ser um elemento que possibilite ao PSP do recebedor apresentar ao usuário recebedor a funcionalidade de conciliação de pagamentos.\n\nO txid é criado exclusivamente pelo usuário recebedor e está sob sua responsabilidade.\nO txid, no contexto de representação de uma cobrança, é único por CPF/CNPJ do usuário recebedor.\n",
+      "pattern": "[a-zA-Z0-9]{26,35}"
+    },
+    "ValorPerc": {
+      "type": "object",
+      "required": [
+        "valorPerc"
+      ],
+      "properties": {
+        "valorPerc": {
+          "type": "string",
+          "title": "Abatimentos",
+          "description": "Abatimentos ou outras deduções aplicadas ao documento, em valor absoluto ou percentual do valor original do documento.",
+          "pattern": "\\d{1,10}\\.\\d{2}"
+        }
+      }
+    }
+  }
+}

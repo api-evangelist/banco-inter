@@ -1,0 +1,2011 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Cobrança com Vencimento API
+  version: ''
+  description: 'Operations tagged Cobrança com Vencimento across 2 of this provider''s published API definitions: swagger-api-pix-yaml.yaml, banco-inter-pix-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj.partners.bancointer.com.br/pix/v2
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+  description: Servidor de Sandbox
+tags:
+- name: Cobrança com Vencimento
+paths:
+  /cobv/{txid}:
+    put:
+      summary: Criar cobrança com vencimento
+      description: 'Endpoint para criar uma cobrança com vencimento.
+
+
+        Na cobrança com vencimento é possível parametrizar uma data de vencimento e com isso o pagamento pode ser realizado em data futura,
+
+        pode também incluir outras informações como juros, multas, outros acréscimos, descontos e outros abatimentos, semelhante ao boleto.
+
+
+        * Escopo requerido: cobv.write
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/cobv/{txid}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/cobv/{txid}'
+      tags:
+      - Cobrança com Vencimento
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - $ref: '#/components/parameters/txid'
+      requestBody:
+        $ref: '#/components/requestBodies/CobVBody'
+      responses:
+        '201':
+          description: Cobrança com vencimento criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CobVGerada'
+              examples:
+                retorno1:
+                  $ref: '#/components/examples/cobResponse4'
+        '400':
+          description: Requisição com formato inválido.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problema'
+              examples:
+                exemplo1:
+                  $ref: '#/components/examples/RequisicaoInvalidaCobVExample1'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      operationId: putCobvByTxid
+      x-operation-id-source: derived
+    patch:
+      summary: Revisar cobrança com vencimento
+      description: 'Endpoint para revisar uma cobrança com vencimento.
+
+
+        * Escopo requerido: cobv.write
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/cobv/{txid}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/cobv/{txid}'
+      tags:
+      - Cobrança com Vencimento
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - $ref: '#/components/parameters/txid'
+      requestBody:
+        $ref: '#/components/requestBodies/CobVBodyRevisada'
+      responses:
+        '200':
+          description: Cobrança com vencimento revisada. A revisão deve ser incrementada em 1.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CobVGerada'
+              examples:
+                retorno1:
+                  $ref: '#/components/examples/cobResponse4'
+        '400':
+          description: Requisição com formato inválido.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problema'
+              examples:
+                exemplo1:
+                  $ref: '#/components/examples/OperacaoInvalidaCobVExample1'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      operationId: patchCobvByTxid
+      x-operation-id-source: derived
+    get:
+      summary: Consultar cobrança com vencimento
+      description: 'Endpoint para consultar uma cobrança com vencimento através de um determinado txid.
+
+
+        * Escopo requerido: cobv.read
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/cobv/{txid}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/cobv/{txid}'
+      tags:
+      - Cobrança com Vencimento
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - $ref: '#/components/parameters/txid'
+      responses:
+        '200':
+          description: Dados da cobrança com vencimento.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CobVCompleta'
+              examples:
+                retorno1:
+                  $ref: '#/components/examples/cobResponse4'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      operationId: getCobvByTxid
+      x-operation-id-source: derived
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+  /cobv:
+    get:
+      summary: Consultar lista de cobranças com vencimento
+      description: 'Endpoint para consultar cobranças com vencimento através de parâmetros como início, fim, cpf, cnpj e status.
+
+
+        * Escopo requerido: cobv.read
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/cobv
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/cobv'
+      tags:
+      - Cobrança com Vencimento
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - $ref: '#/components/parameters/inicio'
+      - $ref: '#/components/parameters/fim'
+      - $ref: '#/components/parameters/cpf'
+      - $ref: '#/components/parameters/cnpj'
+      - $ref: '#/components/parameters/locationPresente'
+      - $ref: '#/components/parameters/status'
+      - $ref: '#/components/parameters/paginaAtual'
+      - $ref: '#/components/parameters/itensPorPagina'
+      - $ref: '#/components/parameters/loteCobVId'
+      responses:
+        '200':
+          description: Lista de cobranças com vencimento.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CobsVConsultadas'
+              examples:
+                getCobs1:
+                  $ref: '#/components/examples/getCobsV1'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      operationId: getCobv
+      x-operation-id-source: derived
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+  /cobv/pagar/{txid}:
+    post:
+      summary: Pagar Pix de cobrança com vencimento (Sandbox)
+      description: 'Endpoint para pagar uma cobrança com vencimento via Pagamento Pix.
+
+
+        (**Exclusivo para o ambiente Sandbox**)
+
+
+        * Escopo requerido: pix.write
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/cobv/pagar/{txid}'
+      tags:
+      - Cobrança com Vencimento
+      parameters:
+      - $ref: '#/components/parameters/txid'
+      requestBody:
+        $ref: '#/components/requestBodies/PagarCobrancaPixBody'
+      responses:
+        '201':
+          description: Cobrança com vencimento Pix paga com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagarCobrancaPixResponse'
+              examples:
+                retorno1:
+                  $ref: '#/components/examples/pagarPixCobResponse1'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalida'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      servers:
+      - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+        description: Servidor de Sandbox
+      operationId: postCobvPagarByTxid
+      x-operation-id-source: derived
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+  / sandbox/cob/pagamento:
+    post:
+      tags:
+      - Cobrança com Vencimento
+      summary: Pagar cobrança com vencimento utilizando QRCode (Sandbox)
+      description: 'Endpoint para pagar uma cobrança com vencimento utilizando QRCode.
+
+
+        (**Exclusivo para o ambiente Sandbox**)
+
+
+        * Escopo requerido: pix.write
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/sandbox/cob/pagamento'
+      operationId: makePaymentCobCobv
+      requestBody:
+        $ref: '#/components/requestBodies/MakePaymentCobCobvRequestBody'
+      responses:
+        '200':
+          description: pagamento realizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MakePaymentCobCobvResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+components:
+  schemas:
+    TxId:
+      type: string
+      title: Id da Transação
+      description: '# Identificador da transação
+
+
+        O campo txid determina o identificador da transação.
+
+        O objetivo desse campo é ser um elemento que possibilite ao PSP do recebedor apresentar ao usuário recebedor a funcionalidade de conciliação de pagamentos.
+
+
+        O txid é criado exclusivamente pelo usuário recebedor e está sob sua responsabilidade.
+
+        O txid, no contexto de representação de uma cobrança, é único por CPF/CNPJ do usuário recebedor.
+
+        '
+      pattern: '[a-zA-Z0-9]{26,35}'
+    PixValorJuros:
+      type: object
+      properties:
+        juros:
+          type: object
+          required:
+          - valor
+          properties:
+            valor:
+              type: string
+              title: Valor relativo aos juros.
+              description: Valor dos juros.
+              pattern: \d{1,10}\.\d{2}
+    EndToEndId:
+      type: string
+      title: Id fim a fim da transação
+      description: Id único para identificação do Pix Cobrança.
+      pattern: '[a-zA-Z0-9]{32}'
+    PixValorDesconto:
+      type: object
+      properties:
+        desconto:
+          type: object
+          required:
+          - valor
+          properties:
+            valor:
+              type: string
+              title: Valor relativo a desconto.
+              description: Valor do desconto.
+              pattern: \d{1,10}\.\d{2}
+    PayloadLocationId:
+      type: integer
+      format: int64
+      title: Id da location
+      description: Identificador da location a ser informada na criação da cobrança .
+    Pix:
+      type: object
+      title: Pix
+      required:
+      - endToEndId
+      - valor
+      - horario
+      - pagador
+      properties:
+        endToEndId:
+          $ref: '#/components/schemas/EndToEndId'
+        txid:
+          allOf:
+          - $ref: '#/components/schemas/TxId'
+          - pattern: '[a-zA-Z0-9]{1,35}'
+        valor:
+          type: string
+          title: Valor do Pix.
+          pattern: \d{1,10}\.\d{2}
+          description: Valor do Pix.
+        componentesValor:
+          type: object
+          title: Informações sobre o valor do Pix
+          description: "O objetivo dessa estrutura é explicar os elementos de composição do valor do Pix, incluindo informações sobre as multas, juros, descontos e abatimentos quando o Pix for relativo a cobranças com vencimento.\n\nRegras da estrutura:\n- O valor do Pix é igual a:\n  - (original.valor + saque.valor + troco.valor) + multa.valor + juros.valor – abatimento.valor – desconto.valor considerando-se apenas os campos que estiverem presentes para cada tipo de cobrança pago.\n- As estruturas saque e troco só serão retornadas quando o Pix for relativo a um Pix Saque ou Pix Troco, respectivamente, e as demais estruturas (juros, multa, abatimento e desconto) só serão pertinentes aos Pix de pagamentos das cobranças com vencimento.\n- Não pode haver simultaneamente uma subsestrutura do tipo saque e outra do tipo troco;\n- Não há restrição na ordem das subestruturas.\n\nPara o caso de um Pix Saque pode-se retornar original com valor=0.00 (zero) uma vez que a soma será respeitada, ou pode-se omitir a subestrutura original.\nNo caso de um Pix Troco ou de um pagamento de cobrança com vencimento a subsestrutura original vai sempre estar presente.\n\n#### Exemplos válidos:\nExemplo de preenchimentos válidos.\n\n- **Pix para pagamento de cobrança imediata (sem saque ou troco).**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"100.00\"\n    }\n  }\n  ...\n  ```\n- **Pix Saque.**\n  ```\n  ...\n  \"componentesValor\": {\n    \"saque\": {\n      \"valor\": \"100.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```\n- **Pix para pagamento de cobrança imediata com saque (pode vir original.valor=0.00).**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"0.00\"\n    },\n    \"saque\": {\n      \"valor\": \"100.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```\n- **Pix Troco.**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"80.00\"\n    },\n    \"troco\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGTEC\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```\n- **Pix para pagamento de cobrança imediata com troco (ordem não importa).**\n  ```\n  ...\n  \"componentesValor\": {\n    \"troco\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGTEC\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    },\n    \"original\": {\n      \"valor\": \"80.00\"\n    }\n  }\n  ...\n  ```\n- **Pix para pagamento de cobrança com vencimento de R$100,00 considerando-se um atraso de 2 dias a uma multa de 3% e juros de 1% ao dia. O valor do Pix será R$105,00.**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"100.00\"\n    },\n    \"multa\": {\n      \"valor\": \"3.00\"\n    },\n    \"juros\": {\n      \"valor\": \"2.00\"\n    }\n  }\n  ...\n  ```\n#### Exemplos inválidos:\nExemplos, não exaustivos, de preenchimentos inválidos.\n- **`original.valor` maior que 0.00 (zero) e `saque` juntos**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"80.00\"\n    },\n    \"saque\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```\n- **dois elementos de `saque`**\n  ```\n  ...\n  \"componentesValor\": [\n    \"saque\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    },\n    \"saque\": {\n      \"valor\": \"10.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  ]\n  ...\n  ```\n- **saque e troco simultaneamente**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"60.00\"\n    },\n    \"saque\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    },\n    \"troco\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGTEC\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```"
+          anyOf:
+          - $ref: '#/components/schemas/PixValorOriginal'
+          - $ref: '#/components/schemas/PixValorSaque'
+          - $ref: '#/components/schemas/PixValorTroco'
+          - $ref: '#/components/schemas/PixValorJuros'
+          - $ref: '#/components/schemas/PixValorMulta'
+          - $ref: '#/components/schemas/PixValorAbatimento'
+          - $ref: '#/components/schemas/PixValorDesconto'
+        chave:
+          type: string
+          title: Chave DICT do recebedor
+          description: '# Formato do campo chave
+
+
+            * Campo chave do recebedor conforme atribuído na respectiva PACS008.
+
+            * Os tipos de chave podem ser: telefone, e-mail, cpf/cnpj ou EVP.
+
+            * O formato das chaves pode ser encontrado na seção "Formatação das chaves do DICT no BR Code" do [Manual de Padrões para iniciação do Pix](https://www.bcb.gov.br/estabilidadefinanceira/pagamentosinstantaneos).
+
+            '
+          maxLength: 77
+        horario:
+          type: string
+          format: date-time
+          title: Horário
+          description: Horário em que o Pix foi processado no PSP.
+        infoPagador:
+          type: string
+          title: Informação livre do pagador
+          maxLength: 140
+        devolucoes:
+          type: array
+          title: Devoluções
+          items:
+            $ref: '#/components/schemas/Devolucao'
+    TipoLocationCobEnum:
+      type: string
+      title: Tipo da cobrança
+      enum:
+      - cob
+      - cobv
+    CobVCompleta:
+      title: Cobrança com vencimento completa
+      required:
+      - status
+      allOf:
+      - $ref: '#/components/schemas/CobVGerada'
+      - $ref: '#/components/schemas/CobVSolicitada'
+      - type: object
+        properties:
+          pix:
+            type: array
+            title: Pix recebidos
+            items:
+              $ref: '#/components/schemas/Pix'
+      - type: object
+        properties:
+          status:
+            type: string
+            title: Status da Cobrança
+            enum:
+            - ATIVA
+            - CONCLUIDA
+            - REMOVIDA_PELO_USUARIO_RECEBEDOR
+            - REMOVIDA_PELO_PSP
+    MakePaymentCobCobvResponse:
+      required:
+      - endToEnd
+      properties:
+        endToEnd:
+          type: string
+          example: E00416968202406141552CmNRIqASznP
+    PessoaJuridicaCobV:
+      type: object
+      required:
+      - nome
+      - cnpj
+      title: Pessoa Jurídica
+      properties:
+        nome:
+          type: string
+          title: Nome
+          description: Nome do usuário.
+          maxLength: 200
+        cnpj:
+          type: string
+          title: CNPJ
+          pattern: \d{14}
+          description: CNPJ do usuário.
+        email:
+          type: string
+          title: Email
+          description: Email do usuário.
+        logradouro:
+          type: string
+          title: Logradouro
+          description: Logradouro do usuário.
+          maxLength: 200
+        cidade:
+          type: string
+          title: Cidade
+          description: Cidade do usuário.
+          maxLength: 200
+        uf:
+          type: string
+          title: UF
+          description: UF do usuário.
+          maxLength: 2
+        cep:
+          type: string
+          title: CEP
+          description: CEP do usuário.
+          pattern: '[0-9]{1,8}'
+    Paginacao:
+      type: object
+      title: Paginação
+      required:
+      - paginaAtual
+      - itensPorPagina
+      - quantidadeDePaginas
+      - quantidadeTotalDeItens
+      properties:
+        paginaAtual:
+          type: integer
+          title: Página atual
+          description: Número da página recuperada.
+          minimum: 0
+        itensPorPagina:
+          type: integer
+          title: Itens por página
+          description: Quantidade de registros retornado na página.
+          minimum: 1
+        quantidadeDePaginas:
+          type: integer
+          title: Quantidade de páginas
+          description: Quantidade de páginas disponíveis para consulta.
+          minimum: 1
+        quantidadeTotalDeItens:
+          type: integer
+          title: Quantidade total de itens
+          description: Quantidade total de itens disponíveis de acordo com os parâmetros informados.
+          minimum: 0
+    PessoaJuridica:
+      type: object
+      required:
+      - cnpj
+      - nome
+      title: Pessoa Jurídica
+      properties:
+        nome:
+          type: string
+          title: Nome
+          description: Nome do usuário.
+          maxLength: 200
+        cnpj:
+          type: string
+          title: CNPJ
+          pattern: \d{14}
+          description: CNPJ do usuário.
+    CobVDataVencimento:
+      type: object
+      title: Data de Vencimento
+      required:
+      - dataDeVencimento
+      properties:
+        dataDeVencimento:
+          type: string
+          title: Data de vencimento da cobrança
+          format: date
+          description: Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. É a data de vencimento da cobrança. A cobrança pode ser honrada até esse dia, inclusive, em qualquer horário do dia.
+          example: '2020-04-01'
+        validadeAposVencimento:
+          type: integer
+          format: int32
+          title: Validade após vencimento
+          description: 'Trata-se da quantidade de dias corridos após calendario.dataDeVencimento,
+
+            em que a cobrança poderá ser paga.
+
+
+            Aplica-se este campo sobre o vencimento original da cobrança acrescentando-se o
+
+            número de dias corridos nos quais a cobrança ainda poderá ser paga, após vencida.
+
+            Este valor não se sobrepõe à possibilidade de pagamento em data posterior ao vencimento
+
+            original por [força de lei](http://www.planalto.gov.br/ccivil_03/LEIS/L7089.htm).
+
+            Nesse sentido, um vencimento determinado para um dia não útil deverá ser acatado
+
+            no primeiro dia útil subsequente mesmo que exceda o número de dias definido neste campo.
+
+
+            Para ilustrar o funcionamento, seguem alguns exemplos:
+
+
+            Exemplo A:
+
+
+            ```txt
+
+            dataDeVencimento: 2020-10-20, terça-feira.
+
+            validadeAposVencimento: 4
+
+
+            Tenta-se pagar no dia 2020-10-23, sexta: aceito.
+
+            Tenta-se pagar no dia 2020-10-24, sábado: aceito.
+
+            Tenta-se pagar no dia 2020-10-25, domingo: negado.
+
+            ```
+
+
+            Exemplo B:
+
+
+            ```txt
+
+            dataDeVencimento: 2020-12-25, sexta-feira, feriado.
+
+            validadeAposVencimento: 0
+
+
+            Tenta-se pagar no dia 2020-12-25, sexta: aceito.
+
+            Tenta-se pagar no dia 2020-12-26, sábado: aceito.
+
+            Tenta-se pagar no dia 2020-12-27, domingo: aceito.
+
+            Tenta-se pagar no dia 2020-12-28, segunda: aceito.
+
+            Tenta-se pagar no dia 2020-12-29, terça: negado.
+
+            ```
+
+
+            Exemplo C:
+
+
+            ```txt
+
+            dataDeVencimento: 2020-12-25, sexta-feira, feriado.
+
+            validadeAposVencimento: 1
+
+
+            Tenta-se pagar no dia 2020-12-25, sexta: aceito.
+
+            Tenta-se pagar no dia 2020-12-26, sábado: aceito.
+
+            Tenta-se pagar no dia 2020-12-27, domingo: aceito.
+
+            Tenta-se pagar no dia 2020-12-28, segunda: aceito.
+
+            Tenta-se pagar no dia 2020-12-29, terça: negado.
+
+            ```
+
+
+            Exemplo D:
+
+
+            ```txt
+
+            dataDeVencimento: 2020-12-25, sexta-feira, feriado.
+
+            validadeAposVencimento: 3
+
+
+            Tenta-se pagar no dia 2020-12-25, sexta: aceito.
+
+            Tenta-se pagar no dia 2020-12-26, sábado: aceito.
+
+            Tenta-se pagar no dia 2020-12-27, domingo: aceito.
+
+            Tenta-se pagar no dia 2020-12-28, segunda: aceito.
+
+            Tenta-se pagar no dia 2020-12-29, terça: negado.
+
+            ```
+
+
+            Exemplo E:
+
+
+
+            ```txt
+
+            dataDeVencimento: 2020-12-25, sexta-feira, feriado.
+
+            validadeAposVencimento: 4
+
+
+            Tenta-se pagar no dia 2020-12-25, sexta: aceito.
+
+            Tenta-se pagar no dia 2020-12-26, sábado: aceito.
+
+            Tenta-se pagar no dia 2020-12-27, domingo: aceito.
+
+            Tenta-se pagar no dia 2020-12-28, segunda: aceito.
+
+            Tenta-se pagar no dia 2020-12-29, terça: aceito.
+
+            Tenta-se pagar no dia 2020-12-30, quarta: negado.
+
+            ```
+
+            '
+    DescontoDataFixa:
+      type: object
+      properties:
+        descontoDataFixa:
+          title: Lista de Descontos
+          description: Descontos absolutos aplicados à cobrança.
+          type: array
+          minItems: 1
+          maxItems: 3
+          uniqueItems: true
+          items:
+            allOf:
+            - properties:
+                data:
+                  title: Data limite para o desconto absoluto da cobrança
+                  description: Descontos por pagamento antecipado, com data fixa. Matriz com até três elementos, sendo que cada elemento é composto por um par "data e valorPerc", para estabelecer descontos percentuais ou absolutos, até aquela data de pagamento. Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. A data de desconto obrigatoriamente deverá ser menor que a data de vencimento da cobrança.
+                  type: string
+                  example: '2020-04-01'
+            - properties:
+                valorPerc:
+                  type: string
+                  title: Valor do desconto absoluto
+                  description: Desconto em valor absoluto ou percentual por dia, útil ou corrido, conforme valor.desconto.modalidade
+                  pattern: \d{1,10}\.\d{2}
+    CobBase:
+      type: object
+      title: Cobrança Base
+      description: Atributos comuns a todas entidades de Cobrança
+      properties:
+        chave:
+          type: string
+          title: Chave DICT do recebedor
+          description: '* O campo chave determina a chave Pix do recebedor que será utilizada para a cobrança.
+
+            * Os tipos de chave podem ser: telefone, e-mail, cpf/cnpj ou EVP.
+
+            * O formato das chaves pode ser encontrado na seção "Formatação das chaves do DICT no BR Code" do [Manual de Padrões para iniciação do Pix](https://www.bcb.gov.br/estabilidadefinanceira/pagamentosinstantaneos).
+
+            '
+          maxLength: 77
+          minLength: 1
+        solicitacaoPagador:
+          type: string
+          title: Solicitação ao pagador
+          description: O campo solicitacaoPagador determina um texto a ser apresentado ao pagador para que ele possa digitar uma informação correlata, em formato livre, a ser enviada ao recebedor. Esse texto está limitado a 140 caracteres.
+          maxLength: 140
+          minLength: 1
+        infoAdicionais:
+          type: array
+          title: Informações adicionais
+          description: Cada respectiva informação adicional contida na lista (nome e valor) deve ser apresentada ao pagador.
+          maximum: 50
+          items:
+            type: object
+            required:
+            - nome
+            - valor
+            properties:
+              nome:
+                type: string
+                title: Nome
+                description: Nome do campo.
+                maxLength: 50
+                minLength: 1
+              valor:
+                type: string
+                title: Valor
+                description: Dados do campo.
+                maxLength: 200
+                minLength: 1
+    PixValorSaque:
+      type: object
+      properties:
+        saque:
+          type: object
+          required:
+          - valor
+          - modalidadeAgente
+          - prestadorDoServicoDeSaque
+          properties:
+            valor:
+              type: string
+              title: Valor do Saque Pix
+              description: Valor do Saque Pix.
+              pattern: \d{1,10}\.\d{2}
+            modalidadeAgente:
+              type: string
+              title: Modalidade do Agente
+              description: "##### Modalidade do Agente\n<table><tr><th>SIGLA</th><th>Descrição</th></tr><tr><td>AGTEC</td><td>Agente Estabelecimento Comercial</td></tr><tr><td>AGTOT</td><td>\tAgente Outra Espécie de Pessoa Jurídica ou Correspondente no País</td></tr><tr><td>AGPSS</td><td>\tAgente Facilitador de Serviço de Saque (ATENÇÃO: no mapeamento para o campo 'modalidadeAgente', da pacs.008, esse valor deve ser substituído por AGFSS)</b>)</td></tr></table>\n"
+              enum:
+              - AGTEC
+              - AGTOT
+              - AGPSS
+            prestadorDoServicoDeSaque:
+              type: string
+              title: Facilitador de Serviço de Saque
+              pattern: \d{8}
+              description: ISPB do Facilitador de Serviço de Saque
+    PixValorAbatimento:
+      type: object
+      properties:
+        abatimento:
+          type: object
+          required:
+          - valor
+          properties:
+            valor:
+              type: string
+              title: Valor relativo a abatimento.
+              description: Valor do abatimento.
+              pattern: \d{1,10}\.\d{2}
+        txIdPresente:
+          type: boolean
+          description: Filtro pela existência de txid.
+        devolucaoPresente:
+          type: boolean
+          description: Filtro pela existência de devolução.
+        cpf:
+          type: string
+          pattern: \d{11}
+          description: CPF
+        cnpj:
+          type: string
+          pattern: \d{14}
+          description: CNPJ
+        paginacao:
+          $ref: '#/components/schemas/Paginacao'
+    CobVGerada:
+      type: object
+      title: Cobrança com vencimento gerada
+      description: Dados criados ou alterados da cobrança com vencimento via API Pix
+      required:
+      - location
+      - txid
+      - devedor
+      - calendario
+      - revisao
+      - status
+      - valor
+      - chave
+      - recebedor
+      allOf:
+      - type: object
+        properties:
+          calendario:
+            required:
+            - validadeAposVencimento
+            title: CalendarioCobV
+            description: Os campos aninhados sob o identificador calendário organizam informações a respeito de controle de tempo da cobrança.
+            properties:
+              criacao:
+                type: string
+                format: date-time
+                title: Data de Criação
+              dataDeVencimento:
+                type: string
+                format: date
+                title: Data de vencimento da cobrança
+                description: Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. É a data de vencimento da cobrança. A cobrança pode ser honrada até esse dia, inclusive, em qualquer horário do dia.
+                example: '2020-04-01'
+              validadeAposVencimento:
+                type: integer
+                format: int32
+                title: Validade após vencimento
+                description: 'Trata-se da quantidade de dias corridos após calendario.dataDeVencimento,
+
+                  em que a cobrança poderá ser paga.
+
+
+                  Aplica-se este campo sobre o vencimento original da cobrança acrescentando-se o
+
+                  número de dias corridos nos quais a cobrança ainda poderá ser paga, após vencida.
+
+                  Este valor não se sobrepõe à possibilidade de pagamento em data posterior ao vencimento
+
+                  original por [força de lei](http://www.planalto.gov.br/ccivil_03/LEIS/L7089.htm).
+
+                  Nesse sentido, um vencimento determinado para um dia não útil deverá ser acatado
+
+                  no primeiro dia útil subsequente mesmo que exceda o número de dias definido neste campo.
+
+
+                  Para ilustrar o funcionamento, seguem alguns exemplos:
+
+
+                  Exemplo A:
+
+
+                  ```txt
+
+                  dataDeVencimento: 2020-10-20, terça-feira.
+
+                  validadeAposVencimento: 4
+
+
+                  Tenta-se pagar no dia 2020-10-23, sexta: aceito.
+
+                  Tenta-se pagar no dia 2020-10-24, sábado: aceito.
+
+                  Tenta-se pagar no dia 2020-10-25, domingo: negado.
+
+                  ```
+
+
+                  Exemplo B:
+
+
+                  ```txt
+
+                  dataDeVencimento: 2020-12-25, sexta-feira, feriado.
+
+                  validadeAposVencimento: 0
+
+
+                  Tenta-se pagar no dia 2020-12-25, sexta: aceito.
+
+                  Tenta-se pagar no dia 2020-12-26, sábado: aceito.
+
+                  Tenta-se pagar no dia 2020-12-27, domingo: aceito.
+
+                  Tenta-se pagar no dia 2020-12-28, segunda: aceito.
+
+                  Tenta-se pagar no dia 2020-12-29, terça: negado.
+
+                  ```
+
+
+                  Exemplo C:
+
+
+                  ```txt
+
+                  dataDeVencimento: 2020-12-25, sexta-feira, feriado.
+
+                  validadeAposVencimento: 1
+
+
+                  Tenta-se pagar no dia 2020-12-25, sexta: aceito.
+
+                  Tenta-se pagar no dia 2020-12-26, sábado: aceito.
+
+                  Tenta-se pagar no dia 2020-12-27, domingo: aceito.
+
+                  Tenta-se pagar no dia 2020-12-28, segunda: aceito.
+
+                  Tenta-se pagar no dia 2020-12-29, terça: negado.
+
+                  ```
+
+
+                  Exemplo D:
+
+
+                  ```txt
+
+                  dataDeVencimento: 2020-12-25, sexta-feira, feriado.
+
+                  validadeAposVencimento: 3
+
+
+                  Tenta-se pagar no dia 2020-12-25, sexta: aceito.
+
+                  Tenta-se pagar no dia 2020-12-26, sábado: aceito.
+
+                  Tenta-se pagar no dia 2020-12-27, domingo: aceito.
+
+                  Tenta-se pagar no dia 2020-12-28, segunda: aceito.
+
+                  Tenta-se pagar no dia 2020-12-29, terça: negado.
+
+                  ```
+
+
+                  Exemplo E:
+
+
+
+                  ```txt
+
+                  dataDeVencimento: 2020-12-25, sexta-feira, feriado.
+
+                  validadeAposVencimento: 4
+
+
+                  Tenta-se pagar no dia 2020-12-25, sexta: aceito.
+
+                  Tenta-se pagar no dia 2020-12-26, sábado: aceito.
+
+                  Tenta-se pagar no dia 2020-12-27, domingo: aceito.
+
+                  Tenta-se pagar no dia 2020-12-28, segunda: aceito.
+
+                  Tenta-se pagar no dia 2020-12-29, terça: aceito.
+
+                  Tenta-se pagar no dia 2020-12-30, quarta: negado.
+
+                  ```
+
+                  '
+                default: 30
+          txid:
+            $ref: '#/components/schemas/TxId'
+          revisao:
+            $ref: '#/components/schemas/Revisao'
+      - type: object
+        properties:
+          devedor:
+            description: 'Não é permitido que o campo devedor.cpf e campo devedor.cnpj estejam preenchidos ao mesmo tempo. Se o campo devedor.nome está preenchido, então deve existir ou um devedor.cpf ou um campo devedor.cnpj preenchido.
+
+
+              Os campos aninhados sob o objeto devedor são opcionais e identificam a pessoa ou a instituição a quem a cobrança está endereçada. Não identifica, necessariamente, quem irá efetivamente realizar o pagamento.'
+            oneOf:
+            - $ref: '#/components/schemas/PessoaFisica'
+            - $ref: '#/components/schemas/PessoaJuridica'
+      - type: object
+        properties:
+          recebedor:
+            description: Os campos aninhados sob o objeto devedor são opcionais e identificam o devedor, ou seja, a pessoa ou a instituição a quem a cobrança está endereçada. Não identifica, necessariamente, quem irá efetivamente realizar o pagamento. Um CPF pode ser o devedor de uma cobrança, mas pode acontecer de outro CPF realizar, efetivamente, o pagamento do documento. Não é permitido que o campo devedor.cpf e campo devedor.cnpj estejam preenchidos ao mesmo tempo. Se o campo devedor.cnpj está preenchido, então o campo devedor.cpf não pode estar preenchido, e vice-versa. Se o campo devedor.nome está preenchido, então deve existir ou um devedor.cpf ou um campo devedor.cnpj preenchido.
+            oneOf:
+            - $ref: '#/components/schemas/PessoaFisica'
+            - $ref: '#/components/schemas/PessoaJuridica'
+      - type: object
+        properties:
+          loc:
+            required:
+            - id
+            - txid
+            - tipoCob
+            - criacao
+            allOf:
+            - $ref: '#/components/schemas/PayloadLocation'
+      - type: object
+        properties:
+          status:
+            type: string
+            title: Status da Cobrança
+            enum:
+            - ATIVA
+            - CONCLUIDA
+            - REMOVIDA_PELO_USUARIO_RECEBEDOR
+            - REMOVIDA_PELO_PSP
+      - type: object
+        properties:
+          valor:
+            required:
+            - original
+            allOf:
+            - $ref: '#/components/schemas/CobVValor'
+      - $ref: '#/components/schemas/CobBaseCopiaCola'
+    DevolucaoId:
+      type: string
+      title: Id da Devolução
+      description: Id gerado pelo cliente para representar unicamente uma devolução.
+      pattern: '[a-zA-Z0-9]{1,35}'
+    CobBaseCopiaCola:
+      type: object
+      title: Cobrança Base com Copia e Cola
+      description: Atributos comuns a todas entidades de Cobrança que possuem informação de Copia e Cola
+      allOf:
+      - type: object
+        properties:
+          pixCopiaECola:
+            type: string
+            title: Pix Copia e Cola correspondente à cobrança.
+            description: Este campo retorna o valor do Pix Copia e Cola correspondente à cobrança. Trata-se da sequência de caracteres que representa o BR Code.
+            maxLength: 512
+      - $ref: '#/components/schemas/CobBase'
+    PagarCobrancaPixResponse:
+      type: object
+      required:
+      - e2e
+      properties:
+        e2e:
+          type: string
+    PessoaFisicaCobV:
+      type: object
+      required:
+      - nome
+      - cpf
+      title: Pessoa Física
+      properties:
+        nome:
+          type: string
+          title: Nome
+          description: Nome do usuário.
+          maxLength: 200
+        cpf:
+          type: string
+          title: CPF
+          pattern: \d{11}
+          description: CPF do usuário.
+        email:
+          type: string
+          title: Email
+          description: Email do usuário.
+        logradouro:
+          type: string
+          title: Logradouro
+          description: Logradouro do usuário.
+          maxLength: 200
+        cidade:
+          type: string
+          title: Cidade
+          description: Cidade do usuário.
+          maxLength: 200
+        uf:
+          type: string
+          title: UF
+          description: UF do usuário.
+          maxLength: 2
+        cep:
+          type: string
+          title: CEP
+          description: CEP do usuário.
+          pattern: '[0-9]{1,8}'
+    MakePaymentCobCobv:
+      required:
+      - qrCode
+      - valor
+      properties:
+        qrCode:
+          type: string
+          description: URL do pixCopiaECola.
+          example: 000201010200661010014BR.GOV.BCB.PIX2009url-exemplo.qrcode.sandbox.co/pj-s/v2/cob/f5c23856e5694ed48607ab0bd0172496520400005309863540550.005802BR5901*6013BELO HORIZONT61089999999962070503***801000014BR.GOV.BCB.PIX2578cdpj-sandbox.partners.uatinter.co/pj-s/v2/rec/60eb10961d744397903cdc376c3ae8a56300288A
+        valor:
+          type: number
+          description: Valor a ser pago.
+          example: 100
+    PixValorOriginal:
+      type: object
+      properties:
+        original:
+          type: object
+          required:
+          - valor
+          properties:
+            valor:
+              type: string
+              title: Valor original
+              description: Valor original do Pix.
+              pattern: \d{1,10}\.\d{2}
+    CobsVConsultadas:
+      type: object
+      title: Cobranças com vencimento consultadas
+      required:
+      - parametros
+      - cobs
+      properties:
+        parametros:
+          $ref: '#/components/schemas/ParametrosConsultaCob'
+        cobs:
+          type: array
+          title: Lista de cobranças
+          items:
+            allOf:
+            - $ref: '#/components/schemas/CobVCompleta'
+            - required:
+              - status
+              - txid
+              - idCob
+    Revisao:
+      type: integer
+      format: int32
+      title: Revisão
+      description: '# O campo `revisao`
+
+
+        Denota a revisão da cobrança.  Sempre começa em zero. Sempre varia em acréscimos de 1.
+
+
+        O incremento em uma cobrança deve ocorrer sempre que um objeto da cobrança em questão for alterado.
+
+        O campo `loc` é uma exceção a esta regra.
+
+
+        Se em uma determinada alteração em uma cobrança, o único campo alterado for o campo `loc`,
+
+        então esta operação não incrementa a revisão da cobrança.
+
+
+        O campo `loc` não ocasiona uma alteração na cobrança em si.
+
+        Não é necessário armazenar histórico das alterações do campo `loc` para uma determinada cobrança.
+
+        Para os outros campos da cobrança, registra-se histórico.
+
+        '
+      readOnly: true
+    PixValorTroco:
+      type: object
+      properties:
+        troco:
+          type: object
+          required:
+          - valor
+          - modalidadeAgente
+          - prestadorDoServicoDeSaque
+          properties:
+            valor:
+              type: string
+              title: Valor do Troco Pix
+              description: Valor do Troco Pix.
+              pattern: \d{1,10}\.\d{2}
+            modalidadeAgente:
+              type: string
+              title: Modalidade do Agente
+              description: '##### Modalidade do Agente
+
+                <table><tr><th>SIGLA</th><th>Descrição</th></tr><tr><td>AGTEC</td><td>Agente Estabelecimento Comercial</td></tr><tr><td>AGTOT</td><td>Agente Outra Espécie de Pessoa Jurídica ou Correspondente no País</td></tr></table>
+
+                '
+              enum:
+              - AGTEC
+              - AGTOT
+            prestadorDoServicoDeSaque:
+              type: string
+              title: Facilitador de Serviço de Saque
+              pattern: \d{8}
+              description: ISPB do Facilitador de Serviço de Saque
+    CobVDevedor:
+      description: 'Os campos aninhados sob o objeto devedor são opcionais e identificam a pessoa ou a instituição a quem a cobrança está endereçada. Não identifica, necessariamente, quem irá efetivamente realizar o pagamento.
+
+
+        Não é permitido que o campo devedor.cpf e campo devedor.cnpj estejam preenchidos ao mesmo tempo. Se o campo devedor.nome está preenchido, então deve existir ou um devedor.cpf ou um campo devedor.cnpj preenchido.'
+      oneOf:
+      - $ref: '#/components/schemas/PessoaFisicaCobV'
+      - $ref: '#/components/schemas/PessoaJuridicaCobV'
+    ParametrosConsultaCob:
+      type: object
+      title: Parâmetros de Consulta de Cobrança
+      description: '[DEPRECADO] Parâmetros utilizados para a realização de uma consulta de cobranças.'
+      required:
+      - inicio
+      - fim
+      - paginacao
+      properties:
+        inicio:
+          type: string
+          title: Data de Início
+          description: 'Data inicial utilizada na consulta.
+
+            Exemplo: 2020-04-01T00:00:00Z'
+          example: '2020-04-01T00:00:00Z'
+        fim:
+          type: string
+          title: Data de Fim
+          description: 'Data inicial utilizada na consulta.
+
+            Exemplo: 2020-04-01T17:00:00Z'
+          example: '2020-04-01T17:00:00Z'
+        cpf:
+          type: string
+          title: CPF
+          pattern: \d{11}
+          description: Filtro pelo CPF do devedor. Não pode ser utilizado ao mesmo tempo que o CNPJ.
+        cnpj:
+          type: string
+          title: CNPJ
+          pattern: \d{14}
+          description: Filtro pelo CNPJ do devedor. Não pode ser utilizado ao mesmo tempo que o CPF.
+        locationPresente:
+          type: boolean
+          description: Filtro pela existência de location vinculada.
+        status:
+          type: string
+          title: Status da Cobrança
+          description: Filtro pelo status das cobranças.
+        paginacao:
+          $ref: '#/components/schemas/Paginacao'
+    Problema:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+          example: https://pix.bcb.gov.br/api/v2/error/NaoEncontrado
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Not found
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        correlationId:
+          type: string
+          description: Identificador de correlação do problema para fins de suporte
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao'
+    ValorPerc:
+      type: object
+      required:
+      - valorPerc
+      properties:
+        valorPerc:
+          type: string
+          title: Abatimentos
+          description: Abatimentos ou outras deduções aplicadas ao documento, em valor absoluto ou percentual do valor original do documento.
+          pattern: \d{1,10}\.\d{2}
+    PixValorMulta:
+      type: object
+      properties:
+        multa:
+          type: object
+          required:
+          - valor
+          properties:
+            valor:
+              type: string
+              title: Valor relativo a multa.
+              description: Valor da multa.
+              pattern: \d{1,10}\.\d{2}
+    StatusCobVRevisada:
+      type: string
+      title: Status do registro da cobrança
+      enum:
+      - REMOVIDA_PELO_USUARIO_RECEBEDOR
+    PessoaFisica:
+      type: object
+      required:
+      - cpf
+      - nome
+      title: Pessoa Física
+      properties:
+        nome:
+          type: string
+          title: Nome
+          description: Nome do usuário.
+          maxLength: 200
+        cpf:
+          type: string
+          title: CPF
+          pattern: \d{11}
+          description: CPF do usuário.
+    CobVRevisada:
+      type: object
+      title: Cobrança com vencimento revisada
+      description: Dados enviados para revisão da cobrança com vencimento via API Pix
+      allOf:
+      - type: object
+        properties:
+          calendario:
+            $ref: '#/components/schemas/CobVDataVencimento'
+      - type: object
+        properties:
+          devedor:
+            $ref: '#/components/schemas/CobVDevedor'
+      - type: object
+        properties:
+          loc:
+            $ref: '#/components/schemas/PayloadLocationCob'
+      - type: object
+        properties:
+          valor:
+            $ref: '#/components/schemas/CobVValor'
+      - $ref: '#/components/schemas/CobBase'
+      - type: object
+        properties:
+          status:
+            $ref: '#/components/schemas/StatusCobVRevisada'
+    Devolucao:
+      type: object
+      title: Devolução
+      required:
+      - id
+      - rtrId
+      - valor
+      - horario
+      - status
+      properties:
+        id:
+          $ref: '#/components/schemas/DevolucaoId'
+        rtrId:
+          type: string
+          title: RtrId
+          description: ReturnIdentification que transita na PACS004.
+          example: D12345678202009091000abcde123456
+          pattern: '[a-zA-Z0-9]{32}'
+          minLength: 32
+          maxLength: 32
+        valor:
+          type: string
+          title: Valor a devolver.
+          pattern: \d{1,10}\.\d{2}
+          description: Valor a devolver.
+        horario:
+          type: object
+          properties:
+            solicitacao:
+              type: string
+              format: date-time
+              title: Horário de solicitação
+              description: Horário no qual a devolução foi solicitada no PSP.
+            liquidacao:
+              type: string
+              format: date-time
+              title: Horário de liquidacao
+              description: Horário no qual a devolução foi liquidada no PSP.
+        status:
+          type: string
+          title: Status
+          description: Status da devolução.
+          enum:
+          - EM_PROCESSAMENTO
+          - DEVOLVIDO
+          - NAO_REALIZADO
+        motivo:
+          type: string
+          title: Descrição do status.
+          description: '# Status da Devolução
+
+
+            Campo opcional que pode ser utilizado pelo PSP recebedor para detalhar os motivos
+
+            de a devolução ter atingido o status em questão.
+
+            Pode ser utilizado, por exemplo, para detalhar o motivo de a devolução não ter sido realizada.
+
+            '
+          maxLength: 140
+    PagarCobrancaPix:
+      type: object
+      required:
+      - valor
+      properties:
+        valor:
+          type: number
+    CobVSolicitada:
+      type: object
+      title: Cobrança com vencimento solicitada
+      description: Dados enviados para criação ou alteração da cobrança com vencimento via API Pix
+      required:
+      - valor
+      - chave
+      - devedor
+      - calendario
+      allOf:
+      - type: object
+        properties:
+          calendario:
+            $ref: '#/components/schemas/CobVDataVencimento'
+      - type: object
+        properties:
+          devedor:
+            $ref: '#/components/schemas/CobVDevedor'
+      - type: object
+        properties:
+          loc:
+            $ref: '#/components/schemas/PayloadLocationCob'
+      - type: object
+        properties:
+          valor:
+            $ref: '#/components/schemas/CobVValor'
+      - $ref: '#/components/schemas/CobBase'
+    Violacao:
+      type: object
+      title: Violações
+      properties:
+        razao:
+          type: string
+          title: Descrição do erro
+          description: Descrição do erro
+          example: Valor da cobrança não pode ser 0.00
+        propriedade:
+          type: string
+          title: Nome da propriedade
+          description: Nome da propriedade
+          example: cob.chave
+        valor:
+          type: string
+          title: Valor da propriedade
+          description: Valor da propriedade
+          example: 061996671234
+    CobVValor:
+      type: object
+      title: Valor da cobrança com vencimento
+      description: Valores monetários.
+      allOf:
+      - type: object
+        properties:
+          original:
+            type: string
+            title: Valor
+            description: Valor original da cobrança.
+          multa:
+            type: object
+            title: Multa
+            description: Multa aplicada à cobrança
+            properties:
+              modalidade:
+                type: integer
+                format: int32
+                title: Modalidade da multa
+                minimum: 1
+                maximum: 2
+                description: '##### Modalidade da multa, conforme tabela de domínios.
+
+                  <table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor Fixo</td><td>1</td></tr><tr><td>Percentual</td><td>2</td></tr></table>
+
+                  '
+              valorPerc:
+                type: string
+                title: Valor da multa absoluta
+                description: Multa do documento em valor absoluto ou percentual, conforme "valor.multa.modalidade".
+                pattern: \d{1,10}\.\d{2}
+          juros:
+            type: object
+            title: Juro
+            description: Juro aplicado à cobrança
+            properties:
+              modalidade:
+                type: integer
+                format: int32
+                minimum: 1
+                maximum: 8
+                title: Modalidade de juros
+                description: '##### Modalidade de juros, conforme tabela de domínios.
+
+                  <table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor (dias corridos)</td><td>1</td></tr><tr><td>Percentual ao dia (dias corridos)</td><td>2</td></tr><tr><td>Percentual ao mês (dias corridos)</td><td>3</td></tr><tr><td>Percentual ao ano (dias corridos)</td><td>4</td></tr><tr><td>Valor (dias úteis)</td><td>5</td></tr><tr><td>Percentual ao dia (dias úteis)</td><td>6</td></tr><tr><td>Percentual ao mês (dias úteis)</td><td>7</td></tr><tr><td>Percentual ao ano (dias úteis)</td><td>8</td></tr></table>
+
+                  '
+              valorPerc:
+                type: string
+                title: Valor
+                pattern: \d{1,10}\.\d{2}
+          abatimento:
+            title: Abatimento
+            required:
+            - modalidade
+            - valorPerc
+            description: Abatimento aplicado à cobrança
+            properties:
+              modalidade:
+                type: integer
+                format: int32
+                minimum: 1
+                maximum: 2
+                title: Modalidade de abatimentos
+                description: '##### Modalidade de abatimentos, conforme tabela de domínios.
+
+                  <table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor Fixo</td><td>1</td></tr><tr><td>Percentual</td><td>2</td></tr></table>
+
+                  '
+              valorPerc:
+                type: string
+                title: Abatimentos
+                description: Abatimentos ou outras deduções aplicadas ao documento, em valor absoluto ou percentual do valor original do documento.
+                pattern: \d{1,10}\.\d{2}
+      - type: object
+        properties:
+          desconto:
+            title: Desconto
+            required:
+            - modalidade
+            description: Descontos aplicados à cobrança
+            properties:
+              modalidade:
+                type: string
+                title: Modalidade de descontos
+                description: '##### Modalidade de desconto, conforme tabela de domínios.
+
+                  <table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor Fixo até a[s] data[s] informada[s]</td><td>1</td></tr><tr><td>Percentual até a[s] data[s] informada[s]</td><td>2</td></tr><tr><td>Valor por antecipação dia corrido</td><td>3</td></tr><tr><td>Valor por antecipação dia útil</td><td>4</td></tr><tr><td>Percentual por antecipação dia corrido</td><td>5</td></tr><tr><td>Percentual por antecipação dia útil</td><td>6</td></tr></table>
+
+                  '
+            oneOf:
+            - $ref: '#/components/schemas/ValorPerc'
+            - $ref: '#/components/schemas/DescontoDataFixa'
+    PayloadLocation:
+      type: object
+      title: Location do Payload
+      description: Identificador da localização do payload.
+      properties:
+        id:
+          $ref: '#/components/schemas/PayloadLocationId'
+        location:
+          type: string
+          title: Localização do payload
+          description: Localização do Payload a ser informada na criação da cobrança.
+          maxLength: 77
+          format: uri
+          example: pix.example.com/qr/v2/2353c790eefb11eaadc10242ac120002
+          readOnly: true
+        tipoCob:
+          type: string
+          title: Tipo da cobrança
+          enum:
+          - cob
+          - cobv
+        criacao:
+          type: string
+          format: date-time
+          title: Data de Criação
+          description: Data e hora em que a location foi criada. Respeita RFC 3339.
+          readOnly: true
+    PayloadLocationCob:
+      type: object
+      title: Location do Payload
+      description: Identificador da localização do payload.
+      properties:
+        id:
+          $ref: '#/components/schemas/PayloadLocationId'
+        tipoCob:
+          $ref: '#/components/schemas/TipoLocationCobEnum'
+  parameters:
+    status:
+      in: query
+      name: status
+      schema:
+        type: string
+        title: Situação da Cobrança
+        enum:
+        - ATIVA
+        - CONCLUIDA
+        - REMOVIDA_PELO_USUARIO_RECEBEDOR
+        - REMOVIDA_PELO_PSP
+      description: 'Estado do registro da cobrança. Não se confunde com o estado da cobrança em si, ou seja, não guarda relação com o fato de a cobrança encontrar-se vencida ou expirada, por exemplo.
+
+
+        Os status são assim definidos:
+
+        - `ATIVA`: indica que o registro se refere a uma cobrança que foi gerada mas ainda não foi paga nem removida;
+
+        - `CONCLUIDA`: indica que o registro se refere a uma cobrança que já foi paga e, por conseguinte, não pode acolher outro pagamento;
+
+        - `REMOVIDO_PELO_USUARIO_RECEBEDOR`: indica que o usuário recebedor solicitou a remoção do registro da cobrança; e
+
+        - `REMOVIDO_PELO_PSP`: indica que o PSP Recebedor solicitou a remoção do registro da cobrança.
+
+        '
+    txid:
+      name: txid
+      in: path
+      required: true
+      description: 'O campo txid determina o identificador da transação.
+
+
+        O txid é criado exclusivamente pelo usuário recebedor e está sob sua responsabilidade. O txid, no contexto de representação de uma cobrança, é único por CPF/CNPJ do usuário recebedor.'
+      schema:
+        type: string
+        pattern: '[a-zA-Z0-9]{26,35}'
+    locationPresente:
+      name: locationPresente
+      in: query
+      schema:
+        type: boolean
+    cpf:
+      name: cpf
+      in: query
+      schema:
+        type: string
+        title: CPF
+        description: Filtro pelo CPF do devedor. Não pode ser utilizado ao mesmo tempo que o CNPJ.
+    fim:
+      in: query
+      name: fim
+      required: true
+      x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm:ss[.SSS]XXX
+      example: '2023-03-30T12:09:00Z'
+      description: 'Formato: yyyy-MM-dd''T''HH:mm:ss[.SSS]XXX'
+      schema:
+        type: string
+        format: date-time
+        title: Data de fim
+        description: Filtra os registros cuja data de criação seja menor ou igual que a data de fim.
+    loteCobVId:
+      in: query
+      name: loteCobVId
+      schema:
+        type: integer
+        format: int32
+        title: Id do lote de cobrança com vencimento
+        description: Id do lote de cobrança com vencimento.
+    xContaCorrente:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação. Necessário somente quando a aplicação estiver associada a mais de uma conta corrente. Enviar apenas números (incluindo o dígito), e não enviar zeros a esquerda.
+      schema:
+        type: string
+        pattern: '[1-9][0-9]*'
+    paginaAtual:
+      in: query
+      name: paginacao.paginaAtual
+      required: false
+      schema:
+        type: integer
+        format: int32
+        title: Página atual
+        default: 0
+        description: Página a ser retornada pela consulta. Se não for informada, o PSP assumirá que será 0.
+    cnpj:
+      name: cnpj
+      in: query
+      schema:
+        type: string
+        title: CNPJ
+        description: Filtro pelo CNPJ do devedor. Não pode ser utilizado ao mesmo tempo que o CPF.
+    inicio:
+      in: query
+      name: inicio
+      required: true
+      x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm:ss[.SSS]XXX
+      example: '2023-02-30T12:09:00Z'
+      description: 'Formato: yyyy-MM-dd''T''HH:mm:ss[.SSS]XXX'
+      schema:
+        type: string
+        format: date-time
+        title: Data de início
+        description: Filtra os registros cuja data de criação seja maior ou igual que a data de início.
+    itensPorPagina:
+      in: query
+      name: paginacao.itensPorPagina
+      required: false
+      schema:
+        type: integer
+        format: int32
+        title: Itens por Página
+        maximum: 1000
+        default: 100
+        description: Quantidade máxima de registros retornados em cada página. Apenas a última página pode conter uma quantidade menor de registros.
+  requestBodies:
+    CobVBodyRevisada:
+      description: Dados para geração da cobrança.
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CobVRevisada'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/cobBody3'
+            exemplo2:
+              $ref: '#/components/examples/cobBody4'
+            exemplo3:
+              $ref: '#/components/examples/cobBody5'
+    CobVBody:
+      description: Dados para geração da cobrança com vencimento.
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CobVSolicitada'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/cobBody1'
+    MakePaymentCobCobvRequestBody:
+      description: Dados para pagamento de cobrança com QRCode.
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MakePaymentCobCobv'
+    PagarCobrancaPixBody:
+      description: Dados para notificação dos Pix.
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PagarCobrancaPix'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/PagamentoPixCobExample1'
+  examples:
+    OperacaoInvalidaCobVExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/CobVOperacaoInvalida
+        title: Operação inválida.
+        status: 400
+        detail: Cobrança não encontra-se mais com o status ATIVA, somente cobranças ativas podem ser revisadas.
+    cobBody5:
+      summary: Exemplo de revisão de cobrança 3
+      value:
+        status: REMOVIDA_PELO_USUARIO_RECEBEDOR
+    cobBody4:
+      summary: Exemplo de revisão de cobrança 2
+      value:
+        valor:
+          original: '567.89'
+        solicitacaoPagador: Informar cartão fidelidade
+    cobResponse4:
+      summary: Exemplo de cobrança com vencimento 1
+      value:
+        calendario:
+          criacao: '2020-09-09T20:15:00.358Z'
+          dataDeVencimento: '2020-12-31'
+          validadeAposVencimento: 30
+        txid: 7978c0c97ea847e78e8849634473c1f1
+        revisao: 0
+        loc:
+          id: 789
+          location: pix.example.com/qr/v2/cobv/9d36b84fc70b478fb95c12729b90ca25
+          tipoCob: cobv
+        status: ATIVA
+        devedor:
+          logradouro: Rua 15, Numero 1, Bairro Luz
+          cidade: Belo Horizonte
+          uf: MG
+          cep: '99000750'
+          cnpj: '12345678000195'
+          nome: Empresa de Serviços SA
+        recebedor:
+          logradouro: Rua 15 Numero 1200, Bairro São Luiz
+          cidade: São Paulo
+          uf: SP
+          cep: '70800100'
+          cnpj: '56989000019533'
+          nome: Empresa de Logística SA
+        valor:
+          original: '567.89'
+        chave: a1f4102e-a446-4a57-bcce-6fa48899c1d1
+        solicitacaoPagador: Informar cartão fidelidade
+    AcessoNegadoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/AcessoNegado
+        title: Acesso Negado
+        status: 403
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    ServicoIndisponivelExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/ServicoIndisponivel
+        title: Serviço Indisponível
+        status: 503
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    NaoEncontradoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/NaoEncontrado
+        title: Não Encontrado
+        status: 404
+        detail: Entidade não encontrada.
+    getCobsV1:
+      summary: Exemplo de retorno da consulta de cobranças com vencimento 1
+      value:
+        parametros:
+          inicio: '2020-04-01T00:00:00Z'
+          fim: '2020-04-01T23:59:59Z'
+          paginacao:
+            paginaAtual: 0
+            itensPorPagina: 100
+            quantidadeDePaginas: 1
+            quantidadeTotalDeItens: 1
+        cobs:
+        - allOf:
+          - $ref: '#/components/examples/cobResponse4/value'
+    PagamentoPixCobExample1:
+      summary: Exemplo de Payload para pagamento de Cobrança via Pix
+      value:
+        valor: 150
+    cobBody3:
+      summary: Exemplo de revisão de cobrança 1
+      value:
+        loc:
+          id: 7768
+        devedor:
+          cpf: '12345678909'
+          nome: Francisco da Silva
+        valor:
+          original: '123.45'
+        solicitacaoPagador: Cobrança dos serviços prestados.
+    RequisicaoInvalidaCobVExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/CobVOperacaoInvalida
+        title: Cobrança inválida.
+        status: 400
+        detail: A requisição que busca alterar ou criar uma cobrança com vencimento não respeita o schema ou está semanticamente errada.
+        violacoes:
+        - razao: O objeto cobv.devedor não respeita o schema.
+          propriedade: cobv.devedor
+    cobBody1:
+      summary: Exemplo de criação de cobrança com vencimento 1
+      value:
+        calendario:
+          dataDeVencimento: '2020-12-31'
+          validadeAposVencimento: 30
+        loc:
+          id: 789
+        devedor:
+          logradouro: Alameda Souza, Numero 80, Bairro Braz
+          cidade: Recife
+          uf: PE
+          cep: '70011750'
+          cpf: '12345678909'
+          nome: Francisco da Silva
+        valor:
+          original: '123.45'
+          multa:
+            modalidade: '2'
+            valorPerc: '15.00'
+          juros:
+            modalidade: '2'
+            valorPerc: '2.00'
+          desconto:
+            modalidade: '1'
+            descontoDataFixa:
+            - data: '2020-11-30'
+              valorPerc: '30.00'
+        chave: 5f84a4c5-c5cb-4599-9f13-7eb4d419dacc
+        solicitacaoPagador: Cobrança dos serviços prestados.
+    pagarPixCobResponse1:
+      summary: Exemplo de Resposta para sucesso no pagamento de Cobrança via Pix
+      value:
+        e2e: E00416968202406141552CmNRIqASznP
+  responses:
+    InternalError:
+      description: Acesso não permitido.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+    BadRequest:
+      description: Requisição com formato inválido.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+    NotFound:
+      description: Não encontrado.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+    RequisicaoInvalida:
+      description: Problemas na requisição.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+    AcessoNegado:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/AcessoNegadoExample1'
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/NaoEncontradoExample1'
+    ServicoIndisponivel:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/ServicoIndisponivelExample1'
+x-refined-from:
+- swagger-api-pix-yaml.yaml
+- banco-inter-pix-openapi.yml

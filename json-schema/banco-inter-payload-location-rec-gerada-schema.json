@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-payload-location-rec-gerada-schema.json",
+  "title": "Location do Payload Completa",
+  "description": "Identificador da localização do payload completo.",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-pix-automatico-openapi.yml#/components/schemas/PayloadLocationRecGerada",
+  "type": "object",
+  "required": [
+    "id",
+    "location",
+    "tipo",
+    "criacao"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/PayloadLocationRecId"
+    },
+    "location": {
+      "type": "string",
+      "title": "Localização do payload",
+      "description": "Localização do Payload a ser informada na criação da recorrência.",
+      "maxLength": 77,
+      "format": "uri",
+      "readOnly": true
+    },
+    "criacao": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Data de Criação",
+      "description": "Data e hora em que a location foi criada. Respeita RFC 3339.",
+      "readOnly": true
+    }
+  },
+  "$defs": {
+    "PayloadLocationRecId": {
+      "type": "integer",
+      "format": "int64",
+      "title": "Id da location",
+      "description": "Identificador da location a ser informado na criação de uma recorrência."
+    }
+  }
+}

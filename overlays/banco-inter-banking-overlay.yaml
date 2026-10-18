@@ -1,0 +1,147 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for API Banking
+  version: 1.0.0
+  x-generated: '2026-10-18'
+  x-method: derived
+  x-source: openapi/banco-inter-banking-openapi.yml
+extends: ../openapi/_original/banco-inter-banking-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-10-18'
+    x-provider: Banco Inter S.A.
+    x-docs: https://developers.inter.co/
+- target: $.components
+  update:
+    securitySchemes:
+      interOAuth:
+        type: oauth2
+        description: 'OAuth 2.0 client credentials (POST /oauth/v2/token, see openapi/banco-inter-token-openapi.yml) over mTLS: every call must
+          present the integration certificate and key issued in Internet Banking PJ. Scopes are those named in each operation description.'
+        flows:
+          clientCredentials:
+            tokenUrl: https://cdpj.partners.bancointer.com.br/oauth/v2/token
+            scopes:
+              extrato.read: Scope named in the operation descriptions
+              pagamento-boleto.read: Scope named in the operation descriptions
+              pagamento-boleto.write: Scope named in the operation descriptions
+              pagamento-darf.write: Scope named in the operation descriptions
+              pagamento-lote.read: Scope named in the operation descriptions
+              pagamento-lote.write: Scope named in the operation descriptions
+              pagamento-pix.read: Scope named in the operation descriptions
+              pagamento-pix.write: Scope named in the operation descriptions
+              webhook-banking.read: Scope named in the operation descriptions
+              webhook-banking.write: Scope named in the operation descriptions
+        x-sandbox-tokenUrl: https://cdpj-sandbox.partners.uatinter.co/oauth/v2/token
+      interMutualTLS:
+        type: mutualTLS
+        description: Client certificate + key from the Inter Empresas integration.
+- target: $.paths['/extrato'].get
+  update:
+    security:
+    - interOAuth:
+      - extrato.read
+      interMutualTLS: []
+- target: $.paths['/extrato/exportar'].get
+  update:
+    security:
+    - interOAuth:
+      - extrato.read
+      interMutualTLS: []
+- target: $.paths['/extrato/completo'].get
+  update:
+    security:
+    - interOAuth:
+      - extrato.read
+      interMutualTLS: []
+- target: $.paths['/saldo'].get
+  update:
+    security:
+    - interOAuth:
+      - extrato.read
+      interMutualTLS: []
+- target: $.paths['/pagamento'].post
+  update:
+    security:
+    - interOAuth:
+      - pagamento-boleto.write
+      interMutualTLS: []
+- target: $.paths['/pagamento'].get
+  update:
+    security:
+    - interOAuth:
+      - pagamento-boleto.read
+      interMutualTLS: []
+- target: $.paths['/pagamento/darf'].post
+  update:
+    security:
+    - interOAuth:
+      - pagamento-darf.write
+      interMutualTLS: []
+- target: $.paths['/pagamento/darf'].get
+  update:
+    security:
+    - interOAuth:
+      - pagamento-boleto.read
+      interMutualTLS: []
+- target: $.paths['/pagamento/lote'].post
+  update:
+    security:
+    - interOAuth:
+      - pagamento-lote.write
+      interMutualTLS: []
+- target: $.paths['/pagamento/lote/{idLote}'].get
+  update:
+    security:
+    - interOAuth:
+      - pagamento-lote.read
+      interMutualTLS: []
+- target: $.paths['/pagamento/{codigoTransacao}'].delete
+  update:
+    security:
+    - interOAuth:
+      - pagamento-boleto.write
+      interMutualTLS: []
+- target: $.paths['/pix'].post
+  update:
+    security:
+    - interOAuth:
+      - pagamento-pix.write
+      interMutualTLS: []
+- target: $.paths['/pix/{codigoSolicitacao}'].get
+  update:
+    security:
+    - interOAuth:
+      - pagamento-pix.read
+      interMutualTLS: []
+- target: $.paths['/webhooks/{tipoWebhook}'].put
+  update:
+    security:
+    - interOAuth:
+      - webhook-banking.write
+      interMutualTLS: []
+- target: $.paths['/webhooks/{tipoWebhook}'].get
+  update:
+    security:
+    - interOAuth:
+      - webhook-banking.read
+      interMutualTLS: []
+- target: $.paths['/webhooks/{tipoWebhook}'].delete
+  update:
+    security:
+    - interOAuth:
+      - webhook-banking.write
+      interMutualTLS: []
+- target: $.paths['/webhooks/{tipoWebhook}/callbacks'].get
+  update:
+    security:
+    - interOAuth:
+      - webhook-banking.read
+      interMutualTLS: []
+- target: $.paths['/webhooks/{tipoWebhook}/callbacks/retry'].post
+  update:
+    security:
+    - interOAuth:
+      - webhook-banking.write
+      interMutualTLS: []

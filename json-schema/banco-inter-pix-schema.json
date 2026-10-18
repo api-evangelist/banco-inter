@@ -1,0 +1,397 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-pix-schema.json",
+  "title": "Pix",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-pix-openapi.yml#/components/schemas/Pix",
+  "type": "object",
+  "required": [
+    "endToEndId",
+    "valor",
+    "horario",
+    "pagador"
+  ],
+  "properties": {
+    "endToEndId": {
+      "$ref": "#/$defs/EndToEndId"
+    },
+    "txid": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TxId"
+        },
+        {
+          "pattern": "[a-zA-Z0-9]{1,35}"
+        }
+      ]
+    },
+    "valor": {
+      "type": "string",
+      "title": "Valor do Pix.",
+      "pattern": "\\d{1,10}\\.\\d{2}",
+      "description": "Valor do Pix."
+    },
+    "componentesValor": {
+      "type": "object",
+      "title": "Informações sobre o valor do Pix",
+      "description": "O objetivo dessa estrutura é explicar os elementos de composição do valor do Pix, incluindo informações sobre as multas, juros, descontos e abatimentos quando o Pix for relativo a cobranças com vencimento.\n\nRegras da estrutura:\n- O valor do Pix é igual a:\n  - (original.valor + saque.valor + troco.valor) + multa.valor + juros.valor – abatimento.valor – desconto.valor considerando-se apenas os campos que estiverem presentes para cada tipo de cobrança pago.\n- As estruturas saque e troco só serão retornadas quando o Pix for relativo a um Pix Saque ou Pix Troco, respectivamente, e as demais estruturas (juros, multa, abatimento e desconto) só serão pertinentes aos Pix de pagamentos das cobranças com vencimento.\n- Não pode haver simultaneamente uma subsestrutura do tipo saque e outra do tipo troco;\n- Não há restrição na ordem das subestruturas.\n\nPara o caso de um Pix Saque pode-se retornar original com valor=0.00 (zero) uma vez que a soma será respeitada, ou pode-se omitir a subestrutura original.\nNo caso de um Pix Troco ou de um pagamento de cobrança com vencimento a subsestrutura original vai sempre estar presente.\n\n#### Exemplos válidos:\nExemplo de preenchimentos válidos.\n\n- **Pix para pagamento de cobrança imediata (sem saque ou troco).**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"100.00\"\n    }\n  }\n  ...\n  ```\n- **Pix Saque.**\n  ```\n  ...\n  \"componentesValor\": {\n    \"saque\": {\n      \"valor\": \"100.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```\n- **Pix para pagamento de cobrança imediata com saque (pode vir original.valor=0.00).**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"0.00\"\n    },\n    \"saque\": {\n      \"valor\": \"100.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```\n- **Pix Troco.**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"80.00\"\n    },\n    \"troco\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGTEC\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```\n- **Pix para pagamento de cobrança imediata com troco (ordem não importa).**\n  ```\n  ...\n  \"componentesValor\": {\n    \"troco\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGTEC\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    },\n    \"original\": {\n      \"valor\": \"80.00\"\n    }\n  }\n  ...\n  ```\n- **Pix para pagamento de cobrança com vencimento de R$100,00 considerando-se um atraso de 2 dias a uma multa de 3% e juros de 1% ao dia. O valor do Pix será R$105,00.**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"100.00\"\n    },\n    \"multa\": {\n      \"valor\": \"3.00\"\n    },\n    \"juros\": {\n      \"valor\": \"2.00\"\n    }\n  }\n  ...\n  ```\n#### Exemplos inválidos:\nExemplos, não exaustivos, de preenchimentos inválidos.\n- **`original.valor` maior que 0.00 (zero) e `saque` juntos**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"80.00\"\n    },\n    \"saque\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```\n- **dois elementos de `saque`**\n  ```\n  ...\n  \"componentesValor\": [\n    \"saque\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    },\n    \"saque\": {\n      \"valor\": \"10.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  ]\n  ...\n  ```\n- **saque e troco simultaneamente**\n  ```\n  ...\n  \"componentesValor\": {\n    \"original\": {\n      \"valor\": \"60.00\"\n    },\n    \"saque\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGPSS\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    },\n    \"troco\": {\n      \"valor\": \"20.00\",\n      \"modalidadeAgente\": \"AGTEC\",\n      \"prestadorDeServicoDeSaque\": \"12345678\"\n    }\n  }\n  ...\n  ```",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PixValorOriginal"
+        },
+        {
+          "$ref": "#/$defs/PixValorSaque"
+        },
+        {
+          "$ref": "#/$defs/PixValorTroco"
+        },
+        {
+          "$ref": "#/$defs/PixValorJuros"
+        },
+        {
+          "$ref": "#/$defs/PixValorMulta"
+        },
+        {
+          "$ref": "#/$defs/PixValorAbatimento"
+        },
+        {
+          "$ref": "#/$defs/PixValorDesconto"
+        }
+      ]
+    },
+    "chave": {
+      "type": "string",
+      "title": "Chave DICT do recebedor",
+      "description": "# Formato do campo chave\n\n* Campo chave do recebedor conforme atribuído na respectiva PACS008.\n* Os tipos de chave podem ser: telefone, e-mail, cpf/cnpj ou EVP.\n* O formato das chaves pode ser encontrado na seção \"Formatação das chaves do DICT no BR Code\" do [Manual de Padrões para iniciação do Pix](https://www.bcb.gov.br/estabilidadefinanceira/pagamentosinstantaneos).\n",
+      "maxLength": 77
+    },
+    "horario": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Horário",
+      "description": "Horário em que o Pix foi processado no PSP."
+    },
+    "infoPagador": {
+      "type": "string",
+      "title": "Informação livre do pagador",
+      "maxLength": 140
+    },
+    "devolucoes": {
+      "type": "array",
+      "title": "Devoluções",
+      "items": {
+        "$ref": "#/$defs/Devolucao"
+      }
+    }
+  },
+  "$defs": {
+    "Devolucao": {
+      "type": "object",
+      "title": "Devolução",
+      "required": [
+        "id",
+        "rtrId",
+        "valor",
+        "horario",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/DevolucaoId"
+        },
+        "rtrId": {
+          "type": "string",
+          "title": "RtrId",
+          "description": "ReturnIdentification que transita na PACS004.",
+          "pattern": "[a-zA-Z0-9]{32}",
+          "minLength": 32,
+          "maxLength": 32
+        },
+        "valor": {
+          "type": "string",
+          "title": "Valor a devolver.",
+          "pattern": "\\d{1,10}\\.\\d{2}",
+          "description": "Valor a devolver."
+        },
+        "horario": {
+          "type": "object",
+          "properties": {
+            "solicitacao": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Horário de solicitação",
+              "description": "Horário no qual a devolução foi solicitada no PSP."
+            },
+            "liquidacao": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Horário de liquidacao",
+              "description": "Horário no qual a devolução foi liquidada no PSP."
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "title": "Status",
+          "description": "Status da devolução.",
+          "enum": [
+            "EM_PROCESSAMENTO",
+            "DEVOLVIDO",
+            "NAO_REALIZADO"
+          ]
+        },
+        "motivo": {
+          "type": "string",
+          "title": "Descrição do status.",
+          "description": "# Status da Devolução\n\nCampo opcional que pode ser utilizado pelo PSP recebedor para detalhar os motivos\nde a devolução ter atingido o status em questão.\nPode ser utilizado, por exemplo, para detalhar o motivo de a devolução não ter sido realizada.\n",
+          "maxLength": 140
+        }
+      }
+    },
+    "DevolucaoId": {
+      "type": "string",
+      "title": "Id da Devolução",
+      "description": "Id gerado pelo cliente para representar unicamente uma devolução.",
+      "pattern": "[a-zA-Z0-9]{1,35}"
+    },
+    "EndToEndId": {
+      "type": "string",
+      "title": "Id fim a fim da transação",
+      "description": "Id único para identificação do Pix Cobrança.",
+      "pattern": "[a-zA-Z0-9]{32}"
+    },
+    "Paginacao": {
+      "type": "object",
+      "title": "Paginação",
+      "required": [
+        "paginaAtual",
+        "itensPorPagina",
+        "quantidadeDePaginas",
+        "quantidadeTotalDeItens"
+      ],
+      "properties": {
+        "paginaAtual": {
+          "type": "integer",
+          "title": "Página atual",
+          "description": "Número da página recuperada.",
+          "minimum": 0
+        },
+        "itensPorPagina": {
+          "type": "integer",
+          "title": "Itens por página",
+          "description": "Quantidade de registros retornado na página.",
+          "minimum": 1
+        },
+        "quantidadeDePaginas": {
+          "type": "integer",
+          "title": "Quantidade de páginas",
+          "description": "Quantidade de páginas disponíveis para consulta.",
+          "minimum": 1
+        },
+        "quantidadeTotalDeItens": {
+          "type": "integer",
+          "title": "Quantidade total de itens",
+          "description": "Quantidade total de itens disponíveis de acordo com os parâmetros informados.",
+          "minimum": 0
+        }
+      }
+    },
+    "PixValorAbatimento": {
+      "type": "object",
+      "properties": {
+        "abatimento": {
+          "type": "object",
+          "required": [
+            "valor"
+          ],
+          "properties": {
+            "valor": {
+              "type": "string",
+              "title": "Valor relativo a abatimento.",
+              "description": "Valor do abatimento.",
+              "pattern": "\\d{1,10}\\.\\d{2}"
+            }
+          }
+        },
+        "txIdPresente": {
+          "type": "boolean",
+          "description": "Filtro pela existência de txid."
+        },
+        "devolucaoPresente": {
+          "type": "boolean",
+          "description": "Filtro pela existência de devolução."
+        },
+        "cpf": {
+          "type": "string",
+          "pattern": "\\d{11}",
+          "description": "CPF"
+        },
+        "cnpj": {
+          "type": "string",
+          "pattern": "\\d{14}",
+          "description": "CNPJ"
+        },
+        "paginacao": {
+          "$ref": "#/$defs/Paginacao"
+        }
+      }
+    },
+    "PixValorDesconto": {
+      "type": "object",
+      "properties": {
+        "desconto": {
+          "type": "object",
+          "required": [
+            "valor"
+          ],
+          "properties": {
+            "valor": {
+              "type": "string",
+              "title": "Valor relativo a desconto.",
+              "description": "Valor do desconto.",
+              "pattern": "\\d{1,10}\\.\\d{2}"
+            }
+          }
+        }
+      }
+    },
+    "PixValorJuros": {
+      "type": "object",
+      "properties": {
+        "juros": {
+          "type": "object",
+          "required": [
+            "valor"
+          ],
+          "properties": {
+            "valor": {
+              "type": "string",
+              "title": "Valor relativo aos juros.",
+              "description": "Valor dos juros.",
+              "pattern": "\\d{1,10}\\.\\d{2}"
+            }
+          }
+        }
+      }
+    },
+    "PixValorMulta": {
+      "type": "object",
+      "properties": {
+        "multa": {
+          "type": "object",
+          "required": [
+            "valor"
+          ],
+          "properties": {
+            "valor": {
+              "type": "string",
+              "title": "Valor relativo a multa.",
+              "description": "Valor da multa.",
+              "pattern": "\\d{1,10}\\.\\d{2}"
+            }
+          }
+        }
+      }
+    },
+    "PixValorOriginal": {
+      "type": "object",
+      "properties": {
+        "original": {
+          "type": "object",
+          "required": [
+            "valor"
+          ],
+          "properties": {
+            "valor": {
+              "type": "string",
+              "title": "Valor original",
+              "description": "Valor original do Pix.",
+              "pattern": "\\d{1,10}\\.\\d{2}"
+            }
+          }
+        }
+      }
+    },
+    "PixValorSaque": {
+      "type": "object",
+      "properties": {
+        "saque": {
+          "type": "object",
+          "required": [
+            "valor",
+            "modalidadeAgente",
+            "prestadorDoServicoDeSaque"
+          ],
+          "properties": {
+            "valor": {
+              "type": "string",
+              "title": "Valor do Saque Pix",
+              "description": "Valor do Saque Pix.",
+              "pattern": "\\d{1,10}\\.\\d{2}"
+            },
+            "modalidadeAgente": {
+              "type": "string",
+              "title": "Modalidade do Agente",
+              "description": "##### Modalidade do Agente\n<table><tr><th>SIGLA</th><th>Descrição</th></tr><tr><td>AGTEC</td><td>Agente Estabelecimento Comercial</td></tr><tr><td>AGTOT</td><td>\tAgente Outra Espécie de Pessoa Jurídica ou Correspondente no País</td></tr><tr><td>AGPSS</td><td>\tAgente Facilitador de Serviço de Saque (ATENÇÃO: no mapeamento para o campo 'modalidadeAgente', da pacs.008, esse valor deve ser substituído por AGFSS)</b>)</td></tr></table>\n",
+              "enum": [
+                "AGTEC",
+                "AGTOT",
+                "AGPSS"
+              ]
+            },
+            "prestadorDoServicoDeSaque": {
+              "type": "string",
+              "title": "Facilitador de Serviço de Saque",
+              "pattern": "\\d{8}",
+              "description": "ISPB do Facilitador de Serviço de Saque"
+            }
+          }
+        }
+      }
+    },
+    "PixValorTroco": {
+      "type": "object",
+      "properties": {
+        "troco": {
+          "type": "object",
+          "required": [
+            "valor",
+            "modalidadeAgente",
+            "prestadorDoServicoDeSaque"
+          ],
+          "properties": {
+            "valor": {
+              "type": "string",
+              "title": "Valor do Troco Pix",
+              "description": "Valor do Troco Pix.",
+              "pattern": "\\d{1,10}\\.\\d{2}"
+            },
+            "modalidadeAgente": {
+              "type": "string",
+              "title": "Modalidade do Agente",
+              "description": "##### Modalidade do Agente\n<table><tr><th>SIGLA</th><th>Descrição</th></tr><tr><td>AGTEC</td><td>Agente Estabelecimento Comercial</td></tr><tr><td>AGTOT</td><td>Agente Outra Espécie de Pessoa Jurídica ou Correspondente no País</td></tr></table>\n",
+              "enum": [
+                "AGTEC",
+                "AGTOT"
+              ]
+            },
+            "prestadorDoServicoDeSaque": {
+              "type": "string",
+              "title": "Facilitador de Serviço de Saque",
+              "pattern": "\\d{8}",
+              "description": "ISPB do Facilitador de Serviço de Saque"
+            }
+          }
+        }
+      }
+    },
+    "TxId": {
+      "type": "string",
+      "title": "Id da Transação",
+      "description": "# Identificador da transação\n\nO campo txid determina o identificador da transação.\nO objetivo desse campo é ser um elemento que possibilite ao PSP do recebedor apresentar ao usuário recebedor a funcionalidade de conciliação de pagamentos.\n\nO txid é criado exclusivamente pelo usuário recebedor e está sob sua responsabilidade.\nO txid, no contexto de representação de uma cobrança, é único por CPF/CNPJ do usuário recebedor.\n",
+      "pattern": "[a-zA-Z0-9]{26,35}"
+    }
+  }
+}

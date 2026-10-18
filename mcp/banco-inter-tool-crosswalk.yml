@@ -1,0 +1,39 @@
+type: ToolCrosswalk
+name: Banco Inter MCP to REST tool crosswalk
+generated: '2026-10-18'
+method: derived
+source:
+  - mcp/banco-inter-mcp.yml
+  - openapi/banco-inter-banking-openapi.yml
+  - openapi/banco-inter-cobranca-bolepix-openapi.yml
+  - https://registry.npmjs.org/mcp-banco-inter
+surfaces:
+  openapi: 'openapi/ (9 contracts - banking, cobranca-bolepix, cobranca, pix, pix-automatico, forum, token, partners-credito-imobiliario-*)'
+  graphql: none
+  mcp:
+    official: 'https://cdpj-sandbox.partners.uatinter.co/mcp/v1/mcp (tools/list gated behind developer-portal OAuth; 401 without token; no tool names published)'
+    community: 'mcp-banco-inter (npm, unofficial; tool names from its README)'
+note: >-
+  The OFFICIAL Inter MCP is a documentation/guidance copilot that, per its docs, does not execute banking
+  operations; its tools are gated and unnamed, so none can be bound to REST operations and they are recorded
+  under meta_tools by documented category. The crosswalk rows below are the UNOFFICIAL community server's
+  tools, bound by name and documented parameters to the official REST contracts in this repo.
+crosswalk:
+  - {tool: consultar_saldo, server: community, category: banking, rest: [Saldo], binding: direct, confidence: medium}
+  - {tool: consultar_extrato, server: community, category: banking, rest: [Extrato], binding: direct, confidence: medium, note: 'params dataInicial, dataFinal'}
+  - {tool: baixar_pdf_extrato, server: community, category: banking, rest: [ExtratoExport], binding: direct, confidence: medium}
+  - {tool: listar_boletos, server: community, category: cobranca, rest: [pesquisaCobranca], binding: direct, confidence: medium, note: 'params dataInicial, dataFinal, situacao; codigoSolicitacao naming matches Cobrança v3 (BolePix)'}
+  - {tool: emitir_boleto, server: community, category: cobranca, rest: [emitirCobrancaAsync], binding: direct, confidence: medium}
+  - {tool: baixar_pdf_boleto, server: community, category: cobranca, rest: [obterPdfCobranca], binding: direct, confidence: medium}
+  - {tool: cancelar_boleto, server: community, category: cobranca, rest: [cancelarCobranca], binding: direct, confidence: medium, note: 'params codigoSolicitacao, motivo'}
+  - {tool: sumario_boletos, server: community, category: cobranca, rest: [consultarSumario], binding: direct, confidence: medium, note: 'consultarSumario in cobranca-bolepix (v3)'}
+meta_tools:
+  - {tool: official inter-mcp (gated, unnamed), categories: [integration-playbook, sandbox-onboarding-and-test-recipe, environment-hosts-token-url-mtls, api-catalog, request-examples-and-response-hints, oauth-and-scope-strategy, webhooks, http-errors-and-pitfalls, client-coverage-validation], reason: 'Guidance tools over docs and catalogs; the docs state the MCP does not call the business APIs.'}
+rest_only:
+  count: 104
+  note: Every operation in openapi/ other than the 8 bound above has no MCP tool (Pix, Pix Automático, payments, webhooks, Forum, crédito imobiliário, token).
+coverage:
+  rest_operations: 112
+  community_tools: 8
+  community_tools_bound: 8
+  official_tools_known: 0

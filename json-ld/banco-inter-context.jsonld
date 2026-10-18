@@ -1,0 +1,1090 @@
+{
+  "@context": {
+    "@vocab": "https://bancointer.com.br/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "banco": "https://bancointer.com.br/schema#",
+    "EfetuarPagamento": "banco:EfetuarPagamento",
+    "codBarraLinhaDigitavel": {
+      "@id": "banco:codBarraLinhaDigitavel",
+      "@type": "xsd:string"
+    },
+    "valorPagar": {
+      "@id": "banco:valorPagar",
+      "@type": "xsd:string"
+    },
+    "dataPagamento": {
+      "@id": "banco:dataPagamento",
+      "@type": "xsd:string"
+    },
+    "dataVencimento": {
+      "@id": "banco:dataVencimento",
+      "@type": "xsd:string"
+    },
+    "cpfCnpjBeneficiario": {
+      "@id": "banco:cpfCnpjBeneficiario",
+      "@type": "xsd:string"
+    },
+    "EfetuarPagamentoResponse": "banco:EfetuarPagamentoResponse",
+    "quantidadeAprovadores": {
+      "@id": "banco:quantidadeAprovadores",
+      "@type": "xsd:integer"
+    },
+    "dataAgendamento": {
+      "@id": "banco:dataAgendamento",
+      "@type": "xsd:string"
+    },
+    "statusPagamento": {
+      "@id": "banco:statusPagamento",
+      "@type": "@id"
+    },
+    "codigoTransacao": {
+      "@id": "banco:codigoTransacao",
+      "@type": "xsd:string"
+    },
+    "SituacaoPagamento": "banco:SituacaoPagamento",
+    "BoletoResponse": "banco:BoletoResponse",
+    "beneficiario": {
+      "@id": "banco:beneficiario",
+      "@type": "@id"
+    },
+    "pagador": {
+      "@id": "banco:pagador",
+      "@type": "@id"
+    },
+    "valorNominal": {
+      "@id": "banco:valorNominal",
+      "@type": "xsd:decimal"
+    },
+    "desconto": {
+      "@id": "banco:desconto",
+      "@type": "xsd:decimal"
+    },
+    "multa": {
+      "@id": "banco:multa",
+      "@type": "xsd:decimal"
+    },
+    "juros": {
+      "@id": "banco:juros",
+      "@type": "xsd:decimal"
+    },
+    "valorMinimo": {
+      "@id": "banco:valorMinimo",
+      "@type": "xsd:decimal"
+    },
+    "valorMaximo": {
+      "@id": "banco:valorMaximo",
+      "@type": "xsd:decimal"
+    },
+    "vencimento": {
+      "@id": "banco:vencimento",
+      "@type": "xsd:date"
+    },
+    "convenio": {
+      "@id": "banco:convenio",
+      "@type": "@id"
+    },
+    "dataLimitePagamento": {
+      "@id": "banco:dataLimitePagamento",
+      "@type": "xsd:date"
+    },
+    "instituicaoEmissora": {
+      "@id": "banco:instituicaoEmissora",
+      "@type": "xsd:string"
+    },
+    "pagamentoParcial": {
+      "@id": "banco:pagamentoParcial",
+      "@type": "xsd:boolean"
+    },
+    "totalEncargos": {
+      "@id": "banco:totalEncargos",
+      "@type": "xsd:decimal"
+    },
+    "permiteAgendamento": {
+      "@id": "banco:permiteAgendamento",
+      "@type": "xsd:boolean"
+    },
+    "linhaDigitavel": {
+      "@id": "banco:linhaDigitavel",
+      "@type": "xsd:string"
+    },
+    "codigoBarra": {
+      "@id": "banco:codigoBarra",
+      "@type": "xsd:string"
+    },
+    "codigoEspecie": {
+      "@id": "banco:codigoEspecie",
+      "@type": "xsd:string"
+    },
+    "pagamentoBloqueado": {
+      "@id": "banco:pagamentoBloqueado",
+      "@type": "xsd:boolean"
+    },
+    "boletoVencido": {
+      "@id": "banco:boletoVencido",
+      "@type": "xsd:boolean"
+    },
+    "horarioLimitePagamento": {
+      "@id": "banco:horarioLimitePagamento",
+      "@type": "xsd:string"
+    },
+    "alerta": {
+      "@id": "banco:alerta",
+      "@type": "@id"
+    },
+    "codigoBanco": {
+      "@id": "banco:codigoBanco",
+      "@type": "xsd:string"
+    },
+    "situacaoTituloPagamento": {
+      "@id": "banco:situacaoTituloPagamento",
+      "@type": "xsd:string"
+    },
+    "Pessoa": "banco:Pessoa",
+    "nome": {
+      "@id": "banco:nome",
+      "@type": "xsd:string"
+    },
+    "cpfCnpj": {
+      "@id": "banco:cpfCnpj",
+      "@type": "xsd:string"
+    },
+    "nomeFantasia": {
+      "@id": "banco:nomeFantasia",
+      "@type": "xsd:string"
+    },
+    "razaoSocial": {
+      "@id": "banco:razaoSocial",
+      "@type": "xsd:string"
+    },
+    "StatusPagamento": "banco:StatusPagamento",
+    "pago": {
+      "@id": "banco:pago",
+      "@type": "xsd:boolean"
+    },
+    "data": {
+      "@id": "banco:data",
+      "@type": "xsd:string"
+    },
+    "permitePagamentoMultiplo": {
+      "@id": "banco:permitePagamentoMultiplo",
+      "@type": "xsd:boolean"
+    },
+    "valor": {
+      "@id": "banco:valor",
+      "@type": "xsd:decimal"
+    },
+    "Convenio": "banco:Convenio",
+    "descricao": {
+      "@id": "banco:descricao",
+      "@type": "xsd:string"
+    },
+    "debitoAutomatico": {
+      "@id": "banco:debitoAutomatico",
+      "@type": "xsd:boolean"
+    },
+    "segmento": {
+      "@id": "banco:segmento",
+      "@type": "xsd:string"
+    },
+    "codigoEmpresa": {
+      "@id": "banco:codigoEmpresa",
+      "@type": "xsd:string"
+    },
+    "tipoConvenio": {
+      "@id": "banco:tipoConvenio",
+      "@type": "xsd:string"
+    },
+    "abrangenciaConvenio": {
+      "@id": "banco:abrangenciaConvenio",
+      "@type": "xsd:string"
+    },
+    "codigoMunicipio": {
+      "@id": "banco:codigoMunicipio",
+      "@type": "xsd:string"
+    },
+    "InformacoesPagamento": "banco:InformacoesPagamento",
+    "tipo": {
+      "@id": "banco:tipo",
+      "@type": "xsd:string"
+    },
+    "dataVencimentoDigitada": {
+      "@id": "banco:dataVencimentoDigitada",
+      "@type": "xsd:string"
+    },
+    "dataVencimentoTitulo": {
+      "@id": "banco:dataVencimentoTitulo",
+      "@type": "xsd:string"
+    },
+    "dataInclusao": {
+      "@id": "banco:dataInclusao",
+      "@type": "xsd:string"
+    },
+    "valorPago": {
+      "@id": "banco:valorPago",
+      "@type": "xsd:decimal"
+    },
+    "aprovacoesNecessarias": {
+      "@id": "banco:aprovacoesNecessarias",
+      "@type": "xsd:decimal"
+    },
+    "aprovacoesRealizadas": {
+      "@id": "banco:aprovacoesRealizadas",
+      "@type": "xsd:decimal"
+    },
+    "nomeBeneficiario": {
+      "@id": "banco:nomeBeneficiario",
+      "@type": "xsd:string"
+    },
+    "autenticacao": {
+      "@id": "banco:autenticacao",
+      "@type": "xsd:string"
+    },
+    "nsu": {
+      "@id": "banco:nsu",
+      "@type": "xsd:string"
+    },
+    "InformacoesPagamentoDarf": "banco:InformacoesPagamentoDarf",
+    "codigoSolicitacao": {
+      "@id": "banco:codigoSolicitacao",
+      "@type": "xsd:string"
+    },
+    "tipoDarf": {
+      "@id": "banco:tipoDarf",
+      "@type": "xsd:string"
+    },
+    "valorMulta": {
+      "@id": "banco:valorMulta",
+      "@type": "xsd:decimal"
+    },
+    "valorJuros": {
+      "@id": "banco:valorJuros",
+      "@type": "xsd:decimal"
+    },
+    "valorTotal": {
+      "@id": "banco:valorTotal",
+      "@type": "xsd:decimal"
+    },
+    "periodoApuracao": {
+      "@id": "banco:periodoApuracao",
+      "@type": "xsd:string"
+    },
+    "referencia": {
+      "@id": "banco:referencia",
+      "@type": "xsd:string"
+    },
+    "codigoReceita": {
+      "@id": "banco:codigoReceita",
+      "@type": "xsd:string"
+    },
+    "cnpjCpf": {
+      "@id": "banco:cnpjCpf",
+      "@type": "xsd:string"
+    },
+    "Alerta": "banco:Alerta",
+    "titulo": {
+      "@id": "banco:titulo",
+      "@type": "xsd:string"
+    },
+    "mensagem": {
+      "@id": "banco:mensagem",
+      "@type": "xsd:string"
+    },
+    "Saldo": "banco:Saldo",
+    "bloqueadoCheque": {
+      "@id": "banco:bloqueadoCheque",
+      "@type": "xsd:decimal"
+    },
+    "disponivel": {
+      "@id": "banco:disponivel",
+      "@type": "xsd:decimal"
+    },
+    "bloqueadoJudicialmente": {
+      "@id": "banco:bloqueadoJudicialmente",
+      "@type": "xsd:decimal"
+    },
+    "bloqueadoAdministrativo": {
+      "@id": "banco:bloqueadoAdministrativo",
+      "@type": "xsd:decimal"
+    },
+    "limite": {
+      "@id": "banco:limite",
+      "@type": "xsd:decimal"
+    },
+    "dataReferencia": {
+      "@id": "banco:dataReferencia",
+      "@type": "xsd:string"
+    },
+    "ListaTransacoes": "banco:ListaTransacoes",
+    "transacoes": {
+      "@id": "banco:transacoes",
+      "@container": "@list"
+    },
+    "ListaTransacoesCompletaPadrao": "banco:ListaTransacoesCompletaPadrao",
+    "totalPaginas": {
+      "@id": "banco:totalPaginas",
+      "@type": "@id"
+    },
+    "totalElementos": {
+      "@id": "banco:totalElementos",
+      "@type": "@id"
+    },
+    "ultimaPagina": {
+      "@id": "banco:ultimaPagina",
+      "@type": "@id"
+    },
+    "primeiraPagina": {
+      "@id": "banco:primeiraPagina",
+      "@type": "@id"
+    },
+    "tamanhoPagina": {
+      "@id": "banco:tamanhoPagina",
+      "@type": "@id"
+    },
+    "numeroDeElementos": {
+      "@id": "banco:numeroDeElementos",
+      "@type": "@id"
+    },
+    "ListaTransacoesCompletaScroll": "banco:ListaTransacoesCompletaScroll",
+    "scrollId": {
+      "@id": "banco:scrollId",
+      "@type": "xsd:string"
+    },
+    "hasMore": {
+      "@id": "banco:hasMore",
+      "@type": "xsd:boolean"
+    },
+    "PdfModel": "banco:PdfModel",
+    "pdf": {
+      "@id": "banco:pdf",
+      "@type": "xsd:string"
+    },
+    "TransacaoSimples": "banco:TransacaoSimples",
+    "cpmf": {
+      "@id": "banco:cpmf",
+      "@type": "xsd:string"
+    },
+    "dataEntrada": {
+      "@id": "banco:dataEntrada",
+      "@type": "xsd:date"
+    },
+    "tipoTransacao": {
+      "@id": "banco:tipoTransacao",
+      "@type": "xsd:string"
+    },
+    "tipoOperacao": {
+      "@id": "banco:tipoOperacao",
+      "@type": "xsd:string"
+    },
+    "TransacaoCompleta": "banco:TransacaoCompleta",
+    "idTransacao": {
+      "@id": "banco:idTransacao",
+      "@type": "xsd:string"
+    },
+    "dataTransacao": {
+      "@id": "banco:dataTransacao",
+      "@type": "xsd:date"
+    },
+    "numeroDocumento": {
+      "@id": "banco:numeroDocumento",
+      "@type": "xsd:string"
+    },
+    "detalhes": {
+      "@id": "banco:detalhes"
+    },
+    "TransacaoCompletaComDetalhe": "banco:TransacaoCompletaComDetalhe",
+    "TransacaoBoletoCobranca": "banco:TransacaoBoletoCobranca",
+    "TransacaoPagamento": "banco:TransacaoPagamento",
+    "TransacaoPix": "banco:TransacaoPix",
+    "TransacaoTransferencia": "banco:TransacaoTransferencia",
+    "TransacaoCashback": "banco:TransacaoCashback",
+    "TransacaoDepositoBoleto": "banco:TransacaoDepositoBoleto",
+    "TransacaoCompraDebito": "banco:TransacaoCompraDebito",
+    "TransacaoCheque": "banco:TransacaoCheque",
+    "DetalheCheque": "banco:DetalheCheque",
+    "agencia": {
+      "@id": "banco:agencia",
+      "@type": "xsd:string"
+    },
+    "numeroChequeBancario": {
+      "@id": "banco:numeroChequeBancario",
+      "@type": "xsd:string"
+    },
+    "contaBancaria": {
+      "@id": "banco:contaBancaria",
+      "@type": "xsd:string"
+    },
+    "dataRetorno": {
+      "@id": "banco:dataRetorno",
+      "@type": "xsd:string"
+    },
+    "motivoRetorno": {
+      "@id": "banco:motivoRetorno",
+      "@type": "xsd:string"
+    },
+    "descricaoChequeBancario": {
+      "@id": "banco:descricaoChequeBancario",
+      "@type": "xsd:string"
+    },
+    "nomeEmpresa": {
+      "@id": "banco:nomeEmpresa",
+      "@type": "xsd:string"
+    },
+    "tipoDetalhe": {
+      "@id": "banco:tipoDetalhe",
+      "@type": "xsd:string"
+    },
+    "codigoAfiliado": {
+      "@id": "banco:codigoAfiliado",
+      "@type": "xsd:string"
+    },
+    "DetalheCompraDebito": "banco:DetalheCompraDebito",
+    "estabelecimento": {
+      "@id": "banco:estabelecimento",
+      "@type": "xsd:string"
+    },
+    "DetalheDepositoBoleto": "banco:DetalheDepositoBoleto",
+    "dataEmissao": {
+      "@id": "banco:dataEmissao",
+      "@type": "xsd:string"
+    },
+    "nossoNumero": {
+      "@id": "banco:nossoNumero",
+      "@type": "xsd:string"
+    },
+    "codBarras": {
+      "@id": "banco:codBarras",
+      "@type": "xsd:string"
+    },
+    "DetalheCashback": "banco:DetalheCashback",
+    "valorCompra": {
+      "@id": "banco:valorCompra",
+      "@type": "xsd:string"
+    },
+    "produto": {
+      "@id": "banco:produto",
+      "@type": "xsd:string"
+    },
+    "DetalheTransferencia": "banco:DetalheTransferencia",
+    "contaBancariaPagador": {
+      "@id": "banco:contaBancariaPagador",
+      "@type": "xsd:string"
+    },
+    "descricaoTransferencia": {
+      "@id": "banco:descricaoTransferencia",
+      "@type": "xsd:string"
+    },
+    "agenciaPagador": {
+      "@id": "banco:agenciaPagador",
+      "@type": "xsd:string"
+    },
+    "bancoRecebedor": {
+      "@id": "banco:bancoRecebedor",
+      "@type": "xsd:string"
+    },
+    "contaBancariaRecebedor": {
+      "@id": "banco:contaBancariaRecebedor",
+      "@type": "xsd:string"
+    },
+    "cpfCnpjRecebedor": {
+      "@id": "banco:cpfCnpjRecebedor",
+      "@type": "xsd:string"
+    },
+    "cpfCnpjPagador": {
+      "@id": "banco:cpfCnpjPagador",
+      "@type": "xsd:string"
+    },
+    "nomePagador": {
+      "@id": "banco:nomePagador",
+      "@type": "xsd:string"
+    },
+    "nomeEmpresaPagador": {
+      "@id": "banco:nomeEmpresaPagador",
+      "@type": "xsd:string"
+    },
+    "nomeRecebedor": {
+      "@id": "banco:nomeRecebedor",
+      "@type": "xsd:string"
+    },
+    "idTransferencia": {
+      "@id": "banco:idTransferencia",
+      "@type": "xsd:string"
+    },
+    "agenciaRecebedor": {
+      "@id": "banco:agenciaRecebedor",
+      "@type": "xsd:string"
+    },
+    "dataEfetivacao": {
+      "@id": "banco:dataEfetivacao",
+      "@type": "xsd:string"
+    },
+    "DetalhePix": "banco:DetalhePix",
+    "txId": {
+      "@id": "banco:txId",
+      "@type": "xsd:string"
+    },
+    "descricaoPix": {
+      "@id": "banco:descricaoPix",
+      "@type": "xsd:string"
+    },
+    "endToEndId": {
+      "@id": "banco:endToEndId",
+      "@type": "xsd:string"
+    },
+    "chavePixRecebedor": {
+      "@id": "banco:chavePixRecebedor",
+      "@type": "xsd:string"
+    },
+    "nomeEmpresaRecebedor": {
+      "@id": "banco:nomeEmpresaRecebedor",
+      "@type": "xsd:string"
+    },
+    "origemMovimentacao": {
+      "@id": "banco:origemMovimentacao",
+      "@type": "xsd:string"
+    },
+    "DetalhePagamento": "banco:DetalhePagamento",
+    "detalheDescricao": {
+      "@id": "banco:detalheDescricao",
+      "@type": "xsd:string"
+    },
+    "adicionado": {
+      "@id": "banco:adicionado",
+      "@type": "xsd:string"
+    },
+    "empresaEmissora": {
+      "@id": "banco:empresaEmissora",
+      "@type": "xsd:string"
+    },
+    "valorOriginal": {
+      "@id": "banco:valorOriginal",
+      "@type": "xsd:string"
+    },
+    "valorPrincipal": {
+      "@id": "banco:valorPrincipal",
+      "@type": "xsd:string"
+    },
+    "valorAumentado": {
+      "@id": "banco:valorAumentado",
+      "@type": "xsd:string"
+    },
+    "valorParcial": {
+      "@id": "banco:valorParcial",
+      "@type": "xsd:string"
+    },
+    "hora": {
+      "@id": "banco:hora",
+      "@type": "xsd:string"
+    },
+    "empresaOrigem": {
+      "@id": "banco:empresaOrigem",
+      "@type": "xsd:string"
+    },
+    "nomeDestinatario": {
+      "@id": "banco:nomeDestinatario",
+      "@type": "xsd:string"
+    },
+    "nomeOrigem": {
+      "@id": "banco:nomeOrigem",
+      "@type": "xsd:string"
+    },
+    "DetalheBoletoCobranca": "banco:DetalheBoletoCobranca",
+    "seuNumero": {
+      "@id": "banco:seuNumero",
+      "@type": "xsd:string"
+    },
+    "desconto1": {
+      "@id": "banco:desconto1",
+      "@type": "xsd:string"
+    },
+    "desconto2": {
+      "@id": "banco:desconto2",
+      "@type": "xsd:string"
+    },
+    "desconto3": {
+      "@id": "banco:desconto3",
+      "@type": "xsd:string"
+    },
+    "dataLimite": {
+      "@id": "banco:dataLimite",
+      "@type": "xsd:string"
+    },
+    "abatimento": {
+      "@id": "banco:abatimento",
+      "@type": "xsd:string"
+    },
+    "DetalheTarifa": "banco:DetalheTarifa",
+    "TransactionType": "banco:TransactionType",
+    "Violacao": "banco:Violacao",
+    "razao": {
+      "@id": "banco:razao",
+      "@type": "xsd:string"
+    },
+    "propriedade": {
+      "@id": "banco:propriedade",
+      "@type": "xsd:string"
+    },
+    "Problema": "banco:Problema",
+    "type": {
+      "@id": "banco:type",
+      "@type": "@id"
+    },
+    "title": {
+      "@id": "banco:title",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "banco:status",
+      "@type": "xsd:integer"
+    },
+    "detail": {
+      "@id": "banco:detail",
+      "@type": "xsd:string"
+    },
+    "timestamp": {
+      "@id": "banco:timestamp",
+      "@type": "xsd:string"
+    },
+    "EntidadeNaoProcessavel": "banco:EntidadeNaoProcessavel",
+    "DarfRequest": "banco:DarfRequest",
+    "telefoneEmpresa": {
+      "@id": "banco:telefoneEmpresa",
+      "@type": "xsd:string"
+    },
+    "ResponseError": "banco:ResponseError",
+    "erro": {
+      "@id": "banco:erro",
+      "@type": "@id"
+    },
+    "ErrorModel": "banco:ErrorModel",
+    "mensagemDetalhe": {
+      "@id": "banco:mensagemDetalhe",
+      "@type": "xsd:string"
+    },
+    "codigo": {
+      "@id": "banco:codigo",
+      "@type": "xsd:integer"
+    },
+    "SucessoDarfResponse": "banco:SucessoDarfResponse",
+    "nroOperacao": {
+      "@id": "banco:nroOperacao",
+      "@type": "xsd:integer"
+    },
+    "tipoRetorno": {
+      "@id": "banco:tipoRetorno",
+      "@type": "@id"
+    },
+    "DarfResponse": "banco:DarfResponse",
+    "TipoRetornoEnum": "banco:TipoRetornoEnum",
+    "TipoRetornoPagamentoPixEnum": "banco:TipoRetornoPagamentoPixEnum",
+    "PagarLoteRequest": "banco:PagarLoteRequest",
+    "meuIdentificador": {
+      "@id": "banco:meuIdentificador",
+      "@type": "xsd:string"
+    },
+    "pagamentos": {
+      "@id": "banco:pagamentos",
+      "@container": "@list"
+    },
+    "PagamentoRequestModelBase": "banco:PagamentoRequestModelBase",
+    "tipoPagamento": {
+      "@id": "banco:tipoPagamento",
+      "@type": "@id"
+    },
+    "PagamentoResponseModelBase": "banco:PagamentoResponseModelBase",
+    "detalhe": {
+      "@id": "banco:detalhe",
+      "@type": "xsd:string"
+    },
+    "RequestBoletoLote": "banco:RequestBoletoLote",
+    "PagamentoPixRequestBody": "banco:PagamentoPixRequestBody",
+    "destinatario": {
+      "@id": "banco:destinatario"
+    },
+    "DestinatarioBase": "banco:DestinatarioBase",
+    "DestinatarioDadosBancarios": "banco:DestinatarioDadosBancarios",
+    "contaCorrente": {
+      "@id": "banco:contaCorrente",
+      "@type": "xsd:string"
+    },
+    "tipoConta": {
+      "@id": "banco:tipoConta",
+      "@type": "@id"
+    },
+    "instituicaoFinanceira": {
+      "@id": "banco:instituicaoFinanceira",
+      "@type": "@id"
+    },
+    "DestinatarioChave": "banco:DestinatarioChave",
+    "chave": {
+      "@id": "banco:chave",
+      "@type": "xsd:string"
+    },
+    "DestinatarioPixCopiaECola": "banco:DestinatarioPixCopiaECola",
+    "pixCopiaECola": {
+      "@id": "banco:pixCopiaECola",
+      "@type": "xsd:string"
+    },
+    "TipoDestinatario": "banco:TipoDestinatario",
+    "TipoConta": "banco:TipoConta",
+    "InstituicaoFinanceira": "banco:InstituicaoFinanceira",
+    "ispb": {
+      "@id": "banco:ispb",
+      "@type": "xsd:string"
+    },
+    "PagamentoPixResponse": "banco:PagamentoPixResponse",
+    "dataOperacao": {
+      "@id": "banco:dataOperacao",
+      "@type": "xsd:string"
+    },
+    "ConsultaPixAsyncResponse": "banco:ConsultaPixAsyncResponse",
+    "transacaoPix": {
+      "@id": "banco:transacaoPix",
+      "@type": "@id"
+    },
+    "historico": {
+      "@id": "banco:historico"
+    },
+    "PixAsyncResponse": "banco:PixAsyncResponse",
+    "recebedor": {
+      "@id": "banco:recebedor",
+      "@type": "@id"
+    },
+    "erros": {
+      "@id": "banco:erros",
+      "@container": "@list"
+    },
+    "endToEnd": {
+      "@id": "banco:endToEnd",
+      "@type": "xsd:string"
+    },
+    "dataHoraMovimento": {
+      "@id": "banco:dataHoraMovimento",
+      "@type": "xsd:string"
+    },
+    "dataHoraSolicitacao": {
+      "@id": "banco:dataHoraSolicitacao",
+      "@type": "xsd:string"
+    },
+    "HistoricoResponse": "banco:HistoricoResponse",
+    "dataHoraEvento": {
+      "@id": "banco:dataHoraEvento",
+      "@type": "xsd:string"
+    },
+    "RequestDarfLote": "banco:RequestDarfLote",
+    "PagarLoteResponse": "banco:PagarLoteResponse",
+    "idLote": {
+      "@id": "banco:idLote",
+      "@type": "xsd:string"
+    },
+    "qtdePagamentos": {
+      "@id": "banco:qtdePagamentos",
+      "@type": "xsd:integer"
+    },
+    "ObterLoteResponse": "banco:ObterLoteResponse",
+    "dataCriacao": {
+      "@id": "banco:dataCriacao",
+      "@type": "xsd:dateTime"
+    },
+    "TipoPagamentoEnum": "banco:TipoPagamentoEnum",
+    "StatusLoteEnum": "banco:StatusLoteEnum",
+    "StatusPagamentoBoleto": "banco:StatusPagamentoBoleto",
+    "StatusPagamentoDarf": "banco:StatusPagamentoDarf",
+    "ResponseBoletoLote": "banco:ResponseBoletoLote",
+    "ResponseDarfLote": "banco:ResponseDarfLote",
+    "TipoWebhookEnum": "banco:TipoWebhookEnum",
+    "WebhookModel": "banco:WebhookModel",
+    "webhookUrl": {
+      "@id": "banco:webhookUrl",
+      "@type": "@id"
+    },
+    "criacao": {
+      "@id": "banco:criacao",
+      "@type": "xsd:dateTime"
+    },
+    "CallbackPixPagamentoModel": "banco:CallbackPixPagamentoModel",
+    "descricaoPagamento": {
+      "@id": "banco:descricaoPagamento",
+      "@type": "xsd:string"
+    },
+    "instituicaoDestinatario": {
+      "@id": "banco:instituicaoDestinatario",
+      "@type": "xsd:string"
+    },
+    "tipoMovimentacao": {
+      "@id": "banco:tipoMovimentacao",
+      "@type": "@id"
+    },
+    "CallbackPagamentoBoletoModel": "banco:CallbackPagamentoBoletoModel",
+    "valorAgendado": {
+      "@id": "banco:valorAgendado",
+      "@type": "xsd:string"
+    },
+    "CallbackPagamentoBoletoErrorModel": "banco:CallbackPagamentoBoletoErrorModel",
+    "codigoErro": {
+      "@id": "banco:codigoErro",
+      "@type": "xsd:string"
+    },
+    "descricaoErro": {
+      "@id": "banco:descricaoErro",
+      "@type": "xsd:string"
+    },
+    "DadosConta": "banco:DadosConta",
+    "codIspb": {
+      "@id": "banco:codIspb",
+      "@type": "xsd:string"
+    },
+    "codAgencia": {
+      "@id": "banco:codAgencia",
+      "@type": "xsd:string"
+    },
+    "nroConta": {
+      "@id": "banco:nroConta",
+      "@type": "xsd:string"
+    },
+    "ErroPagamento": "banco:ErroPagamento",
+    "codigoErroComplementar": {
+      "@id": "banco:codigoErroComplementar",
+      "@type": "xsd:string"
+    },
+    "StatusPixPagamento": "banco:StatusPixPagamento",
+    "StatusPagamentoBoletoCallback": "banco:StatusPagamentoBoletoCallback",
+    "TipoMovimentacao": "banco:TipoMovimentacao",
+    "CallbackAttemptPage": "banco:CallbackAttemptPage",
+    "CallbackAttemptPageItem": "banco:CallbackAttemptPageItem",
+    "payload": {
+      "@id": "banco:payload"
+    },
+    "numeroTentativa": {
+      "@id": "banco:numeroTentativa",
+      "@type": "xsd:integer"
+    },
+    "dataEnvio": {
+      "@id": "banco:dataEnvio",
+      "@type": "xsd:dateTime"
+    },
+    "sucesso": {
+      "@id": "banco:sucesso",
+      "@type": "xsd:boolean"
+    },
+    "httpStatus": {
+      "@id": "banco:httpStatus",
+      "@type": "xsd:integer"
+    },
+    "mensagemErro": {
+      "@id": "banco:mensagemErro",
+      "@type": "xsd:string"
+    },
+    "RetryCallbacksRequestBody": "banco:RetryCallbacksRequestBody",
+    "body": {
+      "@id": "banco:body"
+    },
+    "CallbackRetryBoletoPagamentoBody": "banco:CallbackRetryBoletoPagamentoBody",
+    "CallbackRetryPixPagamentoBody": "banco:CallbackRetryPixPagamentoBody",
+    "RetryCallbackResponse": "banco:RetryCallbackResponse",
+    "foundIds": {
+      "@id": "banco:foundIds",
+      "@container": "@list"
+    },
+    "CobrancasResponse": "banco:CobrancasResponse",
+    "cobrancas": {
+      "@id": "banco:cobrancas",
+      "@container": "@list"
+    },
+    "CobrancaResponse": "banco:CobrancaResponse",
+    "cobranca": {
+      "@id": "banco:cobranca",
+      "@type": "@id"
+    },
+    "boleto": {
+      "@id": "banco:boleto",
+      "@type": "@id"
+    },
+    "pix": {
+      "@id": "banco:pix",
+      "@type": "@id"
+    },
+    "pagadorCobranca": "banco:pagadorCobranca",
+    "boletoCobranca": "banco:boletoCobranca",
+    "codigoBarras": {
+      "@id": "banco:codigoBarras",
+      "@type": "xsd:string"
+    },
+    "pixCobranca": "banco:pixCobranca",
+    "txid": {
+      "@id": "banco:txid",
+      "@type": "xsd:string"
+    },
+    "EmitirCobrancaRequestBody": "banco:EmitirCobrancaRequestBody",
+    "numDiasAgenda": {
+      "@id": "banco:numDiasAgenda",
+      "@type": "xsd:integer"
+    },
+    "mora": {
+      "@id": "banco:mora"
+    },
+    "beneficiarioFinal": {
+      "@id": "banco:beneficiarioFinal",
+      "@type": "@id"
+    },
+    "formasRecebimento": {
+      "@id": "banco:formasRecebimento",
+      "@container": "@list"
+    },
+    "notaFiscal": {
+      "@id": "banco:notaFiscal",
+      "@type": "@id"
+    },
+    "CancelarCobrancaRequestBody": "banco:CancelarCobrancaRequestBody",
+    "motivoCancelamento": {
+      "@id": "banco:motivoCancelamento",
+      "@type": "xsd:string"
+    },
+    "WebhookSolicitado": "banco:WebhookSolicitado",
+    "CobrancaDetalhadaResponseBody": "banco:CobrancaDetalhadaResponseBody",
+    "WebhookCompleto": "banco:WebhookCompleto",
+    "atualizacao": {
+      "@id": "banco:atualizacao",
+      "@type": "xsd:dateTime"
+    },
+    "CallbackCobranca": "banco:CallbackCobranca",
+    "situacao": {
+      "@id": "banco:situacao",
+      "@type": "@id"
+    },
+    "dataHoraSituacao": {
+      "@id": "banco:dataHoraSituacao",
+      "@type": "xsd:dateTime"
+    },
+    "valorTotalRecebido": {
+      "@id": "banco:valorTotalRecebido",
+      "@type": "xsd:string"
+    },
+    "origemRecebimento": {
+      "@id": "banco:origemRecebimento",
+      "@type": "@id"
+    },
+    "PagadorBase": "banco:PagadorBase",
+    "tipoPessoa": {
+      "@id": "banco:tipoPessoa",
+      "@type": "xsd:string"
+    },
+    "endereco": {
+      "@id": "banco:endereco",
+      "@type": "xsd:string"
+    },
+    "bairro": {
+      "@id": "banco:bairro",
+      "@type": "xsd:string"
+    },
+    "cidade": {
+      "@id": "banco:cidade",
+      "@type": "xsd:string"
+    },
+    "uf": {
+      "@id": "banco:uf",
+      "@type": "@id"
+    },
+    "cep": {
+      "@id": "banco:cep",
+      "@type": "xsd:string"
+    },
+    "BeneficiarioBase": "banco:BeneficiarioBase",
+    "Pagador": "banco:Pagador",
+    "email": {
+      "@id": "banco:email",
+      "@type": "xsd:string"
+    },
+    "ddd": {
+      "@id": "banco:ddd",
+      "@type": "xsd:string"
+    },
+    "telefone": {
+      "@id": "banco:telefone",
+      "@type": "xsd:string"
+    },
+    "numero": {
+      "@id": "banco:numero",
+      "@type": "xsd:string"
+    },
+    "complemento": {
+      "@id": "banco:complemento",
+      "@type": "xsd:string"
+    },
+    "Mensagem": "banco:Mensagem",
+    "linha1": {
+      "@id": "banco:linha1",
+      "@type": "xsd:string"
+    },
+    "linha2": {
+      "@id": "banco:linha2",
+      "@type": "xsd:string"
+    },
+    "linha3": {
+      "@id": "banco:linha3",
+      "@type": "xsd:string"
+    },
+    "linha4": {
+      "@id": "banco:linha4",
+      "@type": "xsd:string"
+    },
+    "linha5": {
+      "@id": "banco:linha5",
+      "@type": "xsd:string"
+    },
+    "Desconto": "banco:Desconto",
+    "quantidadeDias": {
+      "@id": "banco:quantidadeDias",
+      "@type": "xsd:integer"
+    },
+    "DescontoTaxa": "banco:DescontoTaxa",
+    "taxa": {
+      "@id": "banco:taxa",
+      "@type": "xsd:decimal"
+    },
+    "DescontoValor": "banco:DescontoValor",
+    "Multa": "banco:Multa",
+    "MultaTaxa": "banco:MultaTaxa",
+    "MultaValor": "banco:MultaValor",
+    "Mora": "banco:Mora",
+    "MoraTaxa": "banco:MoraTaxa",
+    "MoraValor": "banco:MoraValor",
+    "NotaFiscal": "banco:NotaFiscal",
+    "chaveNFe": {
+      "@id": "banco:chaveNFe",
+      "@type": "xsd:string"
+    },
+    "serie": {
+      "@id": "banco:serie",
+      "@type": "xsd:integer"
+    },
+    "parcela": {
+      "@id": "banco:parcela",
+      "@type": "xsd:integer"
+    },
+    "naturezaOperacao": {
+      "@id": "banco:naturezaOperacao",
+      "@type": "xsd:string"
+    },
+    "MultaMoraResponse": "banco:MultaMoraResponse",
+    "TipoOrdenacaoCobrancasEnum": "banco:TipoOrdenacaoCobrancasEnum",
+    "OrdenarCobrancasPorEnum": "banco:OrdenarCobrancasPorEnum",
+    "OrigemRecebimentoEnum": "banco:OrigemRecebimentoEnum",
+    "EnumUF": "banco:EnumUF",
+    "SituacaoCobrancaEnum": "banco:SituacaoCobrancaEnum",
+    "SituacaoCobrancaCallbackEnum": "banco:SituacaoCobrancaCallbackEnum",
+    "TipoCobrancaEnum": "banco:TipoCobrancaEnum"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Banco Inter API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Banco Inter's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-18) from openapi/banco-inter-banking-openapi.yml, openapi/banco-inter-cobranca-bolepix-openapi.yml, openapi/banco-inter-cobranca-openapi.yml.",
+  "dcterms:created": "2026-10-18",
+  "dcterms:source": [
+    "openapi/banco-inter-banking-openapi.yml",
+    "openapi/banco-inter-cobranca-bolepix-openapi.yml",
+    "openapi/banco-inter-cobranca-openapi.yml",
+    "openapi/banco-inter-forum-openapi.yml",
+    "openapi/banco-inter-partners-credito-imobiliario-credito-openapi.yml"
+  ]
+}

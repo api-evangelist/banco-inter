@@ -1,0 +1,173 @@
+generated: '2026-10-18'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 13
+  own: 3
+  other_domain: 9
+  platform: 1
+  roles:
+  - api
+  - community
+  - marketing
+  - other
+  - partner
+  - portal
+  - security
+  - source
+  - website
+hosts:
+- host: ajuda.inter.co
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  types:
+  - HelpCenter
+  serves: []
+  registrable_domain: inter.co
+  role: other
+  relation: other-domain
+- host: api.com.br
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: api.com.br
+  role: api
+  relation: other-domain
+- host: api.inter.co
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: inter.co
+  role: api
+  relation: other-domain
+- host: bancointer.com.br
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  - vendor-detect
+  types:
+  - Website
+  serves:
+  - cdn
+  vendor: cloudfront
+  registrable_domain: bancointer.com.br
+  role: website
+  relation: own
+- host: blog-us.inter.co
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  types:
+  - Blog
+  serves: []
+  registrable_domain: inter.co
+  role: marketing
+  relation: other-domain
+- host: cdpj.partners.bancointer.com.br
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: bancointer.com.br
+  role: partner
+  relation: own
+- host: ce-partners.uatbi.com.br
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: uatbi.com.br
+  role: other
+  relation: other-domain
+- host: comunidade.inter.co
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  types:
+  - Community
+  serves: []
+  registrable_domain: inter.co
+  role: community
+  relation: other-domain
+- host: developers.inter.co
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - DeveloperPortal
+  - Documentation
+  - APIReference
+  - ChangeLog
+  - Sandbox
+  - SDKs
+  - MCPServer
+  - FAQ
+  - ErrorCodes
+  - Support
+  serves:
+  - docs
+  - documentation
+  vendor: docusaurus
+  registrable_domain: inter.co
+  role: portal
+  relation: other-domain
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: inter.co
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  types:
+  - Newsroom
+  - PrivacyPolicy
+  - Security
+  serves: []
+  registrable_domain: inter.co
+  role: security
+  relation: other-domain
+- host: investors.inter.co
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  types:
+  - InvestorRelations
+  serves: []
+  registrable_domain: inter.co
+  role: other
+  relation: other-domain
+- host: marketing.bancointer.com.br
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: bancointer.com.br
+  role: other
+  relation: own

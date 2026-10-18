@@ -1,0 +1,19 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://developers.inter.co/docs/configurando-postman-testes/como-gerar-um-token-oauth
+sources:
+- https://developers.inter.co/docs/configurando-postman-testes/como-gerar-um-token-oauth
+- https://developers.inter.co/docs/introducao/oauth-2.0
+- https://developers.inter.co/credito-empresas/token
+- https://developers.inter.co/docs/configurando-postman-testes/como-utilizar-token-apis-inter
+description: Banco Inter uses OAuth 2.0 authentication with client credentials flow for API authorization.
+schemes:
+- type: oauth2
+  name: OAuth 2.0
+  evidence: Para segurança dos nossos serviços, implementamos o protocolo OAuth2 para autorização das chamadas.
+  flows:
+  - client_credentials
+  how_to_obtain: obtidas no momento em que se cria uma integração, após baixar o certificado e a chave.
+docs: https://developers.inter.co/docs/introducao/oauth-2.0
+note: The documentation mentions OAuth 2.0 with client credentials but does not provide specific token URLs, authorize URLs, or scopes.

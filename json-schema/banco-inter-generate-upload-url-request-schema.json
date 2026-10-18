@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-generate-upload-url-request-schema.json",
+  "title": "GenerateUploadUrlRequest",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-forum-openapi.yml#/components/schemas/GenerateUploadUrlRequest",
+  "type": "object",
+  "required": [
+    "contentType"
+  ],
+  "properties": {
+    "contentType": {
+      "type": "string",
+      "description": "MIME type of the file to be uploaded. Allowed types: image/jpeg, image/png, video/mp4, video/quicktime, application/pdf."
+    }
+  }
+}

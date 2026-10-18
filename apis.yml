@@ -1,23 +1,2137 @@
 aid: banco-inter
+
 name: Banco Inter
-description: 'Banco Inter is a company surfaced via the API Evangelist harvest backlog (source: kin-score-markets)
-  and added to the network as a stub for full-pipeline profiling.'
+
+description: 'Banco Inter (Inter&Co, Nasdaq: INTR) is a Brazilian digital bank and financial super app offering free digital checking accounts,
+  payments, Pix, credit, investments, insurance and an international Global Account. Its Inter Empresas developer portal (developers.inter.co)
+  documents business banking APIs secured with mTLS certificates and OAuth 2.0: statements (Extrato), balances (Saldos), payments, Pix Cobrança,
+  Pix Pagamento, Pix Automático and boleto collection (Cobrança), plus webhooks, a sandbox environment, SDKs (Java, C#, Python, PHP), CNAB file
+  tooling and an MCP server.'
+
 url: https://raw.githubusercontent.com/api-evangelist/banco-inter/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:kin-score-markets
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-18 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-18'
+
 modified: '2026-10-18'
+
 tags:
 - Company
-apis: []
+- Banking
+- Fintech
+- Payments
+- Pix
+- Brazil
+- Digital Bank
+- Open Banking
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
+image: https://developers.inter.co/img/inter-empresas-logo.svg
+
 common:
+- type: AgenticAccess
+  url: agentic-access/banco-inter-agentic-access.yml
+- type: RateLimits
+  url: rate-limits/banco-inter-rate-limits.yml
+- type: Spectral
+  url: rules/banco-inter-rules.yml
+- type: JSONLD
+  url: json-ld/banco-inter-context.jsonld
+- type: Vocabulary
+  url: vocabulary/banco-inter-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Webhooks
+  url: asyncapi/banco-inter-webhooks.yml
+- type: DataModel
+  url: data-model/banco-inter-data-model.yml
+- type: ChangeLog
+  url: changelog/banco-inter-changelog.yml
+- type: Idempotency
+  url: conventions/banco-inter-conventions.yml
+- type: Conventions
+  url: conventions/banco-inter-conventions.yml
+- type: Lifecycle
+  url: lifecycle/banco-inter-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/banco-inter-problem-types.yml
+- type: Conformance
+  url: conformance/banco-inter-conformance.yml
+- type: Overlay
+  url: overlays/banco-inter-banking-overlay.yaml
+- type: ToolCrosswalk
+  url: mcp/banco-inter-tool-crosswalk.yml
+- type: WellKnown
+  url: well-known/banco-inter-well-known.yml
+- type: Hosts
+  url: hosts/banco-inter-hosts.yml
+- type: Vendors
+  url: vendors/banco-inter-vendors.yml
+- type: Packages
+  url: packages/banco-inter-packages.yml
+- type: Authentication
+  url: authentication/banco-inter-authentication.yml
+- type: OAuthScopes
+  url: scopes/banco-inter-scopes.yml
+- type: DomainSecurity
+  url: security/banco-inter-domain-security.yml
 - type: Website
   url: https://bancointer.com.br
+- type: DeveloperPortal
+  url: https://developers.inter.co/
+- type: Documentation
+  url: https://developers.inter.co/docs/introducao/sobre-este-portal
+- type: APIReference
+  url: https://developers.inter.co/references/token
+- type: ChangeLog
+  url: https://developers.inter.co/changelog
+- type: Sandbox
+  url: https://developers.inter.co/sandbox
+- type: SDKs
+  url: https://developers.inter.co/docs/sdks/sdk-intro
+- type: MCPServer
+  url: https://developers.inter.co/docs/mcp/visao-geral
+- type: FAQ
+  url: https://developers.inter.co/duvidas-frequentes
+- type: ErrorCodes
+  url: https://developers.inter.co/erros-status-code
+- type: Support
+  url: https://developers.inter.co/contacts
+- type: Community
+  url: https://comunidade.inter.co/developers
+- type: HelpCenter
+  url: https://ajuda.inter.co/
+- type: Blog
+  url: https://blog-us.inter.co
+- type: Newsroom
+  url: https://inter.co/news/
+- type: InvestorRelations
+  url: https://investors.inter.co/
+- type: GitHubOrganization
+  url: https://github.com/inter-co
+- type: PrivacyPolicy
+  url: https://inter.co/politica-de-privacidade/
+- type: Security
+  url: https://inter.co/en/security/
+
+apis:
+- aid: banco-inter:banco-inter-boletos-api
+  name: Banco Inter Boletos API
+  description: The Boletos API from Banco Inter — 5 operation(s) for boletos.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Boletos
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-boletos-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-cobran-a-api
+  name: Banco Inter Cobrança API
+  description: The Cobrança API from Banco Inter — 7 operation(s) for cobrança.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Cobrança
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-cobran-a-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-cobran-a-com-vencimento-api
+  name: Banco Inter Cobrança com Vencimento API
+  description: >-
+    The Cobrança com Vencimento API from Banco Inter — 4 operation(s) for cobrança com vencimento.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Cobrança com Vencimento
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-cobran-a-com-vencimento-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-cobran-a-com-vencimento-em-lote-api
+  name: Banco Inter Cobrança com Vencimento em Lote API
+  description: >-
+    The Cobrança com Vencimento em Lote API from Banco Inter — 4 operation(s) for cobrança com vencimento
+    em lote.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Cobrança com Vencimento em Lote
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-cobran-a-com-vencimento-em-lote-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-cobran-a-imediata-api
+  name: Banco Inter Cobrança Imediata API
+  description: The Cobrança Imediata API from Banco Inter — 4 operation(s) for cobrança imediata.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Cobrança Imediata
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-cobran-a-imediata-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-cobran-a-recorrente-api
+  name: Banco Inter Cobrança Recorrente API
+  description: >-
+    Esta seção apresenta os endpoints relacionados ao gerenciamento de cobranças associadas a uma recorrência.
+
+
+    As cobranças só poderão ser geradas utilizando este endpoint após a recorrência ser autorizada por
+    meio da
+
+    solicitação de recorrência (autorização).
+
+
+    ---
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Cobrança Recorrente
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-cobran-a-recorrente-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-extrato-api
+  name: Banco Inter Extrato API
+  description: The Extrato API from Banco Inter — 3 operation(s) for extrato.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Extrato
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-extrato-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-location-api
+  name: Banco Inter Location API
+  description: The Location API from Banco Inter — 3 operation(s) for location.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Location
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-location-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-location-da-recorr-ncia-api
+  name: Banco Inter Location da Recorrência API
+  description: >-
+    Esta seção apresenta os endpoints relacionados ao gerenciamento de payloads associadas a uma recorrência.
+
+
+    ---
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Location da Recorrência
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-location-da-recorr-ncia-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-pagamento-api
+  name: Banco Inter Pagamento API
+  description: The Pagamento API from Banco Inter — 5 operation(s) for pagamento.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Pagamento
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-pagamento-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-pix-api
+  name: Banco Inter Pix API
+  description: The Pix API from Banco Inter — 3 operation(s) for pix.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Pix
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-pix-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-pix-pagamento-api
+  name: Banco Inter Pix Pagamento API
+  description: The Pix Pagamento API from Banco Inter — 2 operation(s) for pix pagamento.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Pix Pagamento
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-pix-pagamento-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-proposta-api
+  name: Banco Inter Proposta API
+  description: The Proposta API from Banco Inter — 1 operation(s) for proposta.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Proposta
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-proposta-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-publica-o-api
+  name: Banco Inter Publicação API
+  description: The Publicação API from Banco Inter — 2 operation(s) for publicação.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Publicação
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-publica-o-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-recorr-ncia-api
+  name: Banco Inter Recorrência API
+  description: >-
+    Essa seção apresenta os endpoints relacionados ao gerenciamento de recorrências do Pix Automático.
+
+
+    Para que as cobranças sejam geradas automaticamente para os clientes pagadores, devemos criar uma
+    recorrência que
+
+    o cliente pagador deverá autorizar.
+
+
+    ---
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Recorrência
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-recorr-ncia-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-saldo-api
+  name: Banco Inter Saldo API
+  description: The Saldo API from Banco Inter — 1 operation(s) for saldo.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Saldo
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-saldo-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-solicitar-recorr-ncia-api
+  name: Banco Inter Solicitar Recorrência API
+  description: >-
+    Esta seção apresenta os endpoints relacionados ao gerenciamento de solicitações de confirmação de
+    recorrência,
+
+    que equivalem às autorizações necessárias.
+
+
+    Para que as recorrências tenham validade e possam gerar cobranças automaticamente, o cliente pagador
+    precisa
+
+    realizar o aceite.
+
+
+    Por meio dessa autorização, o cliente confirma que concorda com a recorrência estabelecida.
+
+
+    ---
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Solicitar Recorrência
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-solicitar-recorr-ncia-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-token-api
+  name: Banco Inter Token API
+  description: The Token API from Banco Inter — 1 operation(s) for token.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Token
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-token-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-upload-de-m-dia-api
+  name: Banco Inter Upload de mídia API
+  description: The Upload de mídia API from Banco Inter — 1 operation(s) for upload de mídia.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Upload de mídia
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-upload-de-m-dia-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-webhook-api
+  name: Banco Inter Webhook API
+  description: The Webhook API from Banco Inter — 8 operation(s) for webhook.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Webhook
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-webhook-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-webhook-de-cobran-as-recorrentes-api
+  name: Banco Inter Webhook de Cobranças Recorrentes API
+  description: >-
+    Esta seção apresenta os endpoints relacionados ao gerenciamento do serviço de notificações de cobranças
+    recorrentes.
+
+
+    ---
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Webhook de Cobranças Recorrentes
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-webhook-de-cobran-as-recorrentes-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-webhook-de-pix-cobran-a-api
+  name: Banco Inter Webhook de Pix Cobrança API
+  description: >-
+    The Webhook de Pix Cobrança API from Banco Inter — 3 operation(s) for webhook de pix cobrança.
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Webhook de Pix Cobrança
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-webhook-de-pix-cobran-a-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+- aid: banco-inter:banco-inter-webhook-de-recorr-ncias-api
+  name: Banco Inter Webhook de Recorrências API
+  description: >-
+    Esta seção apresenta os endpoints relacionados ao gerenciamento do serviço de notificações acerca
+    de recorrências.
+
+
+    ---
+  humanURL: https://developers.inter.co/references/token
+  baseURL: https://cdpj.partners.bancointer.com.br/oauth/v2
+  tags:
+  - Webhook de Recorrências
+  properties:
+  - type: OpenAPI
+    url: openapi/banco-inter-webhook-de-recorr-ncias-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/banco-inter-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-saldo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-informacoes-pagamento-darf-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-obter-lote-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pagamento-pix-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-pix-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-vgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-devolucao-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-lote-cob-vconsultado-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-webhook-completo-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rcompleta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-payload-location-rec-gerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cob-rgerada-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-solic-rec-completa-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobranca-detalhada-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-cobrancas-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-callback-attempt-page-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-item-sumario-cobrancas-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-cobranca-response-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-inclui-boleto-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-boletos-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-baixa-boleto-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-publication-page-response-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-update-publication-request-body-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-generate-upload-url-request-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-proposta-schema.json
+  - type: JSONSchema
+    url: json-schema/banco-inter-operacao-schema.json
+x-coverage:
+  state: covered
+  reason: identity-verified
+  detail: Website https://bancointer.com.br redirects (200) to https://inter.co/us/, the Inter&Co brand site of the same company (Banco Inter);
+    Website kept as the record URL. Developer portal developers.inter.co is a Docusaurus SPA (200 for every path); each pointer was rendered and
+    showed its titled page, while a bogus path rendered "Página não encontrada".
+  evidence:
+  - url: https://bancointer.com.br
+    status: 200
+  - url: https://developers.inter.co/
+    status: 200
+  - url: https://github.com/inter-co
+    status: 200
+  - url: https://investors.inter.co/
+    status: 200
+x-enrichment:
+  date: '2026-10-18'
+  status: enriched
+  artifacts_added: 106
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=deepseek,regulatory=anthropic

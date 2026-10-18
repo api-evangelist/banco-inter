@@ -1,0 +1,442 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-cobranca-detalhada-response-body-schema.json",
+  "title": "CobrancaDetalhadaResponseBody",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-cobranca-bolepix-openapi.yml#/components/schemas/CobrancaDetalhadaResponseBody",
+  "type": "object",
+  "required": [
+    "cobranca"
+  ],
+  "properties": {
+    "cobranca": {
+      "required": [
+        "codigoSolicitacao",
+        "seuNumero",
+        "valorNominal",
+        "dataEmissao",
+        "dataVencimento",
+        "situacao",
+        "tipoCobranca"
+      ],
+      "properties": {
+        "codigoSolicitacao": {
+          "type": "string",
+          "description": "Identificador único da cobranca."
+        },
+        "seuNumero": {
+          "type": "string",
+          "description": "Seu Número.\n"
+        },
+        "dataEmissao": {
+          "type": "string",
+          "format": "date",
+          "description": "Data de emissao da cobrança"
+        },
+        "dataVencimento": {
+          "type": "string",
+          "format": "date",
+          "description": "Data de vencimento da cobrança"
+        },
+        "valorNominal": {
+          "type": "number",
+          "description": "Valor Nominal da cobrança"
+        },
+        "tipoCobranca": {
+          "$ref": "#/$defs/TipoCobrancaEnum"
+        },
+        "situacao": {
+          "$ref": "#/$defs/SituacaoCobrancaEnum"
+        },
+        "dataSituacao": {
+          "type": "string",
+          "format": "date",
+          "title": "Data da situação",
+          "description": "Data que a situação da cobrança sofreu alteração."
+        },
+        "valorTotalRecebido": {
+          "type": "string",
+          "pattern": "^\\\\d{1,10}\\\\.\\\\d{2}$",
+          "description": "Valor total recebido, no caso da cobrança ter sido paga."
+        },
+        "origemRecebimento": {
+          "$ref": "#/$defs/OrigemRecebimentoEnum"
+        },
+        "motivoCancelamento": {
+          "type": "string",
+          "description": "Motivo do Cancelamento."
+        },
+        "arquivada": {
+          "type": "boolean",
+          "description": "Cobrança está arquivada ou não"
+        },
+        "descontos": {
+          "type": "array",
+          "maxLength": 3,
+          "items": {
+            "$ref": "#/$defs/DescontoResponse"
+          }
+        },
+        "multa": {
+          "$ref": "#/$defs/MultaMoraResponse"
+        },
+        "mora": {
+          "$ref": "#/$defs/MultaMoraResponse"
+        },
+        "pagador": {
+          "$ref": "#/$defs/Pagador"
+        }
+      }
+    },
+    "boleto": {
+      "description": "Objeto com os dados da Cobrança gerada para pagamento via código de barras/linha digitável.\n\n<strong>Caso a cobrança esteja com a situação EM_PROCESSAMENTO, essa propriedade poderá não ser retornada.</strong>\n",
+      "type": "object",
+      "required": [
+        "linhaDigitavel",
+        "codigoBarras"
+      ],
+      "properties": {
+        "nossoNumero": {
+          "type": "string",
+          "description": "Nosso Número, atribuído automaticamente ao longo da inclusão do título.\n\n<strong>Caso a cobrança esteja com a situação EM_PROCESSAMENTO, essa campo poderá não ser retornada.</strong>\n",
+          "maxLength": 11
+        },
+        "codigoBarras": {
+          "type": "string",
+          "description": "Dígitos que compõem o código de barras do boleto (44 posições preenchidas)",
+          "minLength": 44,
+          "maxLength": 44
+        },
+        "linhaDigitavel": {
+          "type": "string",
+          "description": "Dígitos que compõem a linha digitável do boleto, sem formatação (47 posições preenchidas)",
+          "minLength": 47,
+          "maxLength": 47
+        }
+      }
+    },
+    "pix": {
+      "description": "Objeto com os dados da Cobrança gerada para pagamento via QRCode.\n\n**Caso não seja possível gerar o Pix no momento, essa propriedade não será retornada.**\n",
+      "type": "object",
+      "required": [
+        "txid",
+        "pixCopiaECola"
+      ],
+      "properties": {
+        "txid": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9]{26,35}$",
+          "description": "Txid da Cobrança PIX gerada"
+        },
+        "pixCopiaECola": {
+          "type": "string",
+          "description": "QRCode de cobrança para pagamento"
+        }
+      }
+    },
+    "notaFiscal": {
+      "$ref": "#/$defs/NotaFiscalResponse"
+    }
+  },
+  "$defs": {
+    "Desconto": {
+      "required": [
+        "codigo",
+        "quantidadeDias"
+      ],
+      "properties": {
+        "codigo": {
+          "type": "string",
+          "enum": [
+            "PERCENTUALDATAINFORMADA",
+            "VALORFIXODATAINFORMADA"
+          ],
+          "description": "* `VALORFIXODATAINFORMADA` - Valor fixo até a data informada.\n* `PERCENTUALDATAINFORMADA` - Percentual até a data informada.\n"
+        },
+        "quantidadeDias": {
+          "type": "integer",
+          "description": "Quantidade de dias antes do vencimento que será aplicado o desconto.\n"
+        }
+      }
+    },
+    "DescontoResponse": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DescontoTaxa"
+        },
+        {
+          "$ref": "#/$defs/DescontoValor"
+        }
+      ]
+    },
+    "DescontoTaxa": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Desconto"
+        }
+      ],
+      "required": [
+        "taxa"
+      ],
+      "properties": {
+        "taxa": {
+          "type": "number",
+          "description": "Taxa Percentual de Desconto do título.<br/>\nMáximo de duas casas decimais, valores excedentes são arredondados.<br/>\nEx: 0.033 -> 0.03 | 0.049 -> 0.05 | 0.335 -> 0.34\n"
+        }
+      }
+    },
+    "DescontoValor": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Desconto"
+        }
+      ],
+      "required": [
+        "valor"
+      ],
+      "properties": {
+        "valor": {
+          "type": "number",
+          "description": "Valor de Desconto, expresso na moeda do título.<br/>\nMáximo de duas casas decimais, valores excedentes são arredondados.<br/>\nEx: 10.032 -> 10.03 | 0.249 -> 0.25 | 15.745 -> 15.75\n"
+        }
+      }
+    },
+    "EnumUF": {
+      "type": "string",
+      "enum": [
+        "AC",
+        "AL",
+        "AP",
+        "AM",
+        "BA",
+        "CE",
+        "DF",
+        "ES",
+        "GO",
+        "MA",
+        "MT",
+        "MS",
+        "MG",
+        "PA",
+        "PB",
+        "PR",
+        "PE",
+        "PI",
+        "RJ",
+        "RN",
+        "RS",
+        "RO",
+        "RR",
+        "SC",
+        "SP",
+        "SE",
+        "TO"
+      ],
+      "description": "UF"
+    },
+    "MultaMoraResponse": {
+      "type": "object",
+      "required": [
+        "codigo"
+      ],
+      "properties": {
+        "codigo": {
+          "type": "string"
+        },
+        "taxa": {
+          "type": "number"
+        },
+        "valor": {
+          "type": "number"
+        }
+      }
+    },
+    "NotaFiscal": {
+      "description": "Nota fiscal atrelada à cobrança realizada",
+      "type": "object",
+      "required": [
+        "chaveNFe",
+        "numero",
+        "serie",
+        "dataEmissao"
+      ],
+      "properties": {
+        "chaveNFe": {
+          "type": "string",
+          "description": "Chave de Acesso da Nota Fiscal.\n",
+          "minLength": 44,
+          "maxLength": 44,
+          "pattern": "^[0-9]+$"
+        },
+        "numero": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Número da Nota Fiscal.\n"
+        },
+        "serie": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Série da Nota Fiscal.\n"
+        },
+        "dataEmissao": {
+          "type": "string",
+          "format": "date",
+          "description": "Data de Emissão da Nota Fiscal.\n"
+        },
+        "parcela": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Parcela da Nota Fiscal.\n"
+        },
+        "naturezaOperacao": {
+          "type": "string",
+          "description": "Natureza da Operação da Nota Fiscal.\n"
+        }
+      }
+    },
+    "NotaFiscalResponse": {
+      "type": "object",
+      "description": "Nota fiscal relacionada à cobrança.\n\n**Essa propriedade só será retornada caso a nota fiscal tenha sido especificada no momento do cadastro da cobrança.**\n",
+      "allOf": [
+        {
+          "$ref": "#/$defs/NotaFiscal"
+        }
+      ]
+    },
+    "OrigemRecebimentoEnum": {
+      "type": "string",
+      "title": "Origem do recebimento da cobrança",
+      "enum": [
+        "BOLETO",
+        "PIX"
+      ]
+    },
+    "Pagador": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/PagadorBase"
+        }
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "default": "",
+          "description": "E-mail do pagador",
+          "maxLength": 50
+        },
+        "ddd": {
+          "type": "string",
+          "description": "DDD do telefone do pagador",
+          "maxLength": 2
+        },
+        "telefone": {
+          "type": "string",
+          "description": "Telefone do pagador",
+          "maxLength": 9
+        },
+        "numero": {
+          "type": "string",
+          "description": "Número no logradouro do pagador",
+          "maxLength": 10,
+          "default": ""
+        },
+        "complemento": {
+          "type": "string",
+          "description": "Complemento do endereço do pagador",
+          "maxLength": 30,
+          "default": ""
+        }
+      }
+    },
+    "PagadorBase": {
+      "type": "object",
+      "required": [
+        "cpfCnpj",
+        "nome",
+        "tipoPessoa",
+        "cep",
+        "endereco",
+        "cidade",
+        "uf"
+      ],
+      "properties": {
+        "cpfCnpj": {
+          "type": "string",
+          "description": "CPF/CNPJ do pagador do título\n",
+          "minLength": 11,
+          "maxLength": 18
+        },
+        "tipoPessoa": {
+          "type": "string",
+          "enum": [
+            "FISICA",
+            "JURIDICA"
+          ],
+          "description": "Tipo do pagador:\n* `FISICA` - Pessoa Física\n* `JURIDICA` - Pessoa Jurídica\n"
+        },
+        "nome": {
+          "type": "string",
+          "description": "Nome do pagador",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "endereco": {
+          "type": "string",
+          "description": "Endereço do pagador",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "bairro": {
+          "type": "string",
+          "description": "Bairro do pagador",
+          "maxLength": 60,
+          "default": ""
+        },
+        "cidade": {
+          "type": "string",
+          "description": "Cidade do pagador",
+          "maxLength": 60,
+          "minLength": 1
+        },
+        "uf": {
+          "$ref": "#/$defs/EnumUF"
+        },
+        "cep": {
+          "type": "string",
+          "description": "CEP do pagador",
+          "minLength": 8,
+          "maxLength": 8
+        }
+      }
+    },
+    "SituacaoCobrancaEnum": {
+      "type": "string",
+      "enum": [
+        "RECEBIDO",
+        "A_RECEBER",
+        "MARCADO_RECEBIDO",
+        "ATRASADO",
+        "CANCELADO",
+        "EXPIRADO",
+        "FALHA_EMISSAO",
+        "EM_PROCESSAMENTO",
+        "PROTESTO"
+      ],
+      "description": "Possíveis situações de uma cobranca."
+    },
+    "TipoCobrancaEnum": {
+      "type": "string",
+      "description": "Tipos de cobranças existentes.",
+      "enum": [
+        "SIMPLES",
+        "PARCELADO",
+        "RECORRENTE"
+      ]
+    }
+  }
+}

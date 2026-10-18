@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-generate-upload-url-response-schema.json",
+  "title": "GenerateUploadUrlResponse",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-forum-openapi.yml#/components/schemas/GenerateUploadUrlResponse",
+  "type": "object",
+  "properties": {
+    "uploadUrl": {
+      "type": "string",
+      "description": "URL pré-assinada para upload do arquivo"
+    },
+    "publicationUrl": {
+      "type": "string",
+      "description": "URL para ser usada na criação da publicação após o upload"
+    }
+  }
+}

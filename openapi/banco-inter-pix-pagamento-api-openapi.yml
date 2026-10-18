@@ -1,0 +1,666 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Pix Pagamento API
+  version: ''
+  description: 'Operations tagged Pix Pagamento across 2 of this provider''s published API definitions: swagger-banking-yaml.yaml, banco-inter-banking-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj.partners.bancointer.com.br/banking/v2
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+  description: Servidor de Sandbox
+tags:
+- name: Pix Pagamento
+paths:
+  /pix:
+    post:
+      summary: Incluir Pagamento Pix
+      description: 'Método para inclusão de um pagamento/transferência Pix utilizando
+
+        dados bancários, chave ou código Copia e Cola.
+
+
+        **Importante**: Dependendo das configurações da conta, este pagamento
+
+        pode exigir aprovação manual antes da execução.
+
+
+        As configurações de aprovação podem ser ajustadas pelo usuário master
+
+        via Internet Banking. Menu Superior > Aprovar > Gestão de Aprovações.
+
+
+        * Escopo requerido: pagamento-pix.write
+
+        * Rate limite:
+
+
+        * 60 chamadas por minuto (Limitado a 1 chamada por segundo)
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/pix
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/pix'
+      tags:
+      - Pix Pagamento
+      operationId: realizarPagamentoPix
+      parameters:
+      - $ref: '#/components/parameters/xIdIdempotente'
+      - $ref: '#/components/parameters/xContaCorrente'
+      requestBody:
+        $ref: '#/components/requestBodies/PagamentoPixRequestBody'
+      responses:
+        '200':
+          description: Pagamento realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagamentoPixResponse'
+              examples:
+                retornoAguardandoAprovacao:
+                  $ref: '#/components/examples/PagamentoPixResponseAguardandoAprovacao'
+                retornoEfetivado:
+                  $ref: '#/components/examples/PagamentoPixResponseEfetivado'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaIncluirPix'
+        '401':
+          $ref: '#/components/responses/NaoAutorizado'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '422':
+          $ref: '#/components/responses/ErroValidacao'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /pix/{codigoSolicitacao}:
+    get:
+      summary: Consultar Pagamento Pix
+      description: 'Método para consulta de um pagamento/transferência Pix utilizando o codigo solicitação.
+
+
+        O período máximo para consulta é de 90 dias.
+
+
+        * Escopo requerido: pagamento-pix.read
+
+        * Rate limite:
+
+
+        * 20 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/pix/{codigoSolicitacao}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/pix/{codigoSolicitacao}'
+      tags:
+      - Pix Pagamento
+      operationId: consultarPagamentoPix
+      parameters:
+      - $ref: '#/components/parameters/CodigoSolicitacao'
+      - $ref: '#/components/parameters/xContaCorrente'
+      responses:
+        '200':
+          description: Consulta realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsultaPixAsyncResponse'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaConsultarPix'
+        '401':
+          $ref: '#/components/responses/NaoAutorizado'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '422':
+          $ref: '#/components/responses/ErroValidacao'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+components:
+  schemas:
+    Problema:
+      type: object
+      required:
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+        title:
+          type: string
+          description: Descrição resumida do problema.
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        timestamp:
+          type: string
+          description: Data no formato timestamp do erro
+    DestinatarioDadosBancarios:
+      allOf:
+      - $ref: '#/components/schemas/DestinatarioBase'
+      required:
+      - contaCorrente
+      - tipoConta
+      - cpfCnpj
+      - agencia
+      - nome
+      - instituicaoFinanceira
+      properties:
+        contaCorrente:
+          type: string
+        tipoConta:
+          $ref: '#/components/schemas/TipoConta'
+        cpfCnpj:
+          type: string
+        agencia:
+          type: string
+        nome:
+          type: string
+        instituicaoFinanceira:
+          $ref: '#/components/schemas/InstituicaoFinanceira'
+    TipoDestinatario:
+      type: string
+      description: Tipos de pagamentos que podem ser realizados. Por chave pix, dados bancários ou código Pix Copia E Cola.
+      enum:
+      - CHAVE
+      - DADOS_BANCARIOS
+      - PIX_COPIA_E_COLA
+    DadosConta:
+      type: object
+      properties:
+        codIspb:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de Pagamento Pix com dados bancários.
+
+            '
+        codAgencia:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de Pagamento Pix com dados bancários.
+
+            '
+        nroConta:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de Pagamento Pix com dados bancários.
+
+            '
+        cpfCnpj:
+          type: string
+          description: 'Caso seja um CPF, o dado retornado será mascarado. (ex:\***.777.888-\**)
+
+            '
+        nome:
+          type: string
+        tipoConta:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de Pagamento Pix com dados bancários.
+
+            '
+    DestinatarioBase:
+      type: object
+      required:
+      - tipo
+      properties:
+        tipo:
+          $ref: '#/components/schemas/TipoDestinatario'
+    InstituicaoFinanceira:
+      type: object
+      required:
+      - ispb
+      properties:
+        ispb:
+          type: string
+          description: Código ISPB, de 8 dígitos, dos bancos
+          example: '01234567'
+    PagamentoPixResponse:
+      type: object
+      properties:
+        tipoRetorno:
+          $ref: '#/components/schemas/TipoRetornoPagamentoPixEnum'
+        codigoSolicitacao:
+          type: string
+          description: Codigo da solicitacao do pagamento Pix
+          example: c42f0787-02cb-4b31-827e-459ec9d7ece1
+        dataPagamento:
+          type: string
+          description: Data solicitada para efetivação do pagamento do Pix
+          example: '2025-02-28'
+        dataOperacao:
+          type: string
+          description: Data em que foi solicitado a inclusão do pagamento do Pix
+          example: '2025-02-24'
+    EntidadeNaoProcessavel:
+      type: object
+      required:
+      - title
+      properties:
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Não foi possível processar o QR Code
+        detail:
+          type: string
+          description: Descrição completa do problema.
+          example: Por favor, verifique com quem o gerou. Você consegue pagar de outra forma, buscando nos favoritos ou inserindo a chave.
+        timestamp:
+          type: string
+          description: Data no formato timestamp do erro
+          example: '2023-10-23T13:10:47.149543-03:00'
+    TipoConta:
+      type: string
+      example: CONTA_CORRENTE
+      enum:
+      - CONTA_CORRENTE
+      - CONTA_POUPANCA
+      - CONTA_SALARIO
+      - CONTA_PAGAMENTO
+    DestinatarioChave:
+      allOf:
+      - $ref: '#/components/schemas/DestinatarioBase'
+      required:
+      - chave
+      properties:
+        chave:
+          type: string
+          description: 'Exemplos de tipos:
+
+            Se email: email do recebedor (ex: fulano.da.silva@example.com)
+
+            Se CPF/CNPJ: 12345678900 / 00038166000105
+
+            Se número do telefone celular: +55DD9XXXXXXXX (formato internacional)
+
+            Se EVP: 123e4567-e12b-12d1-a456-426655440000
+
+            '
+    ConsultaPixAsyncResponse:
+      type: object
+      properties:
+        transacaoPix:
+          $ref: '#/components/schemas/PixAsyncResponse'
+        historico:
+          items:
+            $ref: '#/components/schemas/HistoricoResponse'
+    StatusHistoricoPix:
+      type: string
+      description: 'Status atual da transação Pix
+
+        * `CRIADO`
+
+        * `AGUARDANDO_APROVACAO`
+
+        * `APROVADO`
+
+        * `REPROVADO`
+
+        * `EXPIRADO`
+
+        * `CANCELADO`
+
+        * `FALHA`
+
+        * `AGENDADO`
+
+        * `PAGO`
+
+        * `ENVIADO`
+
+        * `CANCELADO_SEM_SALDO`
+
+        * `DEBITADO`
+
+        * `PARCIALMENTE_DEBITADO`
+
+        * `PARCIALMENTE_PAGO`
+
+        * `NAO_DEBITADO`
+
+        * `AGENDAMENTO_CANCELADO`
+
+        '
+    PagamentoPixRequestBody:
+      type: object
+      required:
+      - valor
+      - destinatario
+      properties:
+        valor:
+          type: number
+          format: double
+          description: Valor do pagamento PIX
+          example: 234.56
+        dataPagamento:
+          type: string
+          format: date
+          description: 'Data solicitada para efetivação do pagamento do Pix (String formatada)
+
+
+            Se não for informada, será a data atual.
+
+
+            Format aceito: YYYY-MM-DD
+
+            '
+          example: '2025-02-24'
+        descricao:
+          type: string
+          maxLength: 140
+        destinatario:
+          oneOf:
+          - $ref: '#/components/schemas/DestinatarioDadosBancarios'
+          - $ref: '#/components/schemas/DestinatarioChave'
+          - $ref: '#/components/schemas/DestinatarioPixCopiaECola'
+          discriminator:
+            propertyName: tipo
+            mapping:
+              DADOS_BANCARIOS: '#/components/schemas/DestinatarioDadosBancarios'
+              CHAVE: '#/components/schemas/DestinatarioChave'
+              PIX_COPIA_E_COLA: '#/components/schemas/DestinatarioPixCopiaECola'
+      example:
+        dadosBancarios:
+          valor: 1.23
+          dataPagamento: '2022-10-10'
+          descricao: Pix dados bancários teste
+          destinatario:
+            tipo: DADOS_BANCARIOS
+            nome: Teste dados bancários
+            contaCorrente: '0000000'
+            tipoConta: CONTA_CORRENTE
+            cpfCnpj: '00000000000'
+            agencia: 0019
+            instituicaoFinanceira:
+              ispb: 00416968
+        chavePix:
+          valor: 1.23
+          dataPagamento: '2022-10-10'
+          descricao: Pix com chave Pix teste
+          destinatario:
+            tipo: CHAVE
+            chave: chavepix@teste.com
+        pixCopiaECola:
+          valor: 1.23
+          dataPagamento: '2022-10-10'
+          descricao: Pix com código Copia e Cola
+          destinatario:
+            tipo: PIX_COPIA_E_COLA
+            pixCopiaECola: <Código Copia E Cola>
+    ErroPagamento:
+      type: object
+      properties:
+        codigoErro:
+          type: string
+        descricaoErro:
+          type: string
+        codigoErroComplementar:
+          type: string
+    PixAsyncResponse:
+      properties:
+        contaCorrente:
+          type: string
+        recebedor:
+          $ref: '#/components/schemas/DadosConta'
+        erros:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErroPagamento'
+        endToEnd:
+          type: string
+        valor:
+          type: number
+        status:
+          $ref: '#/components/schemas/StatusPix'
+        dataHoraMovimento:
+          type: string
+        dataHoraSolicitacao:
+          type: string
+        chave:
+          type: string
+        codigoSolicitacao:
+          type: string
+    TipoRetornoPagamentoPixEnum:
+      type: string
+      enum:
+      - APROVACAO
+      - PROCESSADO
+      - AGENDADO
+    StatusPix:
+      type: string
+      description: 'Status atual da transação Pix
+
+        * `CRIADO`
+
+        * `AGUARDANDO_APROVACAO`
+
+        * `APROVADO`
+
+        * `REPROVADO`
+
+        * `EXPIRADO`
+
+        * `CANCELADO`
+
+        * `FALHA`
+
+        * `AGENDADO`
+
+        * `PAGO`
+
+        * `ENVIADO`
+
+        * `CANCELADO_SEM_SALDO`
+
+        * `DEBITADO`
+
+        * `PARCIALMENTE_DEBITADO`
+
+        * `PARCIALMENTE_PAGO`
+
+        * `NAO_DEBITADO`
+
+        * `AGENDAMENTO_CANCELADO`
+
+        '
+    HistoricoResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusHistoricoPix'
+        dataHoraEvento:
+          type: string
+    DestinatarioPixCopiaECola:
+      allOf:
+      - $ref: '#/components/schemas/DestinatarioBase'
+      required:
+      - pixCopiaECola
+      properties:
+        pixCopiaECola:
+          type: string
+          description: Informar o código Pix Copia e Cola
+  responses:
+    RequisicaoInvalidaIncluirPix:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida-example:
+              $ref: '#/components/examples/RequisicaoInvalidaIncluirPixExample'
+    NaoAutorizado:
+      description: Requisição não autorizada.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            nao-autorizado-example:
+              $ref: '#/components/examples/NaoAutorizadoExample'
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            nao-encontrado-example:
+              $ref: '#/components/examples/NaoEncontradoExample'
+    ServicoIndisponivel:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            servico-indisponivel-example:
+              $ref: '#/components/examples/ServicoIndisponivelExample'
+    AcessoNegado:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            acesso-negado-example:
+              $ref: '#/components/examples/AcessoNegadoExample'
+    RequisicaoInvalidaConsultarPix:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida-example:
+              $ref: '#/components/examples/RequisicaoInvalidaConsultarPixExample'
+    ErroValidacao:
+      description: Erro de validação
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EntidadeNaoProcessavel'
+  parameters:
+    xContaCorrente:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação. Necessário somente quando a aplicação estiver associada a mais de uma conta corrente. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+      schema:
+        type: string
+        pattern: ^[1-9][0-9]*$
+    CodigoSolicitacao:
+      name: codigoSolicitacao
+      in: path
+      required: true
+      description: Codigo único da transaçao
+      schema:
+        type: string
+        format: uuid
+    xIdIdempotente:
+      in: header
+      name: x-id-idempotente
+      description: Id informado para garantir idempotência nos pagamentos Pix. Representado de acordo com a [RFC4122](https://www.rfc-editor.org/rfc/rfc4122)
+      schema:
+        type: string
+        pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+  requestBodies:
+    PagamentoPixRequestBody:
+      description: Dados do PIX a ser realizado.
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PagamentoPixRequestBody'
+  examples:
+    RequisicaoInvalidaConsultarPixExample:
+      summary: Exemplo de erro de requisição inválida
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        violacoes:
+        - razao: O valor não pode ser nulo
+          propriedade: codigoSolicitacao
+    AcessoNegadoExample:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Acesso Negado
+        status: '403'
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    RequisicaoInvalidaIncluirPixExample:
+      summary: Exemplo de erro de requisição inválida
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        violacoes:
+        - razao: O valor não pode ser nulo
+          propriedade: valor
+    ServicoIndisponivelExample:
+      summary: Exemplo de payload para erro de serviço indisponível
+      value:
+        title: Serviço Indisponível
+        status: '503'
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    NaoAutorizadoExample:
+      summary: Exemplo de payload para acesso não autorizado
+      value:
+        title: Acesso negado
+        status: '401'
+        detail: Login/senha inválido.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+    PagamentoPixResponseAguardandoAprovacao:
+      summary: Exemplo response pagamento Pix Aguardando Aprovação.
+      value:
+        tipoRetorno: APROVACAO
+        codigoSolicitacao: c42f0787-02cb-4b31-827e-459ec9d7ece1
+        dataPagamento: '2022-03-15'
+        dataOperacao: '2022-03-15'
+    PagamentoPixResponseEfetivado:
+      summary: Exemplo response pagamento Pix Efetivado.
+      value:
+        tipoRetorno: PROCESSADO
+        codigoSolicitacao: c42f0787-02cb-4b31-827e-459ec9d7ece1
+        dataPagamento: '2022-03-15'
+        dataOperacao: '2022-03-15'
+    NaoEncontradoExample:
+      summary: Exemplo de payload para erro de objeto não encontrado
+      value:
+        title: Não Encontrado.
+        status: '404'
+        detail: Entidade não encontrada.
+x-refined-from:
+- swagger-banking-yaml.yaml
+- banco-inter-banking-openapi.yml

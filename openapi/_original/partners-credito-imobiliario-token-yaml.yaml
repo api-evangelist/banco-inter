@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  title: Autenticação OAuth
+  version: 1.0.0
+servers:
+  - url: https://ce-partners.uatbi.com.br/oauth
+    description: Servidor OAuth
+paths:
+  /token:
+    post:
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      tags:
+        - Token
+      summary: Obter token oAuth
+      description: >
+        A autenticação OAuth é a mais recente forma de autenticar os novos
+        serviços disponibilizados pelo Inter. O Token gerado será necessário
+        para consumir as APIs do Inter.
+      operationId: Token
+      responses:
+        '200':
+          $ref: '#/components/responses/TokenResponse'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+components:
+  responses:
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+    AcessoNegado:
+      description: >-
+        Requisição de participante autenticado que viola alguma regra de
+        autorização.
+    ServicoIndisponivel:
+      description: >-
+        Serviço não está disponível no momento. Serviço solicitado pode estar em
+        manutenção ou fora da janela de funcionamento.
+    TokenResponse:
+      description: Dados para serem utilizados na requisição
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenResponse'
+  schemas:
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: Token gerado para ser utilizado nas requisições do Inter via Bearer.
+        token_type:
+          type: string
+          description: Tipo do token gerado.
+        expires_in:
+          type: number
+          description: Tempo de uso do token até expirar.
+        scope:
+          type: string
+          description: Para qual escopo foi gerado o token.
+    TokenRequest:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: Client Id obtido no detalhe da tela de aplicações no IB
+        client_secret:
+          type: string
+          description: Client Secret obtido no detalhe da tela de aplicações no IB
+        grant_type:
+          type: string
+          description: GrantType que utilizamos, o default é (client_credentials)
+          default: client_credentials
+        scope:
+          description: >-
+            Escopos cadastrados na tela de aplicações.  OBS: No caso de precisar
+            adicionar mais de um escopo, os escopos devem ser separados com
+            espaço (ce-imp-api:read ce-imp-api:write)   
+
+            Escopos disponíveis: 
+
+            * `ce-imp-api:read`
+
+            * `ce-imp-api:write`
+
+            example: ce-imp-api:write
+          type: string
+      required:
+        - client_id
+        - client_secret
+        - grant_type
+        - scope

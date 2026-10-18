@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-inclui-boleto-response-schema.json",
+  "title": "incluiBoletoResponse",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-cobranca-openapi.yml#/components/schemas/incluiBoletoResponse",
+  "type": "object",
+  "properties": {
+    "seuNumero": {
+      "type": "string",
+      "description": "Seu Número, enviado na requisição para inclusão do título.",
+      "maxLength": 11
+    },
+    "nossoNumero": {
+      "type": "string",
+      "description": "Nosso Número, atribuído automaticamente pelo banco na emissão do título.",
+      "maxLength": 11
+    },
+    "codigoBarras": {
+      "type": "string",
+      "description": "Representação numérica do código de barras do título emitido. (44 dígitos)",
+      "maxLength": 44
+    },
+    "linhaDigitavel": {
+      "type": "string",
+      "description": "Contém os mesmos dados do código de barras dispostos em ordem diferente e acrescido de dígitos verificadores. (47 dígitos)",
+      "maxLength": 47
+    }
+  }
+}

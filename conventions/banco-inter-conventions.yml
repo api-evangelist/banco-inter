@@ -1,0 +1,34 @@
+generated: '2026-10-18'
+method: derived
+source: openapi/banco-inter-banking-openapi.yml
+auth_style: Bearer token with mTLS certificate
+idempotency:
+  coverage: partial
+  scope:
+    - Pix payments in Banking API
+  mechanism: x-id-idempotente header (RFC4122 UUID)
+  retention: Not specified in documentation
+pagination:
+  style: Traditional pagination (pagina, tamanhoPagina) and Scroll pagination (scrollId, hasMore)
+  params:
+    - pagina (page number)
+    - tamanhoPagina (page size)
+    - scrollId (for scroll pagination)
+  response_fields:
+    - hasMore (boolean for scroll pagination)
+    - scrollId (for scroll pagination)
+field_expansion: Not documented
+metadata: Not documented
+request_id_tracing: Not documented
+versioning: URL path versioning (e.g., /v2, /v3)
+error_envelope: RFC 9457 problem+json format
+rate_limit_signaling: HTTP 429 status code
+reversibility:
+  pix_refund: Pix payments can be refunded via devolução endpoints
+  refund_window: Not specified in documentation
+  evidence: https://developers.inter.co/references/pix
+note: |
+  Derived from OpenAPI specifications. Banco Inter supports idempotency for Pix payments via x-id-idempotente header.
+  Two pagination modes: traditional (page-based) and scroll (cursor-based).
+  Uses RFC 9457 problem+json for error responses.
+  Rate limits signaled with HTTP 429 status code.

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-devolucao-schema.json",
+  "title": "Devolução",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-pix-openapi.yml#/components/schemas/Devolucao",
+  "type": "object",
+  "required": [
+    "id",
+    "rtrId",
+    "valor",
+    "horario",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/DevolucaoId"
+    },
+    "rtrId": {
+      "type": "string",
+      "title": "RtrId",
+      "description": "ReturnIdentification que transita na PACS004.",
+      "pattern": "[a-zA-Z0-9]{32}",
+      "minLength": 32,
+      "maxLength": 32
+    },
+    "valor": {
+      "type": "string",
+      "title": "Valor a devolver.",
+      "pattern": "\\d{1,10}\\.\\d{2}",
+      "description": "Valor a devolver."
+    },
+    "horario": {
+      "type": "object",
+      "properties": {
+        "solicitacao": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Horário de solicitação",
+          "description": "Horário no qual a devolução foi solicitada no PSP."
+        },
+        "liquidacao": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Horário de liquidacao",
+          "description": "Horário no qual a devolução foi liquidada no PSP."
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "description": "Status da devolução.",
+      "enum": [
+        "EM_PROCESSAMENTO",
+        "DEVOLVIDO",
+        "NAO_REALIZADO"
+      ]
+    },
+    "motivo": {
+      "type": "string",
+      "title": "Descrição do status.",
+      "description": "# Status da Devolução\n\nCampo opcional que pode ser utilizado pelo PSP recebedor para detalhar os motivos\nde a devolução ter atingido o status em questão.\nPode ser utilizado, por exemplo, para detalhar o motivo de a devolução não ter sido realizada.\n",
+      "maxLength": 140
+    }
+  },
+  "$defs": {
+    "DevolucaoId": {
+      "type": "string",
+      "title": "Id da Devolução",
+      "description": "Id gerado pelo cliente para representar unicamente uma devolução.",
+      "pattern": "[a-zA-Z0-9]{1,35}"
+    }
+  }
+}

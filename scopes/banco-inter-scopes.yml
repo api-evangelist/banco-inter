@@ -1,0 +1,22 @@
+generated: '2026-10-18'
+method: derived
+source: openapi/banco-inter-partners-credito-imobiliario-credito-openapi.yml
+schemes:
+- name: microservice_auth
+  source: openapi/banco-inter-partners-credito-imobiliario-credito-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.cre.uatesb.local/oauth/token
+scopes:
+- scope: ce-imp-api:read
+  description: Permissão para leitura segura
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/banco-inter-partners-credito-imobiliario-credito-openapi.yml
+- scope: ce-imp-api:write
+  description: Permissão para escrita segura
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/banco-inter-partners-credito-imobiliario-credito-openapi.yml

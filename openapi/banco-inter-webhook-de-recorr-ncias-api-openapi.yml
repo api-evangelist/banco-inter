@@ -1,0 +1,644 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Webhook de Recorrências API
+  version: ''
+  description: 'Operations tagged Webhook de Recorrências across 2 of this provider''s published API definitions: swagger-api-pix-automatico-yaml.yaml, banco-inter-pix-automatico-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj.partners.bancointer.com.br/pix/v2
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+  description: Servidor de Sandbox
+tags:
+- name: Webhook de Recorrências
+  description: 'Esta seção apresenta os endpoints relacionados ao gerenciamento do serviço de notificações acerca de recorrências.
+
+
+    ---'
+paths:
+  /webhookrec:
+    put:
+      tags:
+      - Webhook de Recorrências
+      operationId: addWebhookrec
+      summary: Criar WebhookRec
+      description: 'Endpoint destinado a criar um webhook para receber notificações (callbacks) relacionados a recorrências.
+
+
+        Somente recorrências associadas a chave e conta serão notificadas.
+
+
+        Caso o servidor de webhook retorne erro de recebimento do callback, serão realizadas até 4 tentativas com intervalos de 20, 30, 60 e 120 minutos.
+
+        * Escopo requerido: webhookrec.write
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Validar webhook
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/webhookrec
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/webhookrec'
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      requestBody:
+        $ref: '#/components/requestBodies/WebhookRecConfigBody'
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Requisição com formato inválido.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problema'
+              examples:
+                exemplo1:
+                  $ref: '#/components/examples/RequisicaoInvalidaWebhookExample1'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      callbacks:
+        rec:
+          '{$request.body#/webhookUrl}/rec':
+            post:
+              description: ''
+              security: []
+              requestBody:
+                $ref: '#/components/requestBodies/WebhookRecBody'
+              responses:
+                '200':
+                  description: notificação recebida com sucesso
+    get:
+      tags:
+      - Webhook de Recorrências
+      operationId: findWebhookrec
+      summary: Consultar Webhook cadastrado
+      description: 'Endpoint utilizado para recuperar de informações sobre o Webhook cadastrado.
+
+        * Escopo requerido: webhookrec.read
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/webhookrec
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/webhookrec'
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookRecCompleto'
+              examples:
+                response1:
+                  $ref: '#/components/examples/recWebhookResponse1'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    delete:
+      tags:
+      - Webhook de Recorrências
+      operationId: deleteWebhookrec
+      summary: Excluir Webhook
+      description: 'Endpoint destinado ao cancelamento de um webhookRec.
+
+        * Escopo requerido: webhookrec.write
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/webhookrec
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/webhookrec'
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      responses:
+        '204':
+          description: Sucesso
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+components:
+  schemas:
+    Problema:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+          example: https://pix.bcb.gov.br/api/v2/error/NaoEncontrado
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Not found
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        correlationId:
+          type: string
+          description: Identificador de correlação do problema para fins de suporte
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao'
+    TxId:
+      type: string
+      title: Id da Transação
+      description: '# Identificador da transação
+
+
+        O campo txid determina o identificador da transação.
+
+        O objetivo desse campo é ser um elemento que possibilite ao PSP do recebedor apresentar ao usuário recebedor a funcionalidade de conciliação de pagamentos.
+
+
+        O txid é criado exclusivamente pelo usuário recebedor e está sob sua responsabilidade.
+
+        O txid, no contexto de representação de uma cobrança, é único por CPF/CNPJ do usuário recebedor.
+
+        '
+      pattern: '[a-zA-Z0-9]{26,35}'
+    RecEncerramentoCancelamento:
+      type: object
+      title: Informações sobre o cancelamento da recorrência
+      required:
+      - solicitante
+      - codigo
+      - descricao
+      description: Contendo `solicitante`, `codigo` e `descricao` do cancelamento.
+      properties:
+        solicitante:
+          type: string
+          title: Solicitante do cancelamento
+          description: 'Identifica quem solicitou o cancelamento:
+
+            - `PSP_PAGADOR`: Cancelamento solicitado pelo PSP do pagador
+
+            - `USUARIO_PAGADOR`: Cancelamento solicitado pelo usuário pagador
+
+            - `PSP_RECEBEDOR`: Cancelamento solicitado pelo PSP do recebedor
+
+            - `USUARIO_RECEBEDOR`: Cancelamento solicitado pelo usuário recebedor
+
+            '
+          enum:
+          - PSP_PAGADOR
+          - USUARIO_PAGADOR
+          - PSP_RECEBEDOR
+          - USUARIO_RECEBEDOR
+        codigo:
+          type: string
+          title: Código do cancelamento
+          description: 'Razão para a mudança de status. Valores possíveis:
+
+            - **ACCL**: Cancelamento motivado por encerramento de conta
+
+            - **CPCL**: Cancelamento motivado por encerramento de empresa
+
+            - **DCSD**: Cancelamento motivado por falecimento
+
+            - **ERSL**: Cancelamento solicitado pelo usuário recebedor ou pelo seu participante por erro na solicitação de confirmação
+
+            - **FRUD**: Cancelamento motivado por fraude
+
+            - **PCFD**: Cancelamento solicitado pelo PSP recebedor por ausência de resposta à pain.009 dentro do prazo regulamentar
+
+            - **SLCR**: Cancelamento solicitado pelo participante do usuário recebedor porque a mesma recorrência foi confirmada por meio de outra jornada, por exemplo, via QR Code
+
+            - **SLDB**: Cancelamento solicitado pelo usuário recebedor
+
+            '
+          enum:
+          - ACCL
+          - CPCL
+          - DCSD
+          - ERSL
+          - FRUD
+          - PCFD
+          - SLCR
+          - SLDB
+          maxLength: 4
+        descricao:
+          type: string
+          title: Descricao do cancelamento
+          description: Descricao do cancelamento.
+          maxLength: 105
+    WebhookRecSolicitado:
+      type: object
+      title: Webhook Solicitado
+      allOf:
+      - $ref: '#/components/schemas/WebhookRecBase'
+    RecEncerramentoRejeicao:
+      type: object
+      title: Informações sobre a rejeição da recorrência
+      required:
+      - codigo
+      - descricao
+      description: Contendo `codigo` e `descricao` da causa da rejeição.
+      properties:
+        codigo:
+          type: string
+          title: Código da rejeição
+          description: 'Código da rejeição.</br>AC01: Conta não localizada ou não pertencente ao usuário pagador.</br>AC04: Conta transacional do usuário pagador encontra-se encerrada.</br>AC06: Conta transacional do usuário pagador encontra-se bloqueada.</br>AG12: Não é permitido o envio da solicitação de autorização de recorrência, de cancelamento de recorrência, de confirmação de recorrência ou de cancelamento de pain.009 para uma conta transacional na mesma instituição ou em participante que utilize o serviço de liquidação de um mesmo participante liquidante no SPI.</br>AM05: Solicitação de confirmação de recorrência para pagamentos periódicos já confirmada previamente ou com status ''PDNG''.</br>AP01: Divergência no campo de atualização dos dados da recorrência para os pagamentos periódicos e o status da recorrência para os pagamentos periódicos (ex.: falta de sincronização).</br>AP02: CPF/CNPJ do usuário pagador não localizado ou diferente do constante na pain.009 original. Ou, no caso de cancelamento, o CPF/CNPJ usuário pagador não coincide com o contido nos dados da recorrência para os pagamentos periódicos.</br>AP03: Agência do usuário pagador não localizada.</br>AP04: ID da recorrência inválido ou não corresponde ao original.</br>AP05: Status da recorrência para os pagamentos periódicos inconsistente.</br>AP06: CPF/CNPJ do usuário recebedor diferente do constante na pain.009 ou do payload. Ou, no caso de cancelamento, o CPF/CNPJ usuário recebedor não coincide com o contido nos dados da recorrência para os pagamentos periódicos.</br>AP07: Confirmação da recorrência pelo usuário pagador realizada após a expiração ou cancelamento da solicitação de confirmação (pain.009).</br>AP08: Primeiro pagamento imediato associado à recorrência não foi identificado. (Válido apenas para a Jornada 3 de autorização.).</br>AP09: Solicitação de confirmação de recorrência para pagamentos periódicos não foi identificada para viabilizar seu cancelamento.</br>AP10: CPF/CNPJ do solicitante do cancelamento não corresponde à identificação do usuário pagador/recebedor ou do PSP pagador/recebedor contidos na recorrência para os pagamentos periódicos.</br>AP11: ISPB do PSP pagador diverge da informação contida na recorrência para pagamentos periódicos.</br>AP12: ISPB do PSP recebedor diverge da informação contida na recorrência para pagamentos periódicos.</br>AP13: Solicitação de confirmação da recorrência para os pagamentos periódicos rejeitada pelo usuário pagador por não reconhecimento do usuário recebedor.</br>AP14: Solicitação de confirmação da recorrência para os pagamentos periódicos rejeitada pelo usuário pagador por não ter interesse no uso do Pix Automático para o usuário recebedor.</br>AP15: Solicitação de confirmação da recorrência para os pagamentos periódicos rejeitada pelo participante do usuário pagador que optou por não oferecer uso do Pix Automático para cliente pessoa jurídica.</br>CH16: Preenchimento do conteúdo da mensagem incorreto ou incompatível com as regras de negócio.</br>DS27: Participante não se encontra cadastrado ou ainda não iniciou a operação no SPI.</br>MD01: Recorrência objeto da solicitação de cancelamento não existe. Não deve ser utilizado para solicitações de cancelamento de pain.009 com status = ''PDNG''. Ou seja, uma recorrência com status = ''PDNG'' deve ser considerada como uma recorrência existente.</br>MD20: Recorrência objeto da solicitação de cancelamento já expirou.</br>RC09: ISPB do participante do usuário pagador inválido ou inexistente.</br>RC10: ISPB do participante do usuário recebedor inválido ou inexistente.'
+          enum:
+          - AC01
+          - AC04
+          - AC06
+          - AG12
+          - AM05
+          - AP01
+          - AP02
+          - AP03
+          - AP04
+          - AP05
+          - AP06
+          - AP07
+          - AP08
+          - AP09
+          - AP10
+          - AP11
+          - AP12
+          - AP13
+          - AP14
+          - AP15
+          - CH16
+          - DS27
+          - MD01
+          - MD20
+          - RC09
+          - RC10
+          maxLength: 4
+        descricao:
+          type: string
+          title: Descricao da rejeição
+          description: Descricao da causa da rejeição
+          maxLength: 105
+    WebhookRecBase:
+      type: object
+      required:
+      - webhookUrl
+      title: Webhook Base
+      properties:
+        webhookUrl:
+          type: string
+          title: URL Webhook
+          format: uri
+          example: https://pix.example.com/api/webhookrec/
+    RecEncerramento:
+      type: object
+      title: Detalhamento do encerramento da recorrência.
+      properties:
+        encerramento:
+          type: object
+          description: Detalha o encerramento da recorrência, seja por `rejeicao` ou `cancelamento`
+          properties:
+            rejeicao:
+              $ref: '#/components/schemas/RecEncerramentoRejeicao'
+            cancelamento:
+              $ref: '#/components/schemas/RecEncerramentoCancelamento'
+    RecAtivacaoJornada:
+      type: object
+      required:
+      - txid
+      title: Dados de confirmação da jornada e início da recorrência
+      description: Contendo `txid`
+      properties:
+        txid:
+          $ref: '#/components/schemas/TxId'
+    WebhookRecCompleto:
+      type: object
+      required:
+      - webhookUrl
+      title: Webhook Base
+      properties:
+        webhookUrl:
+          type: string
+          title: URL Webhook
+          format: uri
+          example: https://pix.example.com/api/webhookrec/
+        criacao:
+          type: string
+          format: date-time
+          title: Data de Criação
+          description: Data e hora em que o webhook foi cadastrado. Respeita RFC 3339.
+          readOnly: true
+    RecNotification:
+      type: object
+      title: Recorrência Notificada
+      required:
+      - idRec
+      - status
+      - atualizacao
+      description: Atributos de Notificação de Recorrência
+      allOf:
+      - type: object
+        properties:
+          idRec:
+            $ref: '#/components/schemas/RecId'
+      - $ref: '#/components/schemas/RecStatus'
+      - $ref: '#/components/schemas/RecAtualizacao'
+      - $ref: '#/components/schemas/RecEncerramento'
+      - $ref: '#/components/schemas/RecAtivacao'
+    RecStatus:
+      type: object
+      title: Status da Recorrência
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          title: Status do registro da recorrência
+          description: 'Status do registro da recorrência:
+
+            - `CRIADA`: Recorrência criada, aguardando aprovação do pagador
+
+            - `APROVADA`: Recorrência aprovada pelo pagador e ativa
+
+            - `REJEITADA`: Recorrência rejeitada pelo pagador
+
+            - `EXPIRADA`: Recorrência expirou sem aprovação
+
+            - `CANCELADA`: Recorrência cancelada pelo recebedor ou pagador
+
+            '
+          enum:
+          - CRIADA
+          - APROVADA
+          - REJEITADA
+          - EXPIRADA
+          - CANCELADA
+    RecAtualizacao:
+      type: object
+      title: Histórico de atualização da recorrência.
+      required:
+      - atualizacao
+      properties:
+        atualizacao:
+          type: array
+          title: Histórico de Status
+          description: Contendo `status`e `data`.
+          items:
+            type: object
+            required:
+            - status
+            - data
+            properties:
+              status:
+                type: string
+                title: Status da recorrência
+                description: 'Status da recorrência:
+
+                  - `CRIADA`: Recorrência criada, aguardando aprovação do pagador
+
+                  - `APROVADA`: Recorrência aprovada pelo pagador e ativa
+
+                  - `REJEITADA`: Recorrência rejeitada pelo pagador
+
+                  - `EXPIRADA`: Recorrência expirou sem aprovação
+
+                  - `CANCELADA`: Recorrência cancelada pelo recebedor ou pagador
+
+                  '
+                enum:
+                - CRIADA
+                - APROVADA
+                - REJEITADA
+                - EXPIRADA
+                - CANCELADA
+              data:
+                type: string
+                format: date-time
+                description: Data e hora do registro de status atualizado. Respeita RFC 3339.
+    Violacao:
+      type: object
+      title: Violações
+      properties:
+        razao:
+          type: string
+          title: Descrição do erro
+          description: Descrição do erro
+          example: Valor da cobrança não pode ser 0.00
+        propriedade:
+          type: string
+          title: Nome da propriedade
+          description: Nome da propriedade
+          example: cob.chave
+        valor:
+          type: string
+          title: Valor da propriedade
+          description: Valor da propriedade
+          example: 61996671234
+    RecId:
+      type: string
+      title: ID Recorrência
+      description: "# Identificador da Recorrência\n\nRegra de formação:\n\n  - RAxxxxxxxxyyyyMMddzzzzzzzzzzz (29 caracteres; \"case sensitive\", isso\né, diferencia letras maiúsculas e minúsculas), sendo:\n  - \"R\":  fixo (1 caractere). \"R\" para a recorrência criada dentro do\nPix;\n  - \"A\": identificação da possibilidade de novas tentativas, sendo\npossíveis os valores \"R\" ou \"N\" (1 caractere). \"R\" caso a recorrência permita novas tentativas de pagamento pós vencimento, ou \"N\" caso não permita novas tentativas.\n  - \"xxxxxxxx\":  identificação do agente que presta serviço para o\nusuário recebedor que gerou o <Id>, podendo ser: o ISPB do participante direto, o ISPB do participante indireto ou os 8 primeiros dígitos do CNPJ do prestador de serviço de iniciação (8 caracteres numéricos [0-9]);\n  - \"yyyyMMdd\":  data (8 caracteres) de criação da recorrência;\n  - \"zzzzzzzzzzz\": sequencial criado pelo agente que gerou o <Id>\n(11 caracteres alfanuméricos [a-z|A-Z|0-9]). Deve ser único dentro de cada \"yyyyMMdd\".\nDessa forma, o ID da recorrência deve ser formado de acordo com um dos tipos a seguir:\n- \"RRxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que permite novas tentativas de pagamento pós vencimento; ou\n- \"RNxxxxxxxxyyyyMMddzzzzzzzzzzz\"; para recorrência criada dentro do Pix e que não permite novas tentativas de pagamento pós vencimento.\n"
+      pattern: '[a-zA-Z0-9]{29}'
+      minLength: 29
+      maxLength: 29
+      example: RR1234567820240115abcdefghijk
+    RecAtivacao:
+      type: object
+      title: Dados relacionados à confirmação da ativação da recorrência.
+      properties:
+        ativacao:
+          $ref: '#/components/schemas/RecAtivacaoConfirmacao'
+    RecAtivacaoConfirmacao:
+      type: object
+      title: Dados relacionados à confirmação da ativação da recorrência.
+      required:
+      - tipoJornada
+      description: Contendo `tipojornada`e `dadosJornada`
+      properties:
+        tipoJornada:
+          type: string
+          title: Jornada de ativação
+          description: 'Dado relacionado ao caminho percorrido pelo processo de adesão à recorrência pelo usuário pagador:
+
+            - `JORNADA_1`: Usuário pagador aceitou a recorrência através de notificação externa.
+
+            - `JORNADA_2`: Usuário pagador aceitou a recorrência através de leitura de QR Code de recorrência.
+
+            - `JORNADA_3`: Usuário pagador iniciou a recorrência através de leitura de QR Code composto e pagamento de cobrança imediata.
+
+            - `JORNADA_4`: Usuário pagador escolheu aderir à recorrência através de leitura de QR Code composto relacionado à cobrança com vencimento.
+
+            - `AGUARDANDO_DEFINICAO`: Valor inicial posterior à criação e anterior à ativação da recorrência.
+
+            '
+          enum:
+          - JORNADA_1
+          - JORNADA_2
+          - JORNADA_3
+          - JORNADA_4
+          - AGUARDANDO_DEFINICAO
+        dadosJornada:
+          $ref: '#/components/schemas/RecAtivacaoJornada'
+  parameters:
+    xContaCorrente:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação. Necessário somente quando a aplicação estiver associada a mais de uma conta corrente. Enviar apenas números (incluindo o dígito), e não enviar zeros a esquerda.
+      schema:
+        type: string
+        pattern: '[1-9][0-9]*'
+  requestBodies:
+    WebhookRecConfigBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WebhookRecSolicitado'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/recWebhookBody1'
+    WebhookRecBody:
+      description: Dados para notificação.
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              recs:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecNotification'
+          example:
+            recs:
+            - idRec: RR1026652320240821lab77511abf
+              status: APROVADA
+              atualizacao:
+              - status: CRIADA
+                data: '2024-08-20T10:12:07.567Z'
+              - status: APROVADA
+                data: '2024-08-22T12:43:53.337Z'
+              ativacao:
+                tipoJornada: JORNADA_3
+                dadosJornada:
+                  txid: r9eFIFmwcZ55Nm4RsKZAAtIvvCrlcNN6
+  examples:
+    NaoEncontradoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/NaoEncontrado
+        title: Não Encontrado
+        status: 404
+        detail: Entidade não encontrada.
+    AcessoNegadoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/AcessoNegado
+        title: Acesso Negado
+        status: 403
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    ServicoIndisponivelExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/ServicoIndisponivel
+        title: Serviço Indisponível
+        status: 503
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    recWebhookResponse1:
+      summary: Exemplo de webhook de recorrência
+      value:
+        webhookUrl: https://usuario.recebedor.com/api/webhookrec/
+        criacao: '2023-12-20T12:51:16.485Z'
+    RequisicaoInvalidaWebhookExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/WebhookOperacaoInvalida
+        title: Webhook inválido.
+        status: 400
+        detail: A presente requisição busca criar um webhook sem respeitar o schema ou, ainda, com sentido semanticamente inválido.
+    recWebhookBody1:
+      summary: Exemplo de criação de webhook de recorrência
+      value:
+        webhookUrl: https://usuario.recebedor.com/api/webhookrec/
+  responses:
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/NaoEncontradoExample1'
+    ServicoIndisponivel:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/ServicoIndisponivelExample1'
+    AcessoNegado:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/AcessoNegadoExample1'
+x-refined-from:
+- swagger-api-pix-automatico-yaml.yaml
+- banco-inter-pix-automatico-openapi.yml

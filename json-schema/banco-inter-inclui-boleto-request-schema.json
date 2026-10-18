@@ -1,0 +1,338 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-inclui-boleto-request-schema.json",
+  "title": "incluiBoletoRequest",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-cobranca-openapi.yml#/components/schemas/incluiBoletoRequest",
+  "type": "object",
+  "required": [
+    "seuNumero",
+    "dataVencimento",
+    "valorNominal",
+    "pagador",
+    "numDiasAgenda"
+  ],
+  "properties": {
+    "seuNumero": {
+      "type": "string",
+      "description": "Campo Seu Número do título",
+      "maxLength": 15
+    },
+    "valorNominal": {
+      "type": "number",
+      "description": "Valor Nominal do título\n\nO valor nominal deve ser maior ou igual à R$2.50\n",
+      "minimum": 2.5,
+      "maximum": 99999999.99
+    },
+    "dataVencimento": {
+      "type": "string",
+      "description": "Data de vencimento do título\n\nFormato aceito: YYYY-MM-DD\n"
+    },
+    "numDiasAgenda": {
+      "type": "integer",
+      "description": "Número de dias corridos após o vencimento para o cancelamento efetivo automático do boleto. (de 0 até 60)"
+    },
+    "pagador": {
+      "$ref": "#/$defs/pagador"
+    },
+    "mensagem": {
+      "$ref": "#/$defs/mensagem"
+    },
+    "desconto1": {
+      "$ref": "#/$defs/desconto"
+    },
+    "desconto2": {
+      "$ref": "#/$defs/desconto"
+    },
+    "desconto3": {
+      "$ref": "#/$defs/desconto"
+    },
+    "multa": {
+      "$ref": "#/$defs/multa"
+    },
+    "mora": {
+      "$ref": "#/$defs/mora"
+    },
+    "beneficiarioFinal": {
+      "$ref": "#/$defs/beneficiarioFinal"
+    }
+  },
+  "$defs": {
+    "beneficiarioFinal": {
+      "required": [
+        "nome",
+        "cpfCnpj",
+        "tipoPessoa",
+        "cep",
+        "endereco",
+        "bairro",
+        "cidade",
+        "uf"
+      ],
+      "type": "object",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "description": "Nome do beneficiário final",
+          "maxLength": 100
+        },
+        "cpfCnpj": {
+          "type": "string",
+          "description": "CPF/CNPJ do beneficiário final do título\nCNPJ: NNNNNNNNNFFFFCC\nCPF : 0000NNNNNNNNNCC,\nonde\n__NNNNNNNNN__ é a raiz do CNPJ/CPF\n__FFFF__ = filial do CNPJ\n__CC__ = dígitos de controle\n"
+        },
+        "tipoPessoa": {
+          "type": "string",
+          "description": "Tipo do beneficiário final:\n* FISICA - Pessoa Física\n* JURIDICA - Pessoa Jurídica\n"
+        },
+        "cep": {
+          "type": "string",
+          "description": "CEP do beneficiário final"
+        },
+        "endereco": {
+          "type": "string",
+          "description": "Endereço (logradouro) do beneficiário final",
+          "maxLength": 100
+        },
+        "bairro": {
+          "type": "string",
+          "description": "Bairro do beneficiário final",
+          "maxLength": 60,
+          "default": ""
+        },
+        "cidade": {
+          "type": "string",
+          "description": "Cidade do beneficiário final",
+          "maxLength": 60
+        },
+        "uf": {
+          "$ref": "#/$defs/enumUF"
+        }
+      }
+    },
+    "desconto": {
+      "required": [
+        "codigoDesconto",
+        "valor",
+        "taxa"
+      ],
+      "properties": {
+        "codigoDesconto": {
+          "type": "string",
+          "description": "Código de Desconto do título.\n* `NAOTEMDESCONTO` - Não tem desconto.\n* `VALORFIXODATAINFORMADA` - Valor fixo até a data informada.\n* `PERCENTUALDATAINFORMADA` - Percentual até a data informada.\n"
+        },
+        "data": {
+          "type": "string",
+          "description": "Data de Desconto do título.\n\nObrigatório para códigos de desconto VALORFIXODATAINFORMADA e PERCENTUALDATAINFORMADA. Não informar para os\ndemais.\n\nFormato aceito: YYYY-MM-DD\n"
+        },
+        "taxa": {
+          "type": "number",
+          "description": "Taxa Percentual de Desconto do título.\n\nObrigatório para o código de desconto PERCENTUALDATAINFORMADA.\nPara os demais informar 0.\n"
+        },
+        "valor": {
+          "type": "number",
+          "description": "Valor de Desconto, expresso na moeda do título.\n\nObrigatório para o código de desconto VALORFIXODATAINFORMADA.\nPara os demais informar 0.\n"
+        }
+      }
+    },
+    "enumUF": {
+      "type": "string",
+      "enum": [
+        "AC",
+        "AL",
+        "AP",
+        "AM",
+        "BA",
+        "CE",
+        "DF",
+        "ES",
+        "GO",
+        "MA",
+        "MT",
+        "MS",
+        "MG",
+        "PA",
+        "PB",
+        "PR",
+        "PE",
+        "PI",
+        "RJ",
+        "RN",
+        "RS",
+        "RO",
+        "RR",
+        "SC",
+        "SP",
+        "SE",
+        "TO"
+      ],
+      "description": "UF"
+    },
+    "mensagem": {
+      "properties": {
+        "linha1": {
+          "type": "string",
+          "description": "Linha 1 do campo de texto do título",
+          "maxLength": 78
+        },
+        "linha2": {
+          "type": "string",
+          "description": "Linha 2 do campo de texto do título",
+          "maxLength": 78
+        },
+        "linha3": {
+          "type": "string",
+          "description": "Linha 3 do campo de texto do título",
+          "maxLength": 78
+        },
+        "linha4": {
+          "type": "string",
+          "description": "Linha 4 do campo de texto do título",
+          "maxLength": 78
+        },
+        "linha5": {
+          "type": "string",
+          "description": "Linha 5 do campo de texto do título",
+          "maxLength": 78
+        }
+      }
+    },
+    "mora": {
+      "required": [
+        "codigoMora"
+      ],
+      "properties": {
+        "codigoMora": {
+          "type": "string",
+          "description": "Código de Mora do título.\n* `VALORDIA` - Valor ao dia\n* `TAXAMENSAL` - Taxa mensal\n* `ISENTO` - Isento\n"
+        },
+        "data": {
+          "type": "string",
+          "description": "Data da Mora do título.\n\nObrigatório se informado código de mora VALORDIA, TAXAMENSAL.\n\nDeve ser maior que o vencimento e marca a data de início de cobrança\nde mora (incluindo essa data)\n\nFormato aceito: YYYY-MM-DD\n"
+        },
+        "taxa": {
+          "type": "number",
+          "description": "Percentual de Mora do título.\n\nObrigatória se informado código de mora TAXAMENSAL\n"
+        },
+        "valor": {
+          "type": "number",
+          "description": "Valor de Mora expresso na moeda do título.\n\nObrigatório se informado código de mora TAXAMENSAL\n\nDeve ser 0 para código de mora ISENTO\n"
+        }
+      }
+    },
+    "multa": {
+      "required": [
+        "codigoMulta"
+      ],
+      "properties": {
+        "codigoMulta": {
+          "type": "string",
+          "description": "Código de Multa do título.\n* `NAOTEMMULTA` - Não tem multa\n* `VALORFIXO` – Valor fixo\n* `PERCENTUAL` - Percentual\n"
+        },
+        "data": {
+          "type": "string",
+          "description": "Data da Multa do título.\n\nObrigatório se informado código de multa VALORFIXO ou PERCENTUAL.\n\nDeve ser maior que o vencimento e marca a data de início de cobrança\nde multa (incluindo essa data)\n\nFormato aceito: YYYY-MM-DD\n"
+        },
+        "taxa": {
+          "type": "number",
+          "description": "Taxa Percentual de Multa do título. Obrigatória se informado código\nde multa PERCENTUAL\n\nDeve ser 0 para código de multa NAOTEMMULTA\n"
+        },
+        "valor": {
+          "type": "number",
+          "description": "Valor de Multa expresso na moeda do título.\n\nObrigatório se informado código de multa VALORFIXO\n\nDeve ser 0 para código de multa NAOTEMMULTA\n"
+        }
+      }
+    },
+    "pagador": {
+      "type": "object",
+      "required": [
+        "cpfCnpj",
+        "nome",
+        "tipoPessoa",
+        "cep",
+        "endereco",
+        "cidade",
+        "uf"
+      ],
+      "properties": {
+        "cpfCnpj": {
+          "type": "string",
+          "description": "CPF/CNPJ do pagador do título\n\nCNPJ: NNNNNNNNNFFFFCC\n\nCPF : 0000NNNNNNNNNCC,\n\nonde\n\n__NNNNNNNNN__ é a raiz do CNPJ/CPF\n\n__FFFF__ = filial do CNPJ\n\n__CC__ = dígitos de controle\n",
+          "minLength": 11,
+          "maxLength": 14
+        },
+        "tipoPessoa": {
+          "type": "string",
+          "description": "Tipo do pagador:\n* `FISICA` - Pessoa Física\n* `JURIDICA` - Pessoa Jurídica\n"
+        },
+        "nome": {
+          "type": "string",
+          "description": "Nome do pagador",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "endereco": {
+          "type": "string",
+          "description": "Endereço do pagador",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "numero": {
+          "type": "string",
+          "description": "Número no logradouro do pagador",
+          "maxLength": 10,
+          "default": ""
+        },
+        "complemento": {
+          "type": "string",
+          "description": "Complemento do endereço do pagador",
+          "maxLength": 30,
+          "default": ""
+        },
+        "bairro": {
+          "type": "string",
+          "description": "Bairro do pagador",
+          "maxLength": 60,
+          "default": ""
+        },
+        "cidade": {
+          "type": "string",
+          "description": "Cidade do pagador",
+          "maxLength": 60,
+          "minLength": 1
+        },
+        "uf": {
+          "type": "string",
+          "description": "UF do pagador",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "cep": {
+          "type": "string",
+          "description": "CEP do pagador",
+          "minLength": 8,
+          "maxLength": 8
+        },
+        "email": {
+          "type": "string",
+          "default": "",
+          "description": "E-mail do pagador",
+          "maxLength": 50
+        },
+        "ddd": {
+          "type": "string",
+          "default": "",
+          "description": "DDD do telefone do pagador",
+          "maxLength": 2
+        },
+        "telefone": {
+          "type": "string",
+          "default": "",
+          "description": "Telefone do pagador",
+          "maxLength": 9
+        }
+      }
+    }
+  }
+}

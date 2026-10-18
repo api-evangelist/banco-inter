@@ -1,0 +1,2254 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Webhook API
+  version: ''
+  description: 'Operations tagged Webhook across 6 of this provider''s published API definitions: swagger-banking-yaml.yaml, swagger-cobranca-bolepix-yaml.yaml, swagger-cobranca-yaml.yaml, banco-inter-banking-openapi.yml, banco-inter-cobranca-bolepix-openapi.yml, banco-inter-cobranca-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj.partners.bancointer.com.br/banking/v2
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+  description: Servidor de Sandbox
+- url: https://cdpj.partners.bancointer.com.br/cobranca/v3
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/cobranca/v3
+  description: Servidor de Sandbox
+- url: https://cdpj.partners.bancointer.com.br/cobranca/v2
+  description: Servidor de Produção
+tags:
+- name: Webhook
+paths:
+  /webhooks/{tipoWebhook}:
+    put:
+      summary: Criar webhook
+      description: 'Método destinado a criar um webhook para receber notificações (callbacks). O tipo de notificação recebida depende do "tipo webhook" (sessão PATH PARAMS)
+
+        selecionado no cadastro. Para cada tipo será necessário um cadastro em separado.
+
+
+        Caso o servidor de webhook retorne erro de recebimento do callback, serão realizadas até 4 tentativas com intervalos de 5, 10, 30 e 60 minutos.
+
+
+        * Escopo requerido: webhook-banking.write
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        Validar webhook
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/webhooks/{tipoWebhook}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/webhooks/{tipoWebhook}'
+      operationId: putWebhookBanking
+      tags:
+      - Webhook
+      parameters:
+      - $ref: '#/components/parameters/tipoWebhookPath'
+      - $ref: '#/components/parameters/xContaCorrente'
+      requestBody:
+        $ref: '#/components/requestBodies/WebhookRequestBody'
+      callbacks:
+        pixPagamentoList:
+          '{$request.body#/webhookUrl/pix-pagamento}':
+            summary: Retorno de callbacks para o tipoWebhook pix-pagamento.
+            post:
+              parameters:
+              - in: header
+                name: x-conta-corrente
+                schema:
+                  type: string
+                  pattern: ^[1-9][0-9]*$
+                  example: '13525622'
+                description: Conta corrente relacionada ao callback. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/CallbackPixPagamentoModel'
+                    examples:
+                      CallbackPixPagamentoChave:
+                        $ref: '#/components/examples/CallbackPixPagamentoChave'
+                      CallbackPixPagamentoDadosBancarios:
+                        $ref: '#/components/examples/CallbackPixPagamentoDadosBancarios'
+              responses:
+                '200':
+                  description: Notificação recebida com sucesso
+        pagamentoBoletoList:
+          '{$request.body#/webhookUrl/boleto-pagamento}':
+            summary: Retorno de callbacks para o tipoWebhook boleto-pagamento.
+            post:
+              parameters:
+              - in: header
+                name: x-conta-corrente
+                schema:
+                  type: string
+                  pattern: ^[1-9][0-9]*$
+                  example: '13525622'
+                description: Conta corrente relacionada ao callback. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/CallbackPagamentoBoletoModel'
+                    examples:
+                      CallbackPagamentoBoletoRealizado:
+                        $ref: '#/components/examples/CallbackPagamentoBoletoRealizado'
+                      CallbackPagamentoBoletoAgendado:
+                        $ref: '#/components/examples/CallbackPagamentoBoletoAgendado'
+                      CallbackPagamentoBoletoComErro:
+                        $ref: '#/components/examples/CallbackPagamentoBoletoComErro'
+                      CallbackPagamentoBoletoCancelado:
+                        $ref: '#/components/examples/CallbackPagamentoBoletoCancelado'
+              responses:
+                '200':
+                  description: Notificação recebida com sucesso
+      responses:
+        '204':
+          description: Sucesso
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaIncluirWebhook'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    get:
+      summary: Obter webhook cadastrado
+      description: 'Obtém o webhook cadastrado, caso exista.
+
+
+        * Escopo requerido: webhook-banking.read
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/webhooks/{tipoWebhook}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/webhooks/{tipoWebhook}'
+      tags:
+      - Webhook
+      operationId: getWebhookBanking
+      parameters:
+      - $ref: '#/components/parameters/tipoWebhookPath'
+      - $ref: '#/components/parameters/xContaCorrente'
+      responses:
+        '200':
+          description: Objeto de retorno do webhoo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookModel'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    delete:
+      summary: Excluir webhook
+      description: 'Exclui o webhook.
+
+
+        * Escopo requerido: webhook-banking.write
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/webhooks/{tipoWebhook}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/webhooks/{tipoWebhook}'
+      operationId: deleteWebhookBanking
+      tags:
+      - Webhook
+      parameters:
+      - $ref: '#/components/parameters/tipoWebhookPath'
+      - $ref: '#/components/parameters/xContaCorrente'
+      responses:
+        '204':
+          description: Sucesso
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /webhooks/{tipoWebhook}/callbacks:
+    get:
+      summary: Consultar callbacks
+      description: 'Retorna as requisições de callbacks ordenadas pela data de disparo (decrescente).
+
+        Permite consultar erros no envio de callbacks.
+
+
+        * Escopo requerido: webhook-banking.read
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/webhooks/{tipoWebhook}/callbacks
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/webhooks/{tipoWebhook}/callbacks'
+      tags:
+      - Webhook
+      operationId: callbacksFilter
+      parameters:
+      - $ref: '#/components/parameters/tipoWebhookPath'
+      - $ref: '#/components/parameters/xContaCorrente'
+      - name: dataHoraInicio
+        in: query
+        required: true
+        description: 'Formato aceito: yyyy-MM-dd''T''HH:mm[:ss][.SSS]XXX'
+        example: 2023-06-01T00:00Z ou 2023-06-01T00:00:00.000Z
+        x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm[:ss][.SSS]XXX
+        schema:
+          type: string
+          format: date-time
+      - name: dataHoraFim
+        description: 'Formato aceito: yyyy-MM-dd''T''HH:mm[:ss][.SSS]XXX'
+        in: query
+        example: 2023-06-01T00:00Z ou 2023-06-01T00:00:00.000Z
+        required: true
+        x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm[:ss][.SSS]XXX
+        schema:
+          type: string
+          format: date-time
+      - name: pagina
+        in: query
+        schema:
+          type: integer
+          description: Posição da página na lista de dados
+          default: 0
+      - name: tamanhoPagina
+        in: query
+        schema:
+          type: integer
+          description: Tamanho da página
+          default: 20
+          maximum: 50
+          minimum: 10
+      - name: endToEnd
+        in: query
+        schema:
+          type: string
+          description: EndToEnd do callback, caso queira filtrar as notificações de algum Pix Pagamento específico. **Exclusivo para o PATH PARAMETERS pix-pagamento**.
+      - name: codigoTransacao
+        in: query
+        schema:
+          type: string
+          description: CodigoTransacao do callback, caso queira filtrar as notificações de algum Pagamento Boleto específico. **Exclusivo para o PATH PARAMETERS boleto-pagamento**.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallbackAttemptPage'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaConsultarCallback'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /webhooks/{tipoWebhook}/callbacks/retry:
+    post:
+      tags:
+      - Webhook
+      summary: Reenviar callbacks
+      description: 'Método utilizado para reenviar uma mensagem de callback de um pagamento de boleto ou pagamento pix, através de seu código identificador:
+
+        * boleto-pagamento - codigoTransacao
+
+        * pix-pagamento - codigoSolicitacao
+
+
+        A funcionalidade permite o envio de até 50 codigos identificadores, por tipo de webhook, para o reenvio de seus respectivos callbacks.
+
+
+        * Escopo requerido: webhook-banking.write
+
+        * rate limit:
+
+
+        * 5 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/webhooks/{tipoWebhook}/callbacks/retry'
+      operationId: retryCallback
+      servers:
+      - url: https://cdpj.partners.bancointer.com.br/banking/v2
+        description: Servidor de Produção
+      parameters:
+      - $ref: '#/components/parameters/tipoWebhookPath'
+      - $ref: '#/components/parameters/xContaCorrente'
+      requestBody:
+        $ref: '#/components/requestBodies/RetryCallbacksRequest'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/RetryCallbackResponse'
+              examples:
+                exemplo1:
+                  $ref: '#/components/examples/ExemploRetryCallbackResponse'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaRetryCallback'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /cobrancas/webhook:
+    put:
+      tags:
+      - Webhook
+      description: 'Método destinado a criar um webhook para receber notificações (callbacks) de cobranças pagas, canceladas e expiradas.
+
+
+        Caso o servidor de webhook retorne erro de recebimento do callback, serão realizadas até 4 tentativas com intervalos de 20, 30, 60 e 120 minutos.
+
+
+        * Escopo requerido: boleto-cobranca.write
+
+        * rate limit:
+
+
+        * 5 chamadas por minuto
+
+
+        * 5 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        Validar webhook
+
+
+        https://cdpj.partners.bancointer.com.br/cobranca/v3/cobrancas/webhook
+
+
+        https://cdpj-sandbox.partners.uatinter.co/cobranca/v3/cobrancas/webhook'
+      summary: Criar ou editar um webhook
+      operationId: webhookPut
+      requestBody:
+        $ref: '#/components/requestBodies/WebhookConfigBody'
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente_2'
+      responses:
+        '204':
+          description: Sucesso
+          content: {}
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel_2'
+      callbacks:
+        listaCobrancas:
+          '{$request.body#/webhookUrl}':
+            post:
+              parameters:
+              - in: header
+                name: x-conta-corrente
+                schema:
+                  type: string
+                  pattern: ^[1-9][0-9]*$
+                  example: '13525622'
+                description: Conta corrente relacionada ao callback. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+              requestBody:
+                $ref: '#/components/requestBodies/WebhookCobrancaCallbackBody'
+              responses:
+                '200':
+                  description: Notificação recebida com sucesso
+    get:
+      tags:
+      - Webhook
+      description: 'Obtém o webhook cadastrado, caso exista.
+
+
+        * Escopo requerido: boleto-cobranca.read
+
+        * rate limit:
+
+
+        * 5 chamadas por minuto
+
+
+        * 5 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/cobranca/v3/cobrancas/webhook
+
+
+        https://cdpj-sandbox.partners.uatinter.co/cobranca/v3/cobrancas/webhook'
+      summary: Obter webhook cadastrado
+      operationId: webhookGet
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente_2'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookCompleto'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado_2'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel_2'
+    delete:
+      tags:
+      - Webhook
+      description: 'Exclui o webhook.
+
+
+        * Escopo requerido: boleto-cobranca.write
+
+        * rate limit:
+
+
+        * 5 chamadas por minuto
+
+
+        * 5 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/cobranca/v3/cobrancas/webhook
+
+
+        https://cdpj-sandbox.partners.uatinter.co/cobranca/v3/cobrancas/webhook'
+      summary: Excluir webhook
+      operationId: webhookDelete
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente_2'
+      responses:
+        '204':
+          description: Sucesso
+          content: {}
+        '404':
+          $ref: '#/components/responses/NaoEncontrado_2'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel_2'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/cobranca/v3
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/cobranca/v3
+      description: Servidor de Sandbox
+  /cobrancas/webhook/callbacks:
+    get:
+      tags:
+      - Webhook
+      summary: Consulta de callbacks enviados
+      description: 'Retorna as requisições de callbacks ordenado pela data de disparo (decrescente)
+
+
+        * Escopo requerido: boleto-cobranca.read
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/cobranca/v3/cobrancas/webhook/callbacks
+
+
+        https://cdpj-sandbox.partners.uatinter.co/cobranca/v3/cobrancas/webhook/callbacks'
+      operationId: getCobrancasWebhookCallbacks
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente_2'
+      - name: dataHoraInicio
+        in: query
+        required: true
+        description: 'Formato aceito: yyyy-MM-dd''T''HH:mm[:ss][.SSS]XXX'
+        example: 2023-06-01T00:00Z ou 2023-06-01T00:00:00.000Z
+        x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm[:ss][.SSS]XXX
+        schema:
+          type: string
+          format: date-time
+      - name: dataHoraFim
+        description: 'Formato aceito: yyyy-MM-dd''T''HH:mm[:ss][.SSS]XXX'
+        in: query
+        example: 2023-06-01T00:00Z ou 2023-06-01T00:00:00.000Z
+        required: true
+        x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm[:ss][.SSS]XXX
+        schema:
+          type: string
+          format: date-time
+      - name: pagina
+        in: query
+        schema:
+          type: integer
+          description: Posição da página na lista de dados
+          default: 0
+      - name: tamanhoPagina
+        in: query
+        schema:
+          type: integer
+          description: Tamanho da página
+          default: 20
+          maximum: 50
+          minimum: 10
+      - name: codigoSolicitacao
+        in: query
+        schema:
+          type: string
+          format: uuid
+          description: Codigo único da cobrança
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallbackAttemptPage_2'
+              examples:
+                exemplo1:
+                  $ref: '#/components/examples/exemploListaCallback'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalida'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: callbacksFilter
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/cobranca/v3
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/cobranca/v3
+      description: Servidor de Sandbox
+  /webhook/callbacks/retry:
+    post:
+      tags:
+      - Webhook
+      summary: Reenviar callbacks
+      description: 'Método utilizado para reenviar uma mensagem de callback de uma cobrança através de seu código identificador(codigoSolicitacao).
+
+
+        A funcionalidade permite o envio de até 50 codigos identificadores, para o reenvio de seus respectivos callbacks.
+
+
+        * Escopo requerido: boleto-cobranca.write
+
+        * rate limit:
+
+
+        * 5 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/cobranca/v3/cobrancas/webhook/callbacks/retry'
+      operationId: postWebhookCallbacksRetry
+      servers:
+      - url: https://cdpj.partners.bancointer.com.br/cobranca/v3
+        description: Servidor de Produção
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente_2'
+      requestBody:
+        $ref: '#/components/requestBodies/RetryCallbacksRequest'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/RetryCallbackResponse_2'
+              examples:
+                exemplo1:
+                  $ref: '#/components/examples/exemploRetryCallbackResponse'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaRetryCallback'
+        '403':
+          $ref: '#/components/responses/AcessoNegado_2'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado_2'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: retryCallback
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/cobranca/v3
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/cobranca/v3
+      description: Servidor de Sandbox
+  /boletos/webhook:
+    put:
+      summary: Criar webhook
+      description: 'Método destinado a criar um webhook para receber notificações (callbacks) de boletos pagos, cancelados e expirados.
+
+
+        Caso o servidor de webhook retorne erro de recebimento do callback, serão realizadas até 4 tentativas com intervalos de 20, 30, 60 e 120 minutos.
+
+
+        * Escopo requerido: boleto-cobranca.write
+
+        * rate limit: 10 chamadas por minuto
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/cobranca/v2/boletos/webhook'
+      tags:
+      - Webhook
+      operationId: putBoletosWebhook
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      requestBody:
+        $ref: '#/components/requestBodies/WebhookConfigBody_2'
+      responses:
+        '204':
+          description: Sucesso
+          content: {}
+      callbacks:
+        listaBoletoCobranca:
+          '{$request.body#/webhookUrl/boleto}':
+            post:
+              parameters:
+              - in: header
+                name: x-conta-corrente
+                schema:
+                  type: string
+                  pattern: ^[1-9][0-9]*$
+                  example: '13525622'
+                description: Conta corrente relacionada ao callback. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+              requestBody:
+                $ref: '#/components/requestBodies/WebhookBoletoBody'
+              responses:
+                '200':
+                  description: Notificação recebida com sucesso
+      x-operation-id-source: normalized
+      x-operation-id-original: webhookPut
+    get:
+      summary: Obter webhook cadastrado
+      description: 'Obtém o webhook cadastrado, caso exista.
+
+
+        * Escopo requerido: boleto-cobranca.read
+
+        * rate limit: 10 chamadas por minuto
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/cobranca/v2/boletos/webhook'
+      tags:
+      - Webhook
+      operationId: getBoletosWebhook
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookCompleto_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: webhookGet
+    delete:
+      summary: Excluir webhook
+      description: 'Exclui o webhook.
+
+
+        * Escopo requerido: boleto-cobranca.write
+
+        * rate limit: 10 chamadas por minuto
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/cobranca/v2/boletos/webhook'
+      tags:
+      - Webhook
+      operationId: deleteBoletosWebhook
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      responses:
+        '204':
+          description: Sucesso
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: webhookDelete
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/cobranca/v2
+      description: Servidor de Produção
+  /boletos/webhook/callbacks:
+    get:
+      summary: Consultar callbacks
+      description: 'Retorna as requisições de callbacks ordenadas pela data de disparo (decrescente).
+
+        Permite consultar erros no envio de callbacks.
+
+
+        * Escopo requerido: boleto-cobranca.read
+
+        * rate limit: 10 chamadas por minuto
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/cobranca/v2/boletos/webhook/callbacks'
+      tags:
+      - Webhook
+      operationId: getBoletosWebhookCallbacks
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - name: dataHoraInicio
+        in: query
+        required: true
+        description: 'Formato aceito: yyyy-MM-dd''T''HH:mm[:ss][.SSS]XXX'
+        example: 2023-06-01T00:00Z ou 2023-06-01T00:00:00.000Z
+        x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm[:ss][.SSS]XXX
+        schema:
+          type: string
+          format: date-time
+      - name: dataHoraFim
+        description: 'Formato aceito: yyyy-MM-dd''T''HH:mm[:ss][.SSS]XXX'
+        in: query
+        example: 2023-06-01T00:00Z ou 2023-06-01T00:00:00.000Z
+        required: true
+        x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm[:ss][.SSS]XXX
+        schema:
+          type: string
+          format: date-time
+      - name: pagina
+        in: query
+        schema:
+          type: integer
+          description: Posição da página na lista de dados
+          default: 0
+      - name: tamanhoPagina
+        in: query
+        schema:
+          type: integer
+          description: Tamanho da página
+          default: 20
+          maximum: 50
+          minimum: 10
+      - name: nossoNumero
+        in: query
+        schema:
+          type: string
+          description: Nosso número a ser filtrado
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallbackAttemptPage_3'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalida_2'
+        '500':
+          $ref: '#/components/responses/ServicoIndisponivel_3'
+      x-operation-id-source: normalized
+      x-operation-id-original: callbacksFilter
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/cobranca/v2
+      description: Servidor de Produção
+components:
+  schemas:
+    Problema:
+      type: object
+      required:
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+        title:
+          type: string
+          description: Descrição resumida do problema.
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        timestamp:
+          type: string
+          description: Data no formato timestamp do erro
+    DadosConta:
+      type: object
+      properties:
+        codIspb:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de Pagamento Pix com dados bancários.
+
+            '
+        codAgencia:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de Pagamento Pix com dados bancários.
+
+            '
+        nroConta:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de Pagamento Pix com dados bancários.
+
+            '
+        cpfCnpj:
+          type: string
+          description: 'Caso seja um CPF, o dado retornado será mascarado. (ex:\***.777.888-\**)
+
+            '
+        nome:
+          type: string
+        tipoConta:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de Pagamento Pix com dados bancários.
+
+            '
+    CallbackRetryPixPagamentoBody:
+      type: object
+      title: pix-pagamento
+      required:
+      - codigoSolicitacao
+      properties:
+        codigoSolicitacao:
+          type: array
+          items:
+            type: string
+            format: string
+          description: Lista de códigos de solicitações de pagamento pix que deseja reenviar o callback
+          minItems: 1
+          maxItems: 50
+    CallbackRetryBoletoPagamentoBody:
+      type: object
+      title: boleto-pagamento
+      required:
+      - codigoTransacao
+      properties:
+        codigoTransacao:
+          type: array
+          items:
+            type: string
+            format: string
+          description: Lista de códigos de transações de pagamento que deseja reenviar o callback
+          minItems: 1
+          maxItems: 50
+    StatusPixPagamento:
+      type: string
+      description: '* `EFETIVADO`
+
+        * `ERRO`
+
+        * `REPROVADO`
+
+        * `APROVACAO_EXPIRADA`
+
+        * `CANCELADO`
+
+        '
+      enum:
+      - EFETIVADO
+      - ERRO
+      - REPROVADO
+      - APROVACAO_EXPIRADA
+      - CANCELADO
+    TipoMovimentacao:
+      type: string
+      description: '* `PAGAMENTO`
+
+        '
+      enum:
+      - PAGAMENTO
+    RetryCallbackResponse:
+      type: object
+      properties:
+        foundIds:
+          type: array
+          items:
+            type: string
+          description: Lista dos códigos identificadores em que o reenvio foi solicitado com sucesso.
+    CallbackPagamentoBoletoErrorModel:
+      type: object
+      properties:
+        codigoErro:
+          type: string
+        descricaoErro:
+          type: string
+    CallbackAttemptPageItem:
+      type: object
+      required:
+      - payload
+      - numeroTentativa
+      - dataEnvio
+      - sucesso
+      properties:
+        webhookUrl:
+          type: string
+          description: URL do webhook no momento do disparo.
+          format: uri
+        payload:
+          description: Corpo enviado na requisição.
+          type: object
+        numeroTentativa:
+          description: Qual o índice da tentativa de disparo.
+          type: integer
+        dataEnvio:
+          description: Data/hora da tentativa de disparo do callback.
+          type: string
+          format: date-time
+        sucesso:
+          type: boolean
+        httpStatus:
+          description: Resposta da chamada ao endpoint do webhook.
+          type: integer
+        mensagemErro:
+          type: string
+    ErroPagamento:
+      type: object
+      properties:
+        codigoErro:
+          type: string
+        descricaoErro:
+          type: string
+        codigoErroComplementar:
+          type: string
+    CallbackAttemptPage:
+      type: object
+      required:
+      - data
+      properties:
+        totalElementos:
+          type: integer
+          format: int64
+        totalPaginas:
+          type: integer
+        primeiraPagina:
+          description: Informa se é a primeira página
+          type: boolean
+        ultimaPagina:
+          description: Informa se é a última página
+          type: boolean
+        data:
+          description: Dados de cada notificação de callback.
+          type: array
+          items:
+            $ref: '#/components/schemas/CallbackAttemptPageItem'
+    RetryCallbacksRequestBody:
+      type: object
+      properties:
+        body:
+          oneOf:
+          - $ref: '#/components/schemas/CallbackRetryPixPagamentoBody'
+          - $ref: '#/components/schemas/CallbackRetryBoletoPagamentoBody'
+      example:
+        pix-pagamento:
+          codigoSolicitacao:
+          - 5aa9e369-fc6c-4e03-82b7-aa09fdbaa210
+        boleto-pagamento:
+          codigoTransacao:
+          - 5ceb9b65-5b9c-4d2f-b44a-3c55536ce927
+    CallbackPagamentoBoletoModel:
+      type: object
+      properties:
+        linhaDigitavel:
+          type: string
+        codigoTransacao:
+          type: string
+        dataPagamento:
+          type: string
+        dataHoraSolicitacao:
+          type: string
+        nomeBeneficiario:
+          type: string
+        status:
+          $ref: '#/components/schemas/StatusPagamentoBoletoCallback'
+        valorPago:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de Pagamento Boleto **REALIZADO**.
+
+            '
+        valorAgendado:
+          type: string
+          description: 'O atributo em questão só é retornado em caso de de Pagamento Boleto **AGENDADO**.
+
+            '
+        nsu:
+          type: string
+          example: '82127399'
+          description: Número sequencial único, exclusivo para uso no Inter.
+        erros:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallbackPagamentoBoletoErrorModel'
+    CallbackPixPagamentoModel:
+      type: object
+      properties:
+        codigoSolicitacao:
+          type: string
+        chave:
+          type: string
+        dataHoraMovimento:
+          type: string
+        dataHoraSolicitacao:
+          type: string
+        descricaoPagamento:
+          type: string
+        endToEnd:
+          type: string
+        instituicaoDestinatario:
+          type: string
+        recebedor:
+          $ref: '#/components/schemas/DadosConta'
+        erros:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErroPagamento'
+        status:
+          $ref: '#/components/schemas/StatusPixPagamento'
+        tipoMovimentacao:
+          $ref: '#/components/schemas/TipoMovimentacao'
+        valor:
+          type: string
+    TipoWebhookEnum:
+      type: string
+      enum:
+      - pix-pagamento
+      - boleto-pagamento
+      description: '* `pix-pagamento:` - Pix pagamento
+
+        * `boleto-pagamento:` - Boleto Pagamento
+
+        '
+    WebhookModel:
+      type: object
+      required:
+      - webhookUrl
+      properties:
+        webhookUrl:
+          type: string
+          pattern: ^https://[^\s]*$
+          format: uri
+          example: https://meuwebhook.com/
+          description: URL de configuração do webhook. Deve iniciar obrigatoriamente com **https://**
+        criacao:
+          type: string
+          format: date-time
+          description: Data e hora em que o webhook foi cadastrado. Representada de acordo com a [RFC3339](https://tools.ietf.org/html/rfc3339)
+          readOnly: true
+    StatusPagamentoBoletoCallback:
+      type: string
+      description: '* `REALIZADO`
+
+        * `AGENDADO`
+
+        * `CANCELADO`
+
+        * `ERRO`
+
+        * `REPROVADO`
+
+        * `APROVACAO_EXPIRADA`
+
+        '
+      enum:
+      - REALIZADO
+      - AGENDADO
+      - CANCELADO
+      - ERRO
+      - REPROVADO
+      - APROVACAO_EXPIRADA
+    Problema_2:
+      type: object
+      required:
+      - title
+      - status
+      properties:
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Erro
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao'
+    WebhookSolicitado:
+      type: object
+      required:
+      - webhookUrl
+      title: Webhook
+      properties:
+        webhookUrl:
+          type: string
+          pattern: ^https://[^\s]*$
+          format: uri
+          example: https://boleto.example.com/api/webhook/
+          description: URL de configuração do webhook. Deve iniciar obrigatoriamente com **https://**
+    WebhookCompleto:
+      type: object
+      required:
+      - webhookUrl
+      - criacao
+      title: Webhook
+      properties:
+        webhookUrl:
+          type: string
+          format: uri
+          example: https://boleto.example.com/api/webhook/
+        criacao:
+          type: string
+          format: date-time
+          title: Data de Criação
+          description: Data e hora em que o webhook foi cadastrado. Respeita RFC 3339.
+          readOnly: true
+        atualizacao:
+          type: string
+          format: date-time
+          title: Data de Atualização
+          description: Data e hora em que o webhook foi atualizado. Respeita RFC 3339.
+          readOnly: true
+    OrigemRecebimentoEnum:
+      type: string
+      title: Origem do recebimento da cobrança
+      enum:
+      - BOLETO
+      - PIX
+    RetryCallbackResponse_2:
+      type: object
+      properties:
+        foundIds:
+          type: array
+          items:
+            type: string
+          description: Lista dos códigos identificadores das cobranças em que o reenvio foi solicitado com sucesso.
+    CallbackCobranca:
+      type: object
+      required:
+      - codigoSolicitacao
+      - dataHoraSituacao
+      - situacao
+      properties:
+        codigoSolicitacao:
+          type: string
+          description: Identificador único da cobrança
+        seuNumero:
+          type: string
+          description: Seu Número, enviado na requisição para inclusão do título.
+          maxLength: 15
+        situacao:
+          $ref: '#/components/schemas/SituacaoCobrancaCallbackEnum'
+        dataHoraSituacao:
+          type: string
+          format: date-time
+        valorTotalRecebido:
+          type: string
+          pattern: ^\\d{1,10}\\.\\d{2}$
+        origemRecebimento:
+          $ref: '#/components/schemas/OrigemRecebimentoEnum'
+        nossoNumero:
+          type: string
+          description: Nosso Número, atribuído automaticamente ao longo da inclusão do título.
+          maxLength: 11
+        codigoBarras:
+          type: string
+          description: Dígitos que compõem o código de barras do boleto (44 posições preenchidas)
+          minLength: 44
+          maxLength: 44
+        linhaDigitavel:
+          type: string
+          description: Dígitos que compõem a linha digitável do boleto, sem formatação (47 posições preenchidas)
+          minLength: 47
+          maxLength: 47
+        txid:
+          type: string
+          pattern: ^[a-zA-Z0-9]{26,35}$
+          description: Txid da Cobrança PIX gerada
+        pixCopiaECola:
+          type: string
+          description: QRCode de cobrança para pagamento
+    CallbackAttemptPageItem_2:
+      type: object
+      required:
+      - payload
+      - numeroTentativa
+      - dataEnvio
+      - sucesso
+      properties:
+        webhookUrl:
+          type: string
+          description: URL do webhook no momento do disparo.
+          format: uri
+        payload:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallbackCobranca'
+        numeroTentativa:
+          description: Qual o índice da tentativa de disparo.
+          type: integer
+        dataHoraDisparo:
+          description: Data/hora da tentativa de disparo do callback.
+          type: string
+          format: date-time
+        sucesso:
+          type: boolean
+          description: Informa se obteve sucesso no disparo do callback.
+        httpStatus:
+          description: Resposta da chamada ao endpoint do webhook.
+          type: integer
+        mensagemErro:
+          description: Mensagem de erro em caso de falha no dispardo do callback.
+          type: string
+    Violacao:
+      type: object
+      title: Violação
+      properties:
+        razao:
+          type: string
+          title: Descrição do erro
+          description: Descrição do erro
+          example: Valor do pagamento não pode ser 0.00
+        propriedade:
+          type: string
+          title: Nome da propriedade
+          description: Nome da propriedade
+          example: valor
+        valor:
+          type: string
+          title: Valor da propriedade
+          description: Valor da propriedade
+          example: 061996671234
+    CallbackAttemptPage_2:
+      type: object
+      required:
+      - data
+      properties:
+        totalElementos:
+          type: integer
+          format: int64
+          description: Quantidade total de itens disponíveis de acordo com os parâmetros informados
+        totalPaginas:
+          type: integer
+          description: Quantidade total de páginas disponíveis para consulta.
+        primeiraPagina:
+          description: Informa se é a primeira página
+          type: boolean
+        ultimaPagina:
+          description: Informa se é a última página
+          type: boolean
+        data:
+          description: Dados de cada notificação de callback.
+          type: array
+          items:
+            $ref: '#/components/schemas/CallbackAttemptPageItem_2'
+    RetryCallbacksRequestBody_2:
+      type: object
+      required:
+      - codigoSolicitacao
+      properties:
+        codigoSolicitacao:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Lista de códigos identificadores das cobranças. Poderá ser enviado até 50 códigos para efetuar o reenvio.
+          minItems: 1
+          maxItems: 50
+    SituacaoCobrancaCallbackEnum:
+      type: string
+      enum:
+      - RECEBIDO
+      - A_RECEBER
+      - MARCADO_RECEBIDO
+      - CANCELADO
+      - EXPIRADO
+      - FALHA_EMISSAO
+      description: Possíveis situações de uma cobranca.
+    Problema_3:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+          example: https://boleto.bcb.gov.br/api/v2/error/NaoEncontrado
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Not found
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        detail:
+          type: string
+          description: Descrição completa do problema.
+    Violacao_2:
+      type: object
+      title: Violação
+      properties:
+        razao:
+          type: string
+          title: Descrição do erro
+          description: Descrição do erro
+          example: Valor da cobrança não pode ser 0.00
+        propriedade:
+          type: string
+          title: Nome da propriedade
+          description: Nome da propriedade
+          example: cob.chave
+        valor:
+          type: string
+          title: Valor da propriedade
+          description: Valor da propriedade
+          example: 061996671234
+    CallbackAttemptPage_3:
+      type: object
+      required:
+      - data
+      properties:
+        totalElementos:
+          type: integer
+          format: int64
+          description: Quantidade total de itens disponíveis de acordo com os parâmetros informados
+        totalPaginas:
+          type: integer
+          description: Quantidade total de páginas disponíveis para consulta.
+        primeiraPagina:
+          description: Informa se é a primeira página
+          type: boolean
+        ultimaPagina:
+          description: Informa se é a última página
+          type: boolean
+        data:
+          description: Dados de cada notificação de callback.
+          type: array
+          items:
+            $ref: '#/components/schemas/CallbackAttemptPageItem_3'
+    ProblemaViolacao:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+          example: https://boleto.bcb.gov.br/api/v2/error/NaoEncontrado
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Not found
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao_2'
+    WebhookCompleto_2:
+      type: object
+      required:
+      - webhookUrl
+      - criacao
+      title: Webhook
+      properties:
+        webhookUrl:
+          type: string
+          format: uri
+          example: https://boleto.example.com/api/webhook/
+        criacao:
+          type: string
+          format: date-time
+          title: Data de Criação
+          description: Data e hora em que o webhook foi cadastrado. Respeita RFC 3339.
+          readOnly: true
+    CallbackBoletoCobranca:
+      description: Callback para o boleto de cobrança
+      type: object
+      properties:
+        idSolicitacao:
+          type: string
+          description: 'Identificador único da request [beta]
+
+            '
+        nossoNumero:
+          type: string
+          description: 'Nosso Numero.
+
+            '
+        seuNumero:
+          type: string
+          description: 'Seu Número.
+
+            '
+        motivoCancelamento:
+          type: string
+          description: 'Motivo do Cancelamento.
+
+            '
+        situacao:
+          type: string
+          enum:
+          - PAGO
+          - CANCELADO
+          - EXPIRADO
+        dataHoraSituacao:
+          type: string
+          description: 'Data referente à situação do título
+
+
+            Formato aceito: YYYY-MM-DD
+
+            '
+          example: '2018-07-27'
+        valorNominal:
+          type: number
+          description: 'Valor Nominal do Título
+
+            '
+          example: 1234
+        valorTotalRecebimento:
+          type: number
+          description: 'Valor Total Recebimento
+
+            '
+          example: 10
+        codigoBarras:
+          type: string
+        linhaDigitavel:
+          type: string
+          description: 'Linha Digitavel do Título.
+
+            Origem do request que gerou o boleto
+
+            '
+          example: certificado
+    CallbackAttemptPageItem_3:
+      type: object
+      required:
+      - payload
+      - numeroTentativa
+      - dataEnvio
+      - sucesso
+      properties:
+        webhookUrl:
+          type: string
+          description: URL do webhook no momento do disparo.
+          format: uri
+        payload:
+          description: Corpo enviado na requisição.
+          type: object
+        numeroTentativa:
+          description: Qual o índice da tentativa de disparo.
+          type: integer
+        dataHoraDisparo:
+          description: Data/hora da tentativa de disparo do callback.
+          type: string
+          format: date-time
+        sucesso:
+          type: boolean
+          description: Informa se obteve sucesso no disparo do callback.
+        httpStatus:
+          description: Resposta da chamada ao endpoint do webhook.
+          type: integer
+        mensagemErro:
+          description: Mensagem de erro em caso de falha no dispardo do callback.
+          type: string
+    Problema_4:
+      type: object
+      required:
+      - title
+      - status
+      properties:
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Erro
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao'
+    RetryCallbackResponse_3:
+      type: object
+      properties:
+        foundIds:
+          type: array
+          items:
+            type: string
+          description: Lista dos códigos identificadores das cobranças em que o reenvio foi solicitado com sucesso.
+    CallbackAttemptPageItem_4:
+      type: object
+      required:
+      - payload
+      - numeroTentativa
+      - dataEnvio
+      - sucesso
+      properties:
+        webhookUrl:
+          type: string
+          description: URL do webhook no momento do disparo.
+          format: uri
+        payload:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallbackCobranca'
+        numeroTentativa:
+          description: Qual o índice da tentativa de disparo.
+          type: integer
+        dataHoraDisparo:
+          description: Data/hora da tentativa de disparo do callback.
+          type: string
+          format: date-time
+        sucesso:
+          type: boolean
+          description: Informa se obteve sucesso no disparo do callback.
+        httpStatus:
+          description: Resposta da chamada ao endpoint do webhook.
+          type: integer
+        mensagemErro:
+          description: Mensagem de erro em caso de falha no dispardo do callback.
+          type: string
+    CallbackAttemptPage_4:
+      type: object
+      required:
+      - data
+      properties:
+        totalElementos:
+          type: integer
+          format: int64
+          description: Quantidade total de itens disponíveis de acordo com os parâmetros informados
+        totalPaginas:
+          type: integer
+          description: Quantidade total de páginas disponíveis para consulta.
+        primeiraPagina:
+          description: Informa se é a primeira página
+          type: boolean
+        ultimaPagina:
+          description: Informa se é a última página
+          type: boolean
+        data:
+          description: Dados de cada notificação de callback.
+          type: array
+          items:
+            $ref: '#/components/schemas/CallbackAttemptPageItem_4'
+    RetryCallbacksRequestBody_3:
+      type: object
+      required:
+      - codigoSolicitacao
+      properties:
+        codigoSolicitacao:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Lista de códigos identificadores das cobranças. Poderá ser enviado até 50 códigos para efetuar o reenvio.
+          minItems: 1
+          maxItems: 50
+    Problema_5:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+          example: https://boleto.bcb.gov.br/api/v2/error/NaoEncontrado
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Not found
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        detail:
+          type: string
+          description: Descrição completa do problema.
+    Violacao_3:
+      type: object
+      title: Violação
+      properties:
+        razao:
+          type: string
+          title: Descrição do erro
+          description: Descrição do erro
+          example: Valor da cobrança não pode ser 0.00
+        propriedade:
+          type: string
+          title: Nome da propriedade
+          description: Nome da propriedade
+          example: cob.chave
+        valor:
+          type: string
+          title: Valor da propriedade
+          description: Valor da propriedade
+          example: 061996671234
+    CallbackAttemptPage_5:
+      type: object
+      required:
+      - data
+      properties:
+        totalElementos:
+          type: integer
+          format: int64
+          description: Quantidade total de itens disponíveis de acordo com os parâmetros informados
+        totalPaginas:
+          type: integer
+          description: Quantidade total de páginas disponíveis para consulta.
+        primeiraPagina:
+          description: Informa se é a primeira página
+          type: boolean
+        ultimaPagina:
+          description: Informa se é a última página
+          type: boolean
+        data:
+          description: Dados de cada notificação de callback.
+          type: array
+          items:
+            $ref: '#/components/schemas/CallbackAttemptPageItem_5'
+    ProblemaViolacao_2:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+          example: https://boleto.bcb.gov.br/api/v2/error/NaoEncontrado
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Not found
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao_3'
+    WebhookCompleto_3:
+      type: object
+      required:
+      - webhookUrl
+      - criacao
+      title: Webhook
+      properties:
+        webhookUrl:
+          type: string
+          format: uri
+          example: https://boleto.example.com/api/webhook/
+        criacao:
+          type: string
+          format: date-time
+          title: Data de Criação
+          description: Data e hora em que o webhook foi cadastrado. Respeita RFC 3339.
+          readOnly: true
+    CallbackAttemptPageItem_5:
+      type: object
+      required:
+      - payload
+      - numeroTentativa
+      - dataEnvio
+      - sucesso
+      properties:
+        webhookUrl:
+          type: string
+          description: URL do webhook no momento do disparo.
+          format: uri
+        payload:
+          description: Corpo enviado na requisição.
+          type: object
+        numeroTentativa:
+          description: Qual o índice da tentativa de disparo.
+          type: integer
+        dataHoraDisparo:
+          description: Data/hora da tentativa de disparo do callback.
+          type: string
+          format: date-time
+        sucesso:
+          type: boolean
+          description: Informa se obteve sucesso no disparo do callback.
+        httpStatus:
+          description: Resposta da chamada ao endpoint do webhook.
+          type: integer
+        mensagemErro:
+          description: Mensagem de erro em caso de falha no dispardo do callback.
+          type: string
+  examples:
+    CallbackPagamentoBoletoAgendado:
+      summary: Exemplo de callback Pagamento Boleto AGENDADO.
+      value:
+        linhaDigitavel: '12345678946579865465498756465498754564874548123'
+        codigoTransacao: c42f0787-02cb-4b31-827e-459ec9d7ece1
+        dataPagamento: '2023-09-30'
+        dataHoraSolicitacao: '2023-09-30T17:34:00.527'
+        nomeBeneficiario: João da Silva
+        status: REALIZADO
+        valorAgendado: '10.00'
+    CallbackPagamentoBoletoRealizado:
+      summary: Exemplo de callback Pagamento Boleto REALIZADO.
+      value:
+        linhaDigitavel: '12345678946579865465498756465498754564874548123'
+        codigoTransacao: c42f0787-02cb-4b31-827e-459ec9d7ece1
+        dataPagamento: '2023-09-30'
+        dataHoraSolicitacao: '2023-09-30T17:34:00.527'
+        nomeBeneficiario: João da Silva
+        status: REALIZADO
+        valorPago: '10.00'
+        nsu: '82127399'
+    RequisicaoInvalidaExampleRetryCallback:
+      summary: Exemplo de bad request para o reenvio de callback
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-09-26T18:06:11.692931-03:00'
+        violacoes:
+        - razao: Required Body [body] not specified.
+    RequisicaoInvalidaIncluirWebhookExample:
+      summary: Exemplo de erro de requisição inválida
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        violacoes:
+        - razao: O valor deve seguir o padrão ^https://.*$
+          propriedade: webhookUrl
+    CallbackPagamentoBoletoCancelado:
+      summary: Exemplo de callback Pagamento Boleto CANCELADO.
+      value:
+        codigoTransacao: c42f0787-02cb-4b31-827e-459ec9d7ece1
+        status: CANCELADO
+    ExemploRetryCallbackResponse:
+      summary: Exemplo de retorno da lista de callbacks reenviados.
+      value:
+        foundIds:
+        - 5ceb9b65-5b9c-4d2f-b44a-3c55536ce927
+    CallbackPagamentoBoletoComErro:
+      summary: Exemplo de callback Pagamento Boleto ERRO.
+      value:
+        linhaDigitavel: '12345678946579865465498756465498754564874548123'
+        codigoTransacao: c42f0787-02cb-4b31-827e-459ec9d7ece1
+        dataHoraSolicitacao: '2023-09-30T17:34:00.527'
+        nomeBeneficiario: João da Silva
+        status: ERRO
+        erros:
+        - codigoErro: PGE006
+          descricaoErro: Data para pagamento inválida!
+    CallbackPixPagamentoDadosBancarios:
+      summary: Exemplo de callback Pix Pagamento com dados bancários.
+      value:
+        codigoSolicitacao: c42f0787-02cb-4b31-827e-459ec9d7ece1
+        dataHoraMovimento: '2023-09-30T17:34:00.663504'
+        dataHoraSolicitacao: '2023-09-30T17:34:00.527'
+        descricaoPagamento: Pagamento Pix Teste
+        endToEnd: E00416968202309302034aqtneKsYCqs
+        instituicaoDestinatario: Banco Inter S.A.
+        recebedor:
+          codAgencia: '123465'
+          codIspb: '1234567'
+          cpfCnpj: '01123456000123'
+          nome: João da Silva
+          nroConta: '12346587'
+          tipoConta: CAC
+        status: PROCESSADO
+        tipoMovimentacao: PAGAMENTO
+        valor: '0.01'
+    CallbackPixPagamentoChave:
+      summary: Exemplo de callback Pix Pagamento com chave.
+      value:
+        chave: '01123456000123'
+        codigoSolicitacao: c42f0787-02cb-4b31-827e-459ec9d7ece1
+        dataHoraMovimento: '2023-09-30T17:34:00.663504'
+        dataHoraSolicitacao: '2023-09-30T17:34:00.527'
+        descricaoPagamento: Pagamento Pix Teste
+        endToEnd: E00416968202309302034aqtneKsYCqs
+        instituicaoDestinatario: Banco Inter S.A.
+        recebedor:
+          cpfCnpj: '01123456000123'
+          nome: João da Silva
+        status: PROCESSADO
+        tipoMovimentacao: PAGAMENTO
+        valor: '0.01'
+    RequisicaoInvalidaConsultarCallbackExample:
+      summary: Exemplo de erro de requisição inválida
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        violacoes:
+        - razao: Required QueryValue [dataHoraInicio] not specified
+    AcessoNegadoExample:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Acesso Negado
+        status: '403'
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    ServicoIndisponivelExample:
+      summary: Exemplo de payload para erro de serviço indisponível
+      value:
+        title: Serviço Indisponível
+        status: '503'
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    NaoEncontradoExample:
+      summary: Exemplo de payload para erro de objeto não encontrado
+      value:
+        title: Não Encontrado.
+        status: '404'
+        detail: Entidade não encontrada.
+    exemploRetryCallbackResponse:
+      summary: Exemplo de retorno da lista de callbacks reenviados.
+      value:
+        foundIds:
+        - 497f6eca-6276-4993-bfeb-53cbbbba6f08
+    NaoEncontradoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Não Encontrado
+        status: 404
+        detail: Entidade não encontrada.
+    AcessoNegadoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Acesso Negado
+        status: 403
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    ServicoIndisponivelExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Serviço Indisponível
+        status: 503
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    exemploListaCallback:
+      summary: Exemplo de retorno lista de callback
+      value:
+        totalElementos: 0
+        totalPaginas: 0
+        primeiraPagina: true
+        ultimaPagina: true
+        data:
+        - webhookUrl: http://example.com
+          payload: {}
+          numeroTentativa: 1
+          dataHoraDisparo: '2023-09-24T14:15:22Z'
+          sucesso: true
+          httpStatus: 200
+        - webhookUrl: http://example.com
+          payload: {}
+          numeroTentativa: 1
+          dataHoraDisparo: '2023-09-24T14:15:22Z'
+          sucesso: false
+          httpStatus: 403
+          mensagemErro: mensagem de erro
+    RequisicaoInvalidaExample1:
+      summary: Exemplo de bad request 1
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-09-26T18:06:11.692931-03:00'
+        violacoes:
+        - razao: Não foi possível converter o valor.
+          propriedade: dataInicial
+    exemploCriarWebhook:
+      summary: Exemplo de retorno sumário
+      value:
+        webhookUrl: https://cobranca.example.com/api/webhook
+    ServicoIndisponivelExample1_2:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Serviço Indisponível
+        status: 500
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    BadRequestExample1:
+      summary: Exemplo de bad request 1
+      value:
+        title: Bad Request
+        status: 400
+        detail: Requisição inválida
+    CallbackBoletoCobrancaExample:
+      summary: Exemplo de request para a notificação dos boletos
+      value:
+      - nossoNumero: 00999999999
+        seuNumero: '0000'
+        situacao: PAGO
+        dataHoraSituacao: '2022-01-10'
+        valorNominal: 100
+        valorTotalRecebimento: 105
+        codigoBarras: '00000000000000000000000000000000000000000000'
+        linhaDigitavel: '00000000000000000000000000000000000000000000000'
+    ServicoIndisponivelExample1_3:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Serviço Indisponível
+        status: 500
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+  requestBodies:
+    WebhookRequestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WebhookModel'
+    RetryCallbacksRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RetryCallbacksRequestBody'
+    WebhookCobrancaCallbackBody:
+      description: Corpo do callback de cobrança.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/CallbackCobranca'
+    WebhookConfigBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WebhookSolicitado'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/exemploCriarWebhook'
+    WebhookConfigBody_2:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WebhookSolicitado'
+    WebhookBoletoBody:
+      description: Dados para notificação dos Boletos.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/CallbackBoletoCobranca'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/CallbackBoletoCobrancaExample'
+    WebhookConfigBody_3:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WebhookSolicitado'
+  parameters:
+    xContaCorrente:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação. Necessário somente quando a aplicação estiver associada a mais de uma conta corrente. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+      schema:
+        type: string
+        pattern: ^[1-9][0-9]*$
+    tipoWebhookPath:
+      name: tipoWebhook
+      required: true
+      in: path
+      schema:
+        $ref: '#/components/schemas/TipoWebhookEnum'
+    xContaCorrente_2:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação, caso faça parte da lista de contas correntes da aplicação. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+      required: false
+      schema:
+        type: string
+        pattern: '[1-9][0-9]*'
+    xContaCorrente_3:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação, caso faça parte da lista de contas correntes da aplicação. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+      required: false
+      schema:
+        type: string
+        pattern: '[1-9][0-9]*'
+  responses:
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            nao-encontrado-example:
+              $ref: '#/components/examples/NaoEncontradoExample'
+    RequisicaoInvalidaIncluirWebhook:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida-example:
+              $ref: '#/components/examples/RequisicaoInvalidaIncluirWebhookExample'
+    RequisicaoInvalidaConsultarCallback:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida-example:
+              $ref: '#/components/examples/RequisicaoInvalidaConsultarCallbackExample'
+    ServicoIndisponivel:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            servico-indisponivel-example:
+              $ref: '#/components/examples/ServicoIndisponivelExample'
+    AcessoNegado:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            acesso-negado-example:
+              $ref: '#/components/examples/AcessoNegadoExample'
+    RequisicaoInvalidaRetryCallback:
+      description: Problemas na requisição.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplos1:
+              $ref: '#/components/examples/RequisicaoInvalidaExampleRetryCallback'
+    NaoEncontrado_2:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema_2'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/NaoEncontradoExample1'
+    RequisicaoInvalida:
+      description: Problemas na requisição.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema_2'
+          examples:
+            exemplos1:
+              $ref: '#/components/examples/RequisicaoInvalidaExample1'
+    ServicoIndisponivel_2:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema_2'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/ServicoIndisponivelExample1'
+    AcessoNegado_2:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema_2'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/AcessoNegadoExample1'
+    RequisicaoInvalida_2:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemaViolacao'
+          examples:
+            exemplos1:
+              $ref: '#/components/examples/BadRequestExample1'
+    ServicoIndisponivel_3:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema_3'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/ServicoIndisponivelExample1_2'
+    NaoEncontrado_3:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema_4'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/NaoEncontradoExample1'
+    RequisicaoInvalida_3:
+      description: Problemas na requisição.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema_4'
+          examples:
+            exemplos1:
+              $ref: '#/components/examples/RequisicaoInvalidaExample1'
+    ServicoIndisponivel_4:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema_4'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/ServicoIndisponivelExample1'
+    AcessoNegado_3:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema_4'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/AcessoNegadoExample1'
+    RequisicaoInvalida_4:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemaViolacao_2'
+          examples:
+            exemplos1:
+              $ref: '#/components/examples/BadRequestExample1'
+    ServicoIndisponivel_5:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema_5'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/ServicoIndisponivelExample1_3'
+x-refined-from:
+- swagger-banking-yaml.yaml
+- swagger-cobranca-bolepix-yaml.yaml
+- swagger-cobranca-yaml.yaml
+- banco-inter-banking-openapi.yml
+- banco-inter-cobranca-bolepix-openapi.yml
+- banco-inter-cobranca-openapi.yml

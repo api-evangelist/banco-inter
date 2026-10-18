@@ -1,0 +1,21 @@
+generated: '2026-10-18'
+method: none
+source:
+- https://zapier.com/apps/banco-inter/integrations
+- https://n8n.io/integrations/banco-inter/
+- https://composio.dev/toolkits/banco-inter
+- https://monid.ai/tools/banco-inter
+checked:
+- OpenAPI specifications for integration references
+- https://composio.dev/toolkits/banco-inter
+- https://developers.inter.co/docs/integrations
+- https://monid.ai/tools/banco-inter
+- https://n8n.io/integrations/banco-inter/
+- https://www.make.com/en/integrations/banco-inter
+- https://zapier.com/apps/banco-inter/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
+note: No marketplace listings, integration pages, or contract references to third-party services found. Banco Inter
+  appears to focus on its core banking APIs rather than third-party integrations.

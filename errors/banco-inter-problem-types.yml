@@ -1,0 +1,47 @@
+generated: '2026-10-18'
+method: searched
+source: https://developers.inter.co/erros-status-code
+format: application/problem+json
+envelope: error
+problems:
+  - status: 400
+    title: Sem mensagem de Erro
+    description: Esse erro é causado pela falta do certificado nas requisições. Lembrando que é obrigatório o uso do certificado tanto na geração do token quanto nas requisições das nossas API.
+    remediation: Include the mTLS certificate in requests
+  - status: 401
+    title: Login/senha inválido no Token OAuth
+    description: Você pode estar utilizando credenciais (clientId e clientSecret) inválidos. Caso contrário, é provável que elas não contenham os escopos informados no campo scope, ou este campo foi preenchido incorretamente.
+    remediation: Check credentials and scopes, regenerate token with correct scopes
+  - status: 401
+    title: Login/senha inválido nas APIs
+    description: Você está utilizando credenciais (clientId e clientSecret) de uma integração com um certificado de outra integração. É preciso utilizar sempre as credenciais certificado que foram emitidos em conjunto.
+    remediation: Use credentials and certificate issued together for the same integration
+  - status: 401
+    title: Token inválido
+    description: Você precisa adicionar o Bearer token OAuth que foi gerado. Caso já esteja adicionado, este token provavelmente expirou (validade de 1h) e é necessário emitir um novo.
+    remediation: Add Bearer token or regenerate token if expired (1-hour validity)
+  - status: 401
+    title: Acesso negado - Login/senha inválido
+    description: A conta utilizada na requisição está com situação que não permite requisições via API.
+    remediation: Contact Inter support
+  - status: 403
+    title: Faltando escopos necessários
+    description: O token gerado não continha os escopos necessários para acessar o conteúdo dessa requisição.
+    remediation: Generate token with required scopes
+  - status: 406
+    title: Sem mensagem de Erro
+    description: Seu IP pode ter sido bloqueado pelo firewall por ser considerado malicioso. Isso é comum para integrações em cloud, utilizando IPs dinâmicos. Tente utilizar um IP dedicado. Esse erro também pode ocorrer ao realizar a formatação errada na composição do Path Parameter.
+    remediation: Use dedicated IP or check path parameter formatting
+  - status: 422
+    title: Erro ao processar a requisição
+    description: Esse erro é capturado quando é violada uma regra de negócio. Tanto o conteúdo do body quanto a sintaxe estão corretos, entretanto, uma ou mais regras de negócio não foram atendidas.
+    remediation: Check business rules validation
+  - status: 429
+    title: Sem mensagem de Erro
+    description: Esse erro é capturado por conta de um número alto de requisições em um curto espaço de tempo. Cada endpoint está configurado com um limite de chamadas por minuto.
+    remediation: Wait before making new requests, check rate limits
+  - status: 500
+    title: Erro Interno no Token OAuth
+    description: Esse erro é capturado quando os campos do body da requisição não foram preenchidos corretamente.
+    remediation: Check request body fields for token generation
+note: Error descriptions from Banco Inter developer portal error reference page. The API uses RFC 9457 problem+json format as confirmed in OpenAPI specs.

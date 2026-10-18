@@ -1,0 +1,252 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for API Pix
+  version: 1.0.0
+  x-generated: '2026-10-18'
+  x-method: derived
+  x-source: openapi/banco-inter-pix-openapi.yml
+extends: ../openapi/_original/banco-inter-pix-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-10-18'
+    x-provider: Banco Inter S.A.
+    x-docs: https://developers.inter.co/
+- target: $.components
+  update:
+    securitySchemes:
+      interOAuth:
+        type: oauth2
+        description: 'OAuth 2.0 client credentials (POST /oauth/v2/token, see openapi/banco-inter-token-openapi.yml) over mTLS: every call must
+          present the integration certificate and key issued in Internet Banking PJ. Scopes are those named in each operation description.'
+        flows:
+          clientCredentials:
+            tokenUrl: https://cdpj.partners.bancointer.com.br/oauth/v2/token
+            scopes:
+              cob.read: Scope named in the operation descriptions
+              cob.write: Scope named in the operation descriptions
+              cobv.read: Scope named in the operation descriptions
+              cobv.write: Scope named in the operation descriptions
+              lotecobv.read: Scope named in the operation descriptions
+              lotecobv.write: Scope named in the operation descriptions
+              payloadlocation.read: Scope named in the operation descriptions
+              payloadlocation.write: Scope named in the operation descriptions
+              pix.read: Scope named in the operation descriptions
+              pix.write: Scope named in the operation descriptions
+              webhook.read: Scope named in the operation descriptions
+              webhook.write: Scope named in the operation descriptions
+        x-sandbox-tokenUrl: https://cdpj-sandbox.partners.uatinter.co/oauth/v2/token
+      interMutualTLS:
+        type: mutualTLS
+        description: Client certificate + key from the Inter Empresas integration.
+- target: $.paths['/cob/{txid}'].put
+  update:
+    operationId: criarCobrancaImediataComTxid
+    security:
+    - interOAuth:
+      - cob.write
+      interMutualTLS: []
+- target: $.paths['/cob/{txid}'].patch
+  update:
+    operationId: revisarCobrancaImediata
+    security:
+    - interOAuth:
+      - cob.write
+      interMutualTLS: []
+- target: $.paths['/cob/{txid}'].get
+  update:
+    operationId: consultarCobrancaImediata
+    security:
+    - interOAuth:
+      - cob.read
+      interMutualTLS: []
+- target: $.paths['/cob'].post
+  update:
+    operationId: criarCobrancaImediata
+    security:
+    - interOAuth:
+      - cob.write
+      interMutualTLS: []
+- target: $.paths['/cob'].get
+  update:
+    operationId: consultarListaDeCobrancasImediatas
+    security:
+    - interOAuth:
+      - cob.read
+      interMutualTLS: []
+- target: $.paths['/cob/pagar/{txid}'].post
+  update:
+    operationId: pagarPixDeCobrancaImediataSandbox
+    security:
+    - interOAuth:
+      - pix.write
+      interMutualTLS: []
+- target: $.paths['/sandbox/cob/pagamento'].post
+  update:
+    security:
+    - interOAuth:
+      - pix.write
+      interMutualTLS: []
+- target: $.paths['/cobv/{txid}'].put
+  update:
+    operationId: criarCobrancaComVencimento
+    security:
+    - interOAuth:
+      - cobv.write
+      interMutualTLS: []
+- target: $.paths['/cobv/{txid}'].patch
+  update:
+    operationId: revisarCobrancaComVencimento
+    security:
+    - interOAuth:
+      - cobv.write
+      interMutualTLS: []
+- target: $.paths['/cobv/{txid}'].get
+  update:
+    operationId: consultarCobrancaComVencimento
+    security:
+    - interOAuth:
+      - cobv.read
+      interMutualTLS: []
+- target: $.paths['/cobv'].get
+  update:
+    operationId: consultarListaDeCobrancasComVencimento
+    security:
+    - interOAuth:
+      - cobv.read
+      interMutualTLS: []
+- target: $.paths['/cobv/pagar/{txid}'].post
+  update:
+    operationId: pagarPixDeCobrancaComVencimentoSandbox
+    security:
+    - interOAuth:
+      - pix.write
+      interMutualTLS: []
+- target: $.paths['/ sandbox/cob/pagamento'].post
+  update:
+    security:
+    - interOAuth:
+      - pix.write
+      interMutualTLS: []
+- target: $.paths['/lotecobv/{id}'].put
+  update:
+    security:
+    - interOAuth:
+      - lotecobv.write
+      interMutualTLS: []
+- target: $.paths['/lotecobv/{id}'].patch
+  update:
+    security:
+    - interOAuth:
+      - lotecobv.write
+      interMutualTLS: []
+- target: $.paths['/lotecobv/{id}'].get
+  update:
+    security:
+    - interOAuth:
+      - lotecobv.read
+      interMutualTLS: []
+- target: $.paths['/lotecobv/{id}/sumario'].get
+  update:
+    security:
+    - interOAuth:
+      - lotecobv.read
+      interMutualTLS: []
+- target: $.paths['/lotecobv/{id}/situacao/{situacao}'].get
+  update:
+    security:
+    - interOAuth:
+      - lotecobv.read
+      interMutualTLS: []
+- target: $.paths['/lotecobv'].get
+  update:
+    security:
+    - interOAuth:
+      - lotecobv.read
+      interMutualTLS: []
+- target: $.paths['/loc'].post
+  update:
+    operationId: criarLocationDoPayload
+    security:
+    - interOAuth:
+      - payloadlocation.write
+      interMutualTLS: []
+- target: $.paths['/loc'].get
+  update:
+    operationId: consultarLocationsCadastradas
+    security:
+    - interOAuth:
+      - payloadlocation.read
+      interMutualTLS: []
+- target: $.paths['/loc/{id}'].get
+  update:
+    operationId: recuperarLocationDoPayload
+    security:
+    - interOAuth:
+      - payloadlocation.read
+      interMutualTLS: []
+- target: $.paths['/loc/{id}/txid'].delete
+  update:
+    operationId: desvincularUmaCobrancaDeUmaLocation
+    security:
+    - interOAuth:
+      - payloadlocation.write
+      interMutualTLS: []
+- target: $.paths['/pix/{e2eId}'].get
+  update:
+    operationId: consultarPix
+    security:
+    - interOAuth:
+      - pix.read
+      interMutualTLS: []
+- target: $.paths['/pix'].get
+  update:
+    operationId: consultarPixRecebidos
+    security:
+    - interOAuth:
+      - pix.read
+      interMutualTLS: []
+- target: $.paths['/pix/{e2eId}/devolucao/{id}'].put
+  update:
+    operationId: solicitarDevolucao
+    security:
+    - interOAuth:
+      - pix.write
+      interMutualTLS: []
+- target: $.paths['/pix/{e2eId}/devolucao/{id}'].get
+  update:
+    operationId: consultarDevolucao
+    security:
+    - interOAuth:
+      - pix.read
+      interMutualTLS: []
+- target: $.paths['/webhook/{chave}'].put
+  update:
+    security:
+    - interOAuth:
+      - webhook.write
+      interMutualTLS: []
+- target: $.paths['/webhook/{chave}'].get
+  update:
+    security:
+    - interOAuth:
+      - webhook.read
+      interMutualTLS: []
+- target: $.paths['/webhook/{chave}'].delete
+  update:
+    security:
+    - interOAuth:
+      - webhook.write
+      interMutualTLS: []
+- target: $.paths['/webhook/callbacks'].get
+  update:
+    security:
+    - interOAuth:
+      - webhook.read
+      interMutualTLS: []
+- target: $.paths['/webhook/callbacks/retry'].post
+  update:
+    security:
+    - interOAuth:
+      - webhook.write
+      interMutualTLS: []

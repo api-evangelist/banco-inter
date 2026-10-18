@@ -1,0 +1,126 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Upload de mídia API
+  version: ''
+  description: 'Operations tagged Upload de mídia across 2 of this provider''s published API definitions: swagger-api-forum-yaml.yaml, banco-inter-forum-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj-sandbox.partners.uatinter.co/forum/v1
+  description: Servidor de Sandbox
+- url: https://cdpj.partners.bancointer.com.br/forum/v1
+  description: Servidor de Produção
+tags:
+- name: Upload de mídia
+paths:
+  /media/upload-url:
+    post:
+      tags:
+      - Upload de mídia
+      summary: Gerar URL para upload de arquivo de mídia
+      description: 'Utilizado para gerar uma URL pré-assinada para upload de um arquivo de mídia.
+
+
+        * Escopo requerido: publication.write
+
+        * Rate limit:
+
+
+        * 20 chamadas por minuto
+
+        * 120 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj-sandbox.partners.uatinter.co/forum/v1/media/upload-url
+
+
+        https://cdpj.partners.bancointer.com.br/forum/v1/media/upload-url'
+      operationId: generateMediaUploadUrl
+      requestBody:
+        description: A JSON object containing content type information
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateUploadUrlRequest'
+      responses:
+        '200':
+          description: URL generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateUploadUrlResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+    servers:
+    - url: https://cdpj-sandbox.partners.uatinter.co/forum/v1
+      description: Servidor de Sandbox
+    - url: https://cdpj.partners.bancointer.com.br/forum/v1
+      description: Servidor de Produção
+components:
+  schemas:
+    GenerateUploadUrlRequest:
+      type: object
+      required:
+      - contentType
+      properties:
+        contentType:
+          type: string
+          example: image/jpeg
+          description: 'MIME type of the file to be uploaded. Allowed types: image/jpeg, image/png, video/mp4, video/quicktime, application/pdf.'
+    ProblemResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+          description: Descrição resumida do problema
+          example: Not found
+        detail:
+          type: string
+          description: Descrição completa do problema
+        timestamp:
+          type: string
+          format: date-time
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao'
+    Violacao:
+      type: object
+      properties:
+        propriedade:
+          type: string
+          description: Nome da propriedade
+        razao:
+          type: string
+          description: Descrição do erro
+        valor:
+          type: string
+          description: Valor da propriedade
+    GenerateUploadUrlResponse:
+      type: object
+      properties:
+        uploadUrl:
+          type: string
+          description: URL pré-assinada para upload do arquivo
+          example: https://s3.amazonaws.com/bucket?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=EXAMPLEACCESSKEY%2F20251218%2Fuse-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251218T120000Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=12345567899
+        publicationUrl:
+          type: string
+          description: URL para ser usada na criação da publicação após o upload
+          example: https://s3.amazonaws.com/bucket
+x-refined-from:
+- swagger-api-forum-yaml.yaml
+- banco-inter-forum-openapi.yml

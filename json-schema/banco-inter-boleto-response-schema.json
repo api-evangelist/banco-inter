@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-boleto-response-schema.json",
+  "title": "boletoResponse",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-cobranca-openapi.yml#/components/schemas/boletoResponse",
+  "type": "object",
+  "properties": {
+    "nomeBeneficiario": {
+      "type": "string",
+      "description": "Nome do beneficiário.\n"
+    },
+    "cnpjCpfBeneficiario": {
+      "type": "string",
+      "description": "CNPJ do beneficiário.\n"
+    },
+    "tipoPessoaBeneficiario": {
+      "type": "string",
+      "description": "Tipo do beneficiário.\n"
+    },
+    "contaCorrente": {
+      "type": "string",
+      "description": "Conta corrente do boleto emitido\n"
+    },
+    "nossoNumero": {
+      "type": "string",
+      "description": "Identificador único do boleto emitido.\n"
+    },
+    "seuNumero": {
+      "type": "string",
+      "description": "Campo seuNumero do boleto emitido.\n"
+    },
+    "pagador": {
+      "$ref": "#/$defs/pagador"
+    },
+    "motivoCancelamento": {
+      "type": "string",
+      "description": "Motivo do Cancelamento.\n"
+    },
+    "situacao": {
+      "type": "string",
+      "description": "Situacao do boleto.\n"
+    },
+    "dataHoraSituacao": {
+      "type": "string",
+      "description": "Data referente à situação do boleto.\nFormato aceito: YYYY-MM-DD\n"
+    },
+    "dataVencimento": {
+      "type": "string",
+      "description": "Data referente ao vencimento do boleto.\nFormato aceito: YYYY-MM-DD\n"
+    },
+    "valorNominal": {
+      "type": "number",
+      "description": "Valor Nominal do boleto.\n"
+    },
+    "valorTotalRecebimento": {
+      "type": "number",
+      "description": "Valor Total Recebimento.\n"
+    },
+    "dataEmissao": {
+      "type": "string",
+      "description": "Data referente à emissão do boleto.\nFormato aceito: YYYY-MM-DD\n"
+    },
+    "dataLimite": {
+      "type": "string",
+      "description": "Data referente ao limite de pagamento do boleto.\nFormato aceito: YYYY-MM-DD\n"
+    },
+    "codigoEspecie": {
+      "type": "string",
+      "description": "Codigo de Espécie do boleto.\n"
+    },
+    "codigoBarras": {
+      "type": "string",
+      "description": "Codigo de barras do boleto.\n"
+    },
+    "linhaDigitavel": {
+      "type": "string",
+      "description": "Linha digitável do boleto.\n"
+    },
+    "origem": {
+      "type": "string",
+      "description": "Origem da requisição que gerou o boleto.\n"
+    },
+    "mensagem": {
+      "$ref": "#/$defs/mensagem"
+    },
+    "desconto1": {
+      "$ref": "#/$defs/descontoResponse"
+    },
+    "desconto2": {
+      "$ref": "#/$defs/descontoResponse"
+    },
+    "desconto3": {
+      "$ref": "#/$defs/descontoResponse"
+    },
+    "multa": {
+      "$ref": "#/$defs/multaResponse"
+    },
+    "mora": {
+      "$ref": "#/$defs/moraResponse"
+    }
+  },
+  "$defs": {
+    "descontoResponse": {
+      "properties": {
+        "codigo": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "taxa": {
+          "type": "number"
+        },
+        "valor": {
+          "type": "number"
+        }
+      }
+    },
+    "mensagem": {
+      "properties": {
+        "linha1": {
+          "type": "string",
+          "description": "Linha 1 do campo de texto do título",
+          "maxLength": 78
+        },
+        "linha2": {
+          "type": "string",
+          "description": "Linha 2 do campo de texto do título",
+          "maxLength": 78
+        },
+        "linha3": {
+          "type": "string",
+          "description": "Linha 3 do campo de texto do título",
+          "maxLength": 78
+        },
+        "linha4": {
+          "type": "string",
+          "description": "Linha 4 do campo de texto do título",
+          "maxLength": 78
+        },
+        "linha5": {
+          "type": "string",
+          "description": "Linha 5 do campo de texto do título",
+          "maxLength": 78
+        }
+      }
+    },
+    "moraResponse": {
+      "properties": {
+        "codigo": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "taxa": {
+          "type": "number"
+        },
+        "valor": {
+          "type": "number"
+        }
+      }
+    },
+    "multaResponse": {
+      "properties": {
+        "codigo": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "taxa": {
+          "type": "number"
+        },
+        "valor": {
+          "type": "number"
+        }
+      }
+    },
+    "pagador": {
+      "type": "object",
+      "required": [
+        "cpfCnpj",
+        "nome",
+        "tipoPessoa",
+        "cep",
+        "endereco",
+        "cidade",
+        "uf"
+      ],
+      "properties": {
+        "cpfCnpj": {
+          "type": "string",
+          "description": "CPF/CNPJ do pagador do título\n\nCNPJ: NNNNNNNNNFFFFCC\n\nCPF : 0000NNNNNNNNNCC,\n\nonde\n\n__NNNNNNNNN__ é a raiz do CNPJ/CPF\n\n__FFFF__ = filial do CNPJ\n\n__CC__ = dígitos de controle\n",
+          "minLength": 11,
+          "maxLength": 14
+        },
+        "tipoPessoa": {
+          "type": "string",
+          "description": "Tipo do pagador:\n* `FISICA` - Pessoa Física\n* `JURIDICA` - Pessoa Jurídica\n"
+        },
+        "nome": {
+          "type": "string",
+          "description": "Nome do pagador",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "endereco": {
+          "type": "string",
+          "description": "Endereço do pagador",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "numero": {
+          "type": "string",
+          "description": "Número no logradouro do pagador",
+          "maxLength": 10,
+          "default": ""
+        },
+        "complemento": {
+          "type": "string",
+          "description": "Complemento do endereço do pagador",
+          "maxLength": 30,
+          "default": ""
+        },
+        "bairro": {
+          "type": "string",
+          "description": "Bairro do pagador",
+          "maxLength": 60,
+          "default": ""
+        },
+        "cidade": {
+          "type": "string",
+          "description": "Cidade do pagador",
+          "maxLength": 60,
+          "minLength": 1
+        },
+        "uf": {
+          "type": "string",
+          "description": "UF do pagador",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "cep": {
+          "type": "string",
+          "description": "CEP do pagador",
+          "minLength": 8,
+          "maxLength": 8
+        },
+        "email": {
+          "type": "string",
+          "default": "",
+          "description": "E-mail do pagador",
+          "maxLength": 50
+        },
+        "ddd": {
+          "type": "string",
+          "default": "",
+          "description": "DDD do telefone do pagador",
+          "maxLength": 2
+        },
+        "telefone": {
+          "type": "string",
+          "default": "",
+          "description": "Telefone do pagador",
+          "maxLength": 9
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,682 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Location API
+  version: ''
+  description: 'Operations tagged Location across 2 of this provider''s published API definitions: swagger-api-pix-yaml.yaml, banco-inter-pix-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj.partners.bancointer.com.br/pix/v2
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+  description: Servidor de Sandbox
+tags:
+- name: Location
+paths:
+  /loc:
+    post:
+      summary: Criar location do payload
+      description: 'Criar location do payload.
+
+
+        * Escopo requerido: payloadlocation.write
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/loc
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/loc'
+      tags:
+      - Location
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      requestBody:
+        $ref: '#/components/requestBodies/PayloadLocationBody'
+      responses:
+        '201':
+          description: Dados da location do Payload.
+          headers:
+            location:
+              schema:
+                type: string
+                format: uri
+                title: Identificador da location criada.
+                description: Identificador da location criada.
+                example: pix.example.com/api/loc/1234567
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayloadLocation'
+              examples:
+                getPayloadLocation1:
+                  $ref: '#/components/examples/payloadLocationResponse5'
+                getPayloadLocation2:
+                  $ref: '#/components/examples/payloadLocationResponse6'
+        '400':
+          description: Requisição com formato inválido.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problema'
+              examples:
+                exemplo1:
+                  $ref: '#/components/examples/RequisicaoInvalidaLocationExample1'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      operationId: postLoc
+      x-operation-id-source: derived
+    get:
+      summary: Consultar locations cadastradas
+      description: 'Endpoint para consultar locations cadastradas.
+
+
+        * Escopo requerido: payloadlocation.read
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/loc
+
+
+        https:/cdpj-sandbox.partners.uatinter.co/pix/v2/loc'
+      tags:
+      - Location
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - $ref: '#/components/parameters/inicio'
+      - $ref: '#/components/parameters/fim'
+      - $ref: '#/components/parameters/txIdPresente'
+      - $ref: '#/components/parameters/tipoCob'
+      - $ref: '#/components/parameters/paginaAtual'
+      - $ref: '#/components/parameters/itensPorPagina'
+      responses:
+        '200':
+          description: lista dos locations cadastrados de acordo com o critério de busca.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayloadLocationConsultadas'
+              examples:
+                getCobs1:
+                  $ref: '#/components/examples/getPayloadLocation1'
+        '400':
+          description: Requisição com formato inválido.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problema'
+              examples:
+                exemplo1:
+                  $ref: '#/components/examples/RequisicaoInvalidaLocationExample2'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      operationId: getLoc
+      x-operation-id-source: derived
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+  /loc/{id}:
+    get:
+      summary: Recuperar location do payload
+      description: 'Recupera a location do payload.
+
+
+        * Escopo requerido: payloadlocation.read
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/loc/{id}
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/loc/{id}'
+      tags:
+      - Location
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id da location cadastrada para servir um payload
+      responses:
+        '200':
+          description: Dados da location do Payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayloadLocationCompleta'
+              examples:
+                getPayloadLocation1:
+                  $ref: '#/components/examples/payloadLocationResponse1'
+                getPayloadLocation2:
+                  $ref: '#/components/examples/payloadLocationResponse2'
+                getPayloadLocation3:
+                  $ref: '#/components/examples/payloadLocationResponse3'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      operationId: getLocById
+      x-operation-id-source: derived
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+  /loc/{id}/txid:
+    delete:
+      summary: Desvincular uma cobrança de uma location
+      description: 'Endpoint utilizado para desvincular uma cobrança de uma location.
+
+
+        Se executado com sucesso, a entidade `loc` não apresentará mais um txid,
+
+        se apresentava anteriormente à chamada. Adicionalmente, a entidade `cob` ou `cobv` associada ao
+
+        txid desvinculado também passará a não mais apresentar um _location_. Esta operação
+
+        não altera o `status` da `cob` ou `cobv` em questão.
+
+
+        * Escopo requerido: payloadlocation.write
+
+        * rate limit:
+
+
+        * 120 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/pix/v2/loc/{id}/txid
+
+
+        https://cdpj-sandbox.partners.uatinter.co/pix/v2/loc/{id}/txid'
+      tags:
+      - Location
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - name: id
+        in: path
+        description: Id da location
+        required: true
+        schema:
+          type: string
+          title: Id da location cadastrada para servir um payload
+      responses:
+        '200':
+          description: cobrança representada pelo txid informado desvinculada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayloadLocation'
+              examples:
+                getPayloadLocation1:
+                  $ref: '#/components/examples/payloadLocationResponse4'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+      operationId: deleteLocByIdTxid
+      x-operation-id-source: derived
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/pix/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/pix/v2
+      description: Servidor de Sandbox
+components:
+  schemas:
+    Problema:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+          example: https://pix.bcb.gov.br/api/v2/error/NaoEncontrado
+        title:
+          type: string
+          description: Descrição resumida do problema.
+          example: Not found
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+          example: 404
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        correlationId:
+          type: string
+          description: Identificador de correlação do problema para fins de suporte
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao'
+    PayloadLocationCompleta:
+      type: object
+      title: Location do Payload Completa
+      description: Identificador da localização do payload completo.
+      properties:
+        id:
+          $ref: '#/components/schemas/PayloadLocationId'
+        txid:
+          type: string
+          pattern: '[a-zA-Z0-9]{26,35}'
+        location:
+          type: string
+          title: Localização do payload
+          description: Localização do Payload a ser informada na criação da cobrança.
+          maxLength: 77
+          format: uri
+          example: pix.example.com/qr/v2/2353c790eefb11eaadc10242ac120002
+          readOnly: true
+        tipoCob:
+          type: string
+          title: Tipo da cobrança
+          enum:
+          - cob
+          - cobv
+        criacao:
+          type: string
+          format: date-time
+          title: Data de Criação
+          description: Data e hora em que a location foi criada. Respeita RFC 3339.
+          readOnly: true
+    Paginacao:
+      type: object
+      title: Paginação
+      required:
+      - paginaAtual
+      - itensPorPagina
+      - quantidadeDePaginas
+      - quantidadeTotalDeItens
+      properties:
+        paginaAtual:
+          type: integer
+          title: Página atual
+          description: Número da página recuperada.
+          minimum: 0
+        itensPorPagina:
+          type: integer
+          title: Itens por página
+          description: Quantidade de registros retornado na página.
+          minimum: 1
+        quantidadeDePaginas:
+          type: integer
+          title: Quantidade de páginas
+          description: Quantidade de páginas disponíveis para consulta.
+          minimum: 1
+        quantidadeTotalDeItens:
+          type: integer
+          title: Quantidade total de itens
+          description: Quantidade total de itens disponíveis de acordo com os parâmetros informados.
+          minimum: 0
+    ParametrosConsultaPayloadLocation:
+      type: object
+      title: Parâmetros de consulta de locations
+      description: Parâmetros utilizados para a realização de uma consulta de locations.
+      properties:
+        inicio:
+          type: string
+          title: Data de Início
+          description: Data inicial utilizada na consulta. Respeita RFC 3339.
+          example: '2020-01-01T00:00:00Z'
+        fim:
+          type: string
+          title: Data de Fim
+          description: Data de fim utilizada na consulta. Respeita RFC 3339.
+          example: '2020-12-01T17:00:00Z'
+        txIdPresente:
+          type: boolean
+          description: Filtro pela existência de txid.
+        tipoCob:
+          type: string
+          enum:
+          - cob
+          - cobv
+        paginacao:
+          $ref: '#/components/schemas/Paginacao'
+    PayloadLocationId:
+      type: integer
+      format: int64
+      title: Id da location
+      description: Identificador da location a ser informada na criação da cobrança .
+    PayloadLocationConsultadas:
+      type: object
+      title: Locations Consultadas
+      required:
+      - parametros
+      - loc
+      properties:
+        parametros:
+          $ref: '#/components/schemas/ParametrosConsultaPayloadLocation'
+        loc:
+          type: array
+          title: Lista de locations cadastradas
+          items:
+            allOf:
+            - $ref: '#/components/schemas/PayloadLocationCompleta'
+    PayloadLocationSolicitada:
+      type: object
+      title: Location do Payload Solicitada
+      description: Identificador da localização do payload solicitada.
+      properties:
+        tipoCob:
+          type: string
+          title: Tipo da cobrança
+    Violacao:
+      type: object
+      title: Violações
+      properties:
+        razao:
+          type: string
+          title: Descrição do erro
+          description: Descrição do erro
+          example: Valor da cobrança não pode ser 0.00
+        propriedade:
+          type: string
+          title: Nome da propriedade
+          description: Nome da propriedade
+          example: cob.chave
+        valor:
+          type: string
+          title: Valor da propriedade
+          description: Valor da propriedade
+          example: 061996671234
+    PayloadLocation:
+      type: object
+      title: Location do Payload
+      description: Identificador da localização do payload.
+      properties:
+        id:
+          $ref: '#/components/schemas/PayloadLocationId'
+        location:
+          type: string
+          title: Localização do payload
+          description: Localização do Payload a ser informada na criação da cobrança.
+          maxLength: 77
+          format: uri
+          example: pix.example.com/qr/v2/2353c790eefb11eaadc10242ac120002
+          readOnly: true
+        tipoCob:
+          type: string
+          title: Tipo da cobrança
+          enum:
+          - cob
+          - cobv
+        criacao:
+          type: string
+          format: date-time
+          title: Data de Criação
+          description: Data e hora em que a location foi criada. Respeita RFC 3339.
+          readOnly: true
+  examples:
+    RequisicaoInvalidaLocationExample2:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/PayloadLocationOperacaoInvalida
+        title: PayloadLocation inválido.
+        status: 400
+        detail: Os parâmetros de consulta à lista de locations não respeitam o schema ou não fazem sentido semanticamente..
+    payloadLocationResponse2:
+      summary: Exemplo de Payload Location 2
+      value:
+        id: 856
+        txid: 31e08604f9ce459bb59672332af8d672
+        location: pix.example.com/qr/v2/cobv/39c9f435c6324867aa1dec1260e1127c
+        tipoCob: cobv
+        criacao: '2020-02-10T19:22:52.013Z'
+    NaoEncontradoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/NaoEncontrado
+        title: Não Encontrado
+        status: 404
+        detail: Entidade não encontrada.
+    RequisicaoInvalidaLocationExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/PayloadLocationOperacaoInvalida
+        title: PayloadLocation inválido.
+        status: 400
+        detail: A presente requisição busca criar uma location sem respeitar o schema estabelecido.
+    payloadLocationResponse1:
+      summary: Exemplo de Payload Location 1
+      value:
+        id: 7716
+        txid: fda9460fe04e4f129b72863ae57ee22f
+        location: pix.example.com/qr/v2/cobv/2353c790eefb11eaadc10242ac120002
+        tipoCob: cobv
+        criacao: '2020-03-11T21:19:51.013Z'
+    AcessoNegadoExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/AcessoNegado
+        title: Acesso Negado
+        status: 403
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    ServicoIndisponivelExample1:
+      summary: Exemplo de erro da requisição 1
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/ServicoIndisponivel
+        title: Serviço Indisponível
+        status: 503
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    payloadLocationResponse4:
+      summary: Exemplo de Payload Location 3
+      value:
+        id: 2316
+        location: pix.example.com/qr/v2/a8534e273ecb47d3ac30613104544466
+        tipoCob: cob
+        criacao: '2020-05-31T19:39:54.013Z'
+    getPayloadLocation1:
+      summary: Exemplo de retorno da consulta de locations 1
+      value:
+        parametros:
+          inicio: '2020-04-01T00:00:00Z'
+          fim: '2020-04-01T23:59:59Z'
+          paginacao:
+            paginaAtual: 0
+            itensPorPagina: 100
+            quantidadeDePaginas: 1
+            quantidadeTotalDeItens: 3
+        loc:
+        - allOf:
+          - $ref: '#/components/examples/payloadLocationResponse1/value'
+        - allOf:
+          - $ref: '#/components/examples/payloadLocationResponse2/value'
+        - allOf:
+          - $ref: '#/components/examples/payloadLocationResponse3/value'
+    payloadLocationResponse5:
+      summary: Exemplo de Payload Location 1
+      value:
+        id: 7716
+        location: pix.example.com/qr/v2/2353c790eefb11eaadc10242ac120002
+        tipoCob: cob
+        criacao: '2020-03-11T21:19:51.013Z'
+    payloadLocationBody1:
+      summary: Exemplo de Payload Location 1
+      value:
+        tipoCob: cob
+    payloadLocationResponse3:
+      summary: Exemplo de Payload Location 3
+      value:
+        id: 2316
+        txid: eb9d87f36fca4c92b7d5ec48e2ee3853
+        location: pix.example.com/qr/v2/a8534e273ecb47d3ac30613104544466
+        tipoCob: cob
+        criacao: '2020-05-31T19:39:54.013Z'
+    payloadLocationResponse6:
+      summary: Exemplo de Payload Location 2
+      value:
+        id: 856
+        location: pix.example.com/qr/v2/cobv/39c9f435c6324867aa1dec1260e1127c
+        tipoCob: cobv
+        criacao: '2020-02-10T19:22:52.013Z'
+  parameters:
+    xContaCorrente:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação. Necessário somente quando a aplicação estiver associada a mais de uma conta corrente. Enviar apenas números (incluindo o dígito), e não enviar zeros a esquerda.
+      schema:
+        type: string
+        pattern: '[1-9][0-9]*'
+    inicio:
+      in: query
+      name: inicio
+      required: true
+      x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm:ss[.SSS]XXX
+      example: '2023-02-30T12:09:00Z'
+      description: 'Formato: yyyy-MM-dd''T''HH:mm:ss[.SSS]XXX'
+      schema:
+        type: string
+        format: date-time
+        title: Data de início
+        description: Filtra os registros cuja data de criação seja maior ou igual que a data de início.
+    txIdPresente:
+      name: txIdPresente
+      in: query
+      schema:
+        type: boolean
+    tipoCob:
+      name: tipoCob
+      in: query
+      schema:
+        type: string
+        enum:
+        - cob
+        - cobv
+    itensPorPagina:
+      in: query
+      name: paginacao.itensPorPagina
+      required: false
+      schema:
+        type: integer
+        format: int32
+        title: Itens por Página
+        maximum: 1000
+        default: 100
+        description: Quantidade máxima de registros retornados em cada página. Apenas a última página pode conter uma quantidade menor de registros.
+    fim:
+      in: query
+      name: fim
+      required: true
+      x-arch-date-time-pattern: yyyy-MM-dd'T'HH:mm:ss[.SSS]XXX
+      example: '2023-03-30T12:09:00Z'
+      description: 'Formato: yyyy-MM-dd''T''HH:mm:ss[.SSS]XXX'
+      schema:
+        type: string
+        format: date-time
+        title: Data de fim
+        description: Filtra os registros cuja data de criação seja menor ou igual que a data de fim.
+    paginaAtual:
+      in: query
+      name: paginacao.paginaAtual
+      required: false
+      schema:
+        type: integer
+        format: int32
+        title: Página atual
+        default: 0
+        description: Página a ser retornada pela consulta. Se não for informada, o PSP assumirá que será 0.
+  responses:
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/NaoEncontradoExample1'
+    ServicoIndisponivel:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/ServicoIndisponivelExample1'
+    AcessoNegado:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/AcessoNegadoExample1'
+  requestBodies:
+    PayloadLocationBody:
+      description: Dados para geração da location.
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PayloadLocationSolicitada'
+          examples:
+            exemplo1:
+              $ref: '#/components/examples/payloadLocationBody1'
+x-refined-from:
+- swagger-api-pix-yaml.yaml
+- banco-inter-pix-openapi.yml

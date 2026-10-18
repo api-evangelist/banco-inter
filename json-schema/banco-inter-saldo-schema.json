@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-saldo-schema.json",
+  "title": "Saldo",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-banking-openapi.yml#/components/schemas/Saldo",
+  "type": "object",
+  "properties": {
+    "bloqueadoCheque": {
+      "type": "number",
+      "format": "int64",
+      "description": "Saldo bloqueado (cheque). Retornando apenas quando **não** é informado a \"dataSaldo\" na requisição."
+    },
+    "disponivel": {
+      "type": "number",
+      "format": "int64",
+      "description": "Saldo líquido"
+    },
+    "bloqueadoJudicialmente": {
+      "type": "number",
+      "format": "int64",
+      "description": "Saldo bloqueado (justiça). Retornando apenas quando **não** é informado a \"dataSaldo\" na requisição."
+    },
+    "bloqueadoAdministrativo": {
+      "type": "number",
+      "format": "int64",
+      "description": "Saldo bloqueado (justiça). Retornando apenas quando **não** é informado a \"dataSaldo\" na requisição."
+    },
+    "limite": {
+      "type": "number",
+      "format": "int64",
+      "description": "Limite de credito da conta. Retornando apenas quando **não** é informado a \"dataSaldo\" na requisição."
+    },
+    "dataReferencia": {
+      "type": "string",
+      "description": "A data referência será retornada quando a consulta for realizada em um dia não útil. Visto que o saldo não é sensibilizado em dias não úteis, será retornada à data referência do saldo, sendo o último dia útil."
+    }
+  }
+}

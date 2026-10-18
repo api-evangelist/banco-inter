@@ -1,0 +1,766 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Publicação API
+  version: ''
+  description: 'Operations tagged Publicação across 2 of this provider''s published API definitions: swagger-api-forum-yaml.yaml, banco-inter-forum-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj-sandbox.partners.uatinter.co/forum/v1
+  description: Servidor de Sandbox
+- url: https://cdpj.partners.bancointer.com.br/forum/v1
+  description: Servidor de Produção
+tags:
+- name: Publicação
+paths:
+  /publication:
+    get:
+      tags:
+      - Publicação
+      summary: Obter publicação pelo ID
+      description: 'Utilizado para recuperar uma publicação pelo ID.
+
+
+        * Escopo requerido: publication.read
+
+
+        * Rate limit:
+
+
+        * 20 chamadas por minuto
+
+        * 120 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj-sandbox.partners.uatinter.co/forum/v1/publication
+
+
+        https://cdpj.partners.bancointer.com.br/forum/v1/publication'
+      operationId: getPublicationById
+      parameters:
+      - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicationResponse'
+        '204':
+          description: Publicação não encontrada
+        '403':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+    post:
+      tags:
+      - Publicação
+      summary: Criar publicação
+      description: 'Utilizado para criar uma publicação.
+
+
+        * Escopo requerido: publication.write
+
+        * Rate limit:
+
+
+        * 20 chamadas por minuto
+
+        * 120 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj-sandbox.partners.uatinter.co/forum/v1/publication
+
+
+        https://cdpj.partners.bancointer.com.br/forum/v1/publication'
+      operationId: createPublication
+      requestBody:
+        description: Um JSON contendo informações da publicação
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicationRequestBody'
+      responses:
+        '200':
+          description: Publicação criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: string
+                description: ID da publicação
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+        '403':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+    put:
+      tags:
+      - Publicação
+      summary: Editar publicação
+      description: 'Utilizado para editar uma publicação pelo ID.
+
+
+        * Escopo requerido: publication.write
+
+        * Rate limit:
+
+
+        * 20 chamadas por minuto
+
+        * 120 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj-sandbox.partners.uatinter.co/forum/v1/publication
+
+
+        https://cdpj.partners.bancointer.com.br/forum/v1/publication'
+      operationId: updatePublication
+      parameters:
+      - $ref: '#/components/parameters/id'
+      requestBody:
+        description: Um JSON contendo informações da publicação
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePublicationRequestBody'
+      responses:
+        '200':
+          description: Publicação atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: string
+                description: ID da publicação
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+        '403':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+    delete:
+      tags:
+      - Publicação
+      summary: Deletar publicação
+      description: 'Utilizado para deletar uma publicação pelo ID.
+
+
+        * Escopo requerido: publication.delete
+
+        * Rate limit:
+
+
+        * 20 chamadas por minuto
+
+        * 120 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj-sandbox.partners.uatinter.co/forum/v1/publication
+
+
+        https://cdpj.partners.bancointer.com.br/forum/v1/publication'
+      operationId: deletePublication
+      parameters:
+      - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: Publicação deletada com sucesso
+        '403':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+    servers:
+    - url: https://cdpj-sandbox.partners.uatinter.co/forum/v1
+      description: Servidor de Sandbox
+    - url: https://cdpj.partners.bancointer.com.br/forum/v1
+      description: Servidor de Produção
+  /publications:
+    get:
+      tags:
+      - Publicação
+      summary: Obter lista de publicações
+      description: 'Utilizado para recuperar uma lista de publicações baseado nos parametros informados.
+
+
+        * Escopo requerido: publication.read
+
+        * Rate limit:
+
+
+        * 20 chamadas por minuto
+
+        * 120 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        https://cdpj-sandbox.partners.uatinter.co/forum/v1/publications
+
+
+        https://cdpj.partners.bancointer.com.br/forum/v1/publications'
+      operationId: getPublications
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/searchKey'
+      - $ref: '#/components/parameters/startDate'
+      - $ref: '#/components/parameters/endDate'
+      - $ref: '#/components/parameters/types'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicationPageResponse'
+        '403':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+        '404':
+          description: Não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+    servers:
+    - url: https://cdpj-sandbox.partners.uatinter.co/forum/v1
+      description: Servidor de Sandbox
+    - url: https://cdpj.partners.bancointer.com.br/forum/v1
+      description: Servidor de Produção
+components:
+  schemas:
+    CardFooterInfo:
+      type: object
+      description: Rodapé do card
+      properties:
+        text:
+          type: string
+    CardTableCellInfo:
+      type: object
+      description: Célula da tabela do card
+      properties:
+        align:
+          $ref: '#/components/schemas/CardTableCellAlignInfo'
+        title:
+          type: string
+        icon:
+          $ref: '#/components/schemas/CardIconInfo'
+        text:
+          type: string
+        textColor:
+          type: string
+          description: Código hexadecimal da cor do texto
+    ProblemResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+          description: Descrição resumida do problema
+          example: Not found
+        detail:
+          type: string
+          description: Descrição completa do problema
+        timestamp:
+          type: string
+          format: date-time
+        violacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violacao'
+    MediaFile:
+      type: object
+      description: Arquivo de mídia para adicionar na publicação
+      properties:
+        file:
+          type: string
+          format: byte
+          description: Imagem, vídeo ou documento
+        extension:
+          $ref: '#/components/schemas/FileExtension'
+        position:
+          type: integer
+          description: A posição do arquivo na publicação
+          default: 0
+    CardTagInfo:
+      type: object
+      description: Tag do card
+      properties:
+        title:
+          type: string
+        textColor:
+          type: string
+          description: Código hexadecimal da cor do texto
+        backgroundColor:
+          type: string
+          description: Código hexadecimal da cor do fundo
+    CardIconInfo:
+      type: object
+      description: Ícone do card
+      properties:
+        value:
+          type: string
+    Style:
+      type: string
+      description: Estilo do botão do card
+      enum:
+      - PRIMARY
+      - SECONDARY
+      - GHOST
+    PostType:
+      type: string
+      enum:
+      - POST
+      - POLL
+      default: POST
+      description: Tipo da publicação
+    DurationPoll:
+      type: string
+      description: Duração da enquete em dias
+      enum:
+      - ONE_DAY
+      - TWO_DAYS
+      - THREE_DAYS
+      - FOUR_DAYS
+      - FIVE_DAYS
+    CardTypeInfo:
+      type: string
+      enum:
+      - ASSET
+      - SHOPPING
+      - GENERIC
+      - BASIC
+      description: Tipo de card
+    PublicationRequestBody:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PostType'
+        text:
+          type: string
+          description: Conteúdo da publicação
+        mediasInformation:
+          $ref: '#/components/schemas/MediasInformationUpdate'
+        mediaFiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaFile'
+          description: Arquivos de mídia para adicionar na publicação
+        poll:
+          $ref: '#/components/schemas/PollRequestBody'
+        createdAt:
+          type: string
+          format: date-time
+          description: Data e hora da publicação (Aceita datas futuras para criar publicações agendadas)
+    PollRequestBody:
+      type: object
+      description: Enquete
+      properties:
+        durationInDays:
+          $ref: '#/components/schemas/DurationPoll'
+        multipleChoice:
+          type: boolean
+          description: Se a enquete permite múltiplas escolhas
+        options:
+          type: array
+          description: As opções da enquete
+          items:
+            type: string
+          minItems: 2
+    CardChartInfo:
+      type: object
+      description: Gráfico do card
+      properties:
+        description:
+          type: string
+        variations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardChartVariationInfo'
+        lineColor:
+          type: string
+        labelCount:
+          type: integer
+        forceLabelCount:
+          type: boolean
+        typeOfCurrency:
+          type: string
+    MediasInformationUpdate:
+      type: object
+      description: Arquivos de mídia para manter na publicação
+      properties:
+        images:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/MediaInformationUpdate'
+          description: Imagens para manter na publicação
+        videos:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/MediaInformationUpdate'
+          description: Vídeos para manter na publicação
+        documents:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/MediaInformationUpdate'
+          description: Documentos para manter na publicação
+    CardInfo:
+      type:
+      - object
+      - 'null'
+      description: Card Genérico
+      properties:
+        type:
+          $ref: '#/components/schemas/CardTypeInfo'
+        header:
+          $ref: '#/components/schemas/CardHeaderInfo'
+        body:
+          $ref: '#/components/schemas/CardBodyInfo'
+        footer:
+          $ref: '#/components/schemas/CardFooterInfo'
+        action:
+          $ref: '#/components/schemas/CardButtonActionInfo'
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+    PollResponse:
+      type: object
+      description: Enquete
+      properties:
+        expiresAt:
+          type: string
+          format: date-time
+          description: Data e hora da expiração da enquete
+        multipleChoice:
+          type: boolean
+          description: Se a enquete permite múltiplas escolhas
+        optionsPoll:
+          type: array
+          items:
+            $ref: '#/components/schemas/OptionPoll'
+          description: As opções da enquete
+    CardBodyInfo:
+      type: object
+      description: Corpo do card
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardTagInfo'
+        title:
+          type: string
+        text:
+          type: string
+        price:
+          type: string
+        oldPrice:
+          type: string
+        installment:
+          type: string
+        cashback:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        button:
+          $ref: '#/components/schemas/CardButtonInfo'
+        grid:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardGridCellInfo'
+        table:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardTableCellInfo'
+        chart:
+          $ref: '#/components/schemas/CardChartInfo'
+    FileExtension:
+      type: string
+      enum:
+      - PNG
+      - JPG
+      - MOV
+      - MP4
+      - QUICKTIME
+      - PDF
+      description: Extensão do arquivo
+    CardButtonActionInfo:
+      type: object
+      description: Ação do botão do card
+      properties:
+        route:
+          type: string
+        value:
+          type: string
+    CardChartVariationInfo:
+      type: object
+      description: Variação do gráfico
+      properties:
+        value:
+          type: number
+          format: double
+        label:
+          type: string
+    UpdatePublicationRequestBody:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Conteúdo da publicação
+        mediasInformation:
+          $ref: '#/components/schemas/MediasInformationUpdate'
+        mediaFiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaFile'
+          description: Arquivos para adicionar na publicação
+    MediaInformationUpdate:
+      type: object
+      description: Arquivo de mídia para atualizar na publicação
+      properties:
+        url:
+          type: string
+          description: A url do arquivo
+        position:
+          type: integer
+          description: A posição do arquivo na publicação
+          default: 0
+    Violacao:
+      type: object
+      properties:
+        propriedade:
+          type: string
+          description: Nome da propriedade
+        razao:
+          type: string
+          description: Descrição do erro
+        valor:
+          type: string
+          description: Valor da propriedade
+    CardTableCellAlignInfo:
+      description: Alinhamento da célula da tabela do card
+      type: string
+      enum:
+      - LEFT
+      - RIGHT
+    OptionPoll:
+      type: object
+      description: Opção da enquete
+      properties:
+        label:
+          type: string
+          description: A label da opção
+        totalAnswer:
+          type: integer
+          description: O total de votos para esta opção
+    CardGridCellInfo:
+      type: object
+      description: Célula do grid do card
+      properties:
+        title:
+          type: string
+        text:
+          type: string
+        textColor:
+          type: string
+          description: Código hexadecimal da cor do texto
+        icon:
+          $ref: '#/components/schemas/CardIconInfo'
+    CardHeaderInfo:
+      type: object
+      description: Cabeçalho do card
+      properties:
+        tag:
+          $ref: '#/components/schemas/CardTagInfo'
+        title:
+          type: string
+    PublicationResponse:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PostType'
+        id:
+          type: string
+          description: ID da publicação
+        text:
+          type: string
+          description: Conteúdo da publicação
+        mediasInformation:
+          $ref: '#/components/schemas/MediasInformationUpdate'
+        card:
+          $ref: '#/components/schemas/CardInfo'
+        poll:
+          $ref: '#/components/schemas/PollResponse'
+        likes:
+          type: integer
+          format: int64
+          default: 0
+          description: Quantidade de curtidas
+        comments:
+          type: integer
+          format: int64
+          default: 0
+          description: Quantidade de comentários
+        reposts:
+          type: integer
+          format: int64
+          default: 0
+          description: Quantidade de reposts
+        quotes:
+          type: integer
+          format: int64
+          default: 0
+          description: Quantidade de citações
+        answers:
+          type: integer
+          format: int64
+          default: 0
+          description: Quantidade de respostas
+        createdAt:
+          type: string
+          format: date-time
+          description: Data e hora da publicação
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data e hora da última atualização
+    CardButtonInfo:
+      type: object
+      description: Botão do card
+      properties:
+        title:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        isEnable:
+          type: boolean
+          default: true
+        icon:
+          $ref: '#/components/schemas/CardIconInfo'
+        action:
+          $ref: '#/components/schemas/CardButtonActionInfo'
+    PublicationPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicationResponse'
+          description: Lista de publicações
+        totalPages:
+          type: integer
+          format: int32
+          description: Total de páginas
+        totalElements:
+          type: integer
+          format: int32
+          description: Total de itens
+      required:
+      - content
+      - totalPages
+      - totalElements
+  parameters:
+    id:
+      name: id
+      in: header
+      required: true
+      description: ID da publicação
+      schema:
+        type: string
+    startDate:
+      name: startDate
+      description: Data de início
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+        example: '2025-01-01'
+    size:
+      name: size
+      in: query
+      required: false
+      description: Número de itens por página
+      schema:
+        type: integer
+        default: 100
+    page:
+      name: page
+      in: query
+      required: false
+      description: Número da página
+      schema:
+        type: integer
+        default: 0
+    endDate:
+      name: endDate
+      in: query
+      description: Data de fim
+      required: false
+      schema:
+        type: string
+        format: date
+        example: '2025-01-02'
+    types:
+      name: types
+      in: query
+      required: false
+      description: 'Tipos de publicações. Default: POST, POLL'
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/PostType'
+    searchKey:
+      name: searchKey
+      in: query
+      required: false
+      description: Chave de busca
+      schema:
+        type: string
+x-refined-from:
+- swagger-api-forum-yaml.yaml
+- banco-inter-forum-openapi.yml

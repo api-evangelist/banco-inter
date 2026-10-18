@@ -1,0 +1,452 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-lista-transacoes-completa-scroll-schema.json",
+  "title": "ListaTransacoesCompletaScroll",
+  "description": "Resposta para consultas usando modo scroll. Retornado quando\nheaders `x-inter-scroll-enabled` ou `x-inter-scroll-id` são utilizados.\n",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-banking-openapi.yml#/components/schemas/ListaTransacoesCompletaScroll",
+  "name": "Resposta com Scroll",
+  "type": "object",
+  "properties": {
+    "totalElementos": {
+      "$ref": "#/$defs/totalElementos"
+    },
+    "scrollId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid",
+      "description": "ID único do scroll para continuar a navegação. Use este valor no\nheader `x-inter-scroll-id` das próximas requisições.\nQuando `hasMore: false`, este campo será `null` indicando que o\nscroll foi finalizado e removido.\n"
+    },
+    "hasMore": {
+      "type": "boolean",
+      "description": "Indica se existem mais transações para serem recuperadas. Quando `false`, o scroll é automaticamente removido."
+    },
+    "transacoes": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/TransacaoCompleta"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "DetalheBoletoCobranca": {
+      "title": "Boleto Cobrança",
+      "properties": {
+        "dataVencimento": {
+          "type": "string"
+        },
+        "dataTransacao": {
+          "type": "string"
+        },
+        "nossoNumero": {
+          "type": "string"
+        },
+        "seuNumero": {
+          "type": "string"
+        },
+        "codBarras": {
+          "type": "string"
+        },
+        "juros": {
+          "type": "string"
+        },
+        "multa": {
+          "type": "string"
+        },
+        "desconto1": {
+          "type": "string"
+        },
+        "desconto2": {
+          "type": "string"
+        },
+        "desconto3": {
+          "type": "string"
+        },
+        "nome": {
+          "type": "string"
+        },
+        "dataLimite": {
+          "type": "string"
+        },
+        "tipoDetalhe": {
+          "type": "string"
+        },
+        "cpfCnpj": {
+          "type": "string"
+        },
+        "dataEmissao": {
+          "type": "string"
+        },
+        "abatimento": {
+          "type": "string"
+        }
+      }
+    },
+    "DetalheCashback": {
+      "title": "Cashback",
+      "properties": {
+        "valorCompra": {
+          "type": "string"
+        },
+        "produto": {
+          "type": "string"
+        },
+        "tipoDetalhe": {
+          "type": "string"
+        }
+      }
+    },
+    "DetalheCheque": {
+      "title": "Cheque",
+      "properties": {
+        "agencia": {
+          "type": "string"
+        },
+        "numeroChequeBancario": {
+          "type": "string"
+        },
+        "contaBancaria": {
+          "type": "string"
+        },
+        "dataRetorno": {
+          "type": "string"
+        },
+        "motivoRetorno": {
+          "type": "string"
+        },
+        "descricaoChequeBancario": {
+          "type": "string"
+        },
+        "nomeEmpresa": {
+          "type": "string"
+        },
+        "tipoDetalhe": {
+          "type": "string"
+        },
+        "codigoAfiliado": {
+          "type": "string"
+        }
+      }
+    },
+    "DetalheCompraDebito": {
+      "title": "Compra Débito",
+      "properties": {
+        "estabelecimento": {
+          "type": "string"
+        },
+        "tipoDetalhe": {
+          "type": "string"
+        }
+      }
+    },
+    "DetalheDepositoBoleto": {
+      "title": "Depósito Boleto",
+      "properties": {
+        "dataVencimento": {
+          "type": "string"
+        },
+        "tipoDetalhe": {
+          "type": "string"
+        },
+        "dataEmissao": {
+          "type": "string"
+        },
+        "nossoNumero": {
+          "type": "string"
+        },
+        "codBarras": {
+          "type": "string"
+        }
+      }
+    },
+    "DetalhePagamento": {
+      "title": "Pagamento",
+      "properties": {
+        "valorTotal": {
+          "type": "string"
+        },
+        "detalheDescricao": {
+          "type": "string"
+        },
+        "contaBancaria": {
+          "type": "string"
+        },
+        "agencia": {
+          "type": "string"
+        },
+        "adicionado": {
+          "type": "string"
+        },
+        "dataVencimento": {
+          "type": "string"
+        },
+        "codigoAfiliado": {
+          "type": "string"
+        },
+        "empresaEmissora": {
+          "type": "string"
+        },
+        "valorOriginal": {
+          "type": "string"
+        },
+        "desconto": {
+          "type": "string"
+        },
+        "cpfCnpj": {
+          "type": "string"
+        },
+        "valorPrincipal": {
+          "type": "string"
+        },
+        "periodoApuracao": {
+          "type": "string"
+        },
+        "valorAumentado": {
+          "type": "string"
+        },
+        "codBarras": {
+          "type": "string"
+        },
+        "valorParcial": {
+          "type": "string"
+        },
+        "hora": {
+          "type": "string"
+        },
+        "juros": {
+          "type": "string"
+        },
+        "multa": {
+          "type": "string"
+        },
+        "empresaOrigem": {
+          "type": "string"
+        },
+        "nomeDestinatario": {
+          "type": "string"
+        },
+        "tipoDetalhe": {
+          "type": "string"
+        },
+        "nomeOrigem": {
+          "type": "string"
+        },
+        "codigoReceita": {
+          "type": "string"
+        },
+        "linhaDigitavel": {
+          "type": "string"
+        },
+        "autenticacao": {
+          "type": "string"
+        }
+      }
+    },
+    "DetalhePix": {
+      "title": "Pix",
+      "properties": {
+        "txId": {
+          "type": "string",
+          "description": "ID de identificação do documento.\nSeu objetivo é possibilitar a conciliação de pagamentos.\n"
+        },
+        "nomePagador": {
+          "type": "string"
+        },
+        "descricaoPix": {
+          "type": "string"
+        },
+        "cpfCnpjPagador": {
+          "type": "string"
+        },
+        "contaBancariaRecebedor": {
+          "type": "string"
+        },
+        "nomeEmpresaPagador": {
+          "type": "string"
+        },
+        "tipoDetalhe": {
+          "type": "string"
+        },
+        "endToEndId": {
+          "type": "string",
+          "description": "Id único para identificação do pagamento Pix.\n"
+        },
+        "chavePixRecebedor": {
+          "type": "string"
+        },
+        "nomeEmpresaRecebedor": {
+          "type": "string"
+        },
+        "nomeRecebedor": {
+          "type": "string"
+        },
+        "agenciaRecebedor": {
+          "type": "string"
+        },
+        "cpfCnpjRecebedor": {
+          "type": "string"
+        },
+        "origemMovimentacao": {
+          "type": "string"
+        },
+        "codigoSolicitacao": {
+          "type": "string"
+        }
+      }
+    },
+    "DetalheTarifa": {
+      "title": "Tarifa",
+      "properties": {
+        "dataVencimento": {
+          "type": "string"
+        },
+        "dataEmissao": {
+          "type": "string"
+        },
+        "dataTransacao": {
+          "type": "string"
+        },
+        "nossoNumero": {
+          "type": "string"
+        },
+        "seuNumero": {
+          "type": "string"
+        },
+        "codBarras": {
+          "type": "string"
+        },
+        "endToEndId": {
+          "type": "string"
+        }
+      }
+    },
+    "DetalheTransferencia": {
+      "title": "Transferência",
+      "properties": {
+        "contaBancariaPagador": {
+          "type": "string"
+        },
+        "descricaoTransferencia": {
+          "type": "string"
+        },
+        "agenciaPagador": {
+          "type": "string"
+        },
+        "bancoRecebedor": {
+          "type": "string"
+        },
+        "contaBancariaRecebedor": {
+          "type": "string"
+        },
+        "cpfCnpjRecebedor": {
+          "type": "string"
+        },
+        "cpfCnpjPagador": {
+          "type": "string"
+        },
+        "nomePagador": {
+          "type": "string"
+        },
+        "nomeEmpresaPagador": {
+          "type": "string"
+        },
+        "nomeRecebedor": {
+          "type": "string"
+        },
+        "tipoDetalhe": {
+          "type": "string"
+        },
+        "idTransferencia": {
+          "type": "string"
+        },
+        "agenciaRecebedor": {
+          "type": "string"
+        },
+        "dataEfetivacao": {
+          "type": "string"
+        }
+      }
+    },
+    "TransacaoCompleta": {
+      "properties": {
+        "idTransacao": {
+          "type": "string"
+        },
+        "dataInclusao": {
+          "type": "string",
+          "format": "date"
+        },
+        "dataTransacao": {
+          "type": "string",
+          "format": "date"
+        },
+        "tipoTransacao": {
+          "type": "string",
+          "description": "Transação vinculada a movimentação\n* `DEBITO_EM_CONTA`\n* `DEPOSITO_BOLETO`\n* `ANTECIPACAO_RECEBIVEIS`\n* `ANTECIPACAO_RECEBIVEIS_CARTAO`\n* `BOLETO_COBRANCA`\n* `CAMBIO`\n* `CASHBACK`\n* `CHEQUE`\n* `ESTORNO`\n* `DOMICILIO_CARTAO`\n* `FINANCIAMENTO`\n* `IMPOSTO`\n* `INTERPAG`\n* `INVESTIMENTO`\n* `JUROS`\n* `MAQUININHA_GRANITO`\n* `MULTA`\n* `OUTROS`\n* `PAGAMENTO`\n* `PIX`\n* `PROVENTOS`\n* `SAQUE`\n* `COMPRA_DEBITO`\n* `DEBITO_AUTOMATICO`\n* `TARIFA`\n* `TRANSFERENCIA`\n"
+        },
+        "tipoOperacao": {
+          "type": "string",
+          "description": "Tipo de operação realizada\n* `D` - Débito(Saída)\n* `C` - Crédito(Entrada)\n"
+        },
+        "valor": {
+          "type": "string"
+        },
+        "titulo": {
+          "type": "string"
+        },
+        "descricao": {
+          "type": "string"
+        },
+        "numeroDocumento": {
+          "type": "string"
+        },
+        "detalhes": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/DetalhePix"
+            },
+            {
+              "$ref": "#/$defs/DetalheBoletoCobranca"
+            },
+            {
+              "$ref": "#/$defs/DetalheCashback"
+            },
+            {
+              "$ref": "#/$defs/DetalheCheque"
+            },
+            {
+              "$ref": "#/$defs/DetalheCompraDebito"
+            },
+            {
+              "$ref": "#/$defs/DetalheDepositoBoleto"
+            },
+            {
+              "$ref": "#/$defs/DetalheTransferencia"
+            },
+            {
+              "$ref": "#/$defs/DetalhePagamento"
+            },
+            {
+              "$ref": "#/$defs/DetalheTarifa"
+            }
+          ]
+        }
+      }
+    },
+    "totalElementos": {
+      "type": "integer",
+      "format": "int64",
+      "title": "Quantidade total de itens",
+      "description": "Quantidade total de itens disponíveis de acordo com os parâmetros informados.",
+      "minimum": 0
+    }
+  }
+}

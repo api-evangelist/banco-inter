@@ -1,0 +1,90 @@
+generated: '2026-10-18'
+method: searched
+probe: true
+source:
+- https://inter.co/politica-de-privacidade/privacidade/
+- https://inter.co/en/security/
+language: pt-BR
+jurisdiction: Brazil (LGPD; Banco Central do Brasil; ANPD)
+policy_updated: 'Política atualizada em 05 de Março de 2026'
+signals:
+  data_subject_request:
+    url: https://inter.co/politica-de-privacidade/privacidade/
+    section: '11. Os seus direitos como Titular'
+    channel: privacidade@inter.co (Encarregada); Central de Privacidade no Super App
+    stated_sla: '15 (quinze) dias'
+    rights_named: [confirmation of processing, access, correction, anonymisation/blocking/deletion, portability via Open Finance]
+    escalation: Ouvidoria 0800 940 7772
+    evidence:
+    - source: https://inter.co/politica-de-privacidade/privacidade/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'A LGPD confere uma série de direitos aos Titulares. Sendo assim, você, como Titular pode fazer as solicitações ao Inter conforme detalhado na tabela abaixo:'
+    - source: https://inter.co/politica-de-privacidade/privacidade/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'você pode acessar a qualquer tempo e de forma gratuita a Central de Privacidade no Super App, e/ou entrar em contato com a nossa Encarregada, Camila Wendling, através do e-mail " privacidade@inter.co ". Você receberá uma resposta em, no máximo, 15 (quinze) dias contados da data da sua solicitação.'
+    - source: https://inter.co/politica-de-privacidade/privacidade/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'Você pode, por meio do Open Finance, solicitar o compartilhamento das informações cadastradas no Inter com outras instituições financeiras.'
+    note: >-
+      LGPD data-subject rights table with a named DPO (Encarregada), an email channel, an in-app
+      privacy center and a stated 15-day maximum response time; portability is routed through
+      Brazil's Open Finance APIs. Escalation to the Ouvidoria is offered if unsatisfied.
+  data_residency:
+    url: https://inter.co/politica-de-privacidade/privacidade/
+    section: '8. Transferência internacional de Dados Pessoais'
+    regions_named: [Estados Unidos da América, Argentina, Ilhas Cayman]
+    evidence:
+    - source: https://inter.co/politica-de-privacidade/privacidade/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'O Inter pode transferir seus Dados Pessoais, considerando as finalidades informadas nesta Política, para os países abaixo: Estados Unidos da América; Argentina; Ilhas Cayman.'
+    - source: https://inter.co/politica-de-privacidade/privacidade/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'O titular poderá solicitar, por meio dos nossos canais de atendimento, a cópia das cláusulas contratuais que fundamentam as transferências internacionais.'
+    note: >-
+      Not a residency guarantee: the policy names the three countries personal data may be
+      transferred to outside Brazil, under LGPD / Resolução CD/ANPD nº 19/2024 mechanisms
+      (adequacy, ANPD standard clauses, BCRs, consent), and offers a copy of the clauses on request.
+  data_retention:
+    url: https://inter.co/politica-de-privacidade/privacidade/
+    section: '9. Duração do Tratamento de Dados Pessoais'
+    evidence:
+    - source: https://inter.co/politica-de-privacidade/privacidade/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'Por exemplo: Dados Pessoais utilizados durante a abertura de conta estão submetidos a normas do Banco Central que exigem retenção mínima de 10 (dez) anos após a finalização do contrato.'
+    - source: https://inter.co/politica-de-privacidade/privacidade/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'O prazo de Tratamento dos seus Dados Pessoais pelo Inter variará de acordo: com os tipos de produtos e serviços contratados/prestados/fornecidos; com as finalidades do Tratamento; com as disposições contratuais e legais em questão.'
+    note: >-
+      Retention is purpose- and regulation-driven; the one concrete period stated is a minimum of
+      10 years after contract end for account-opening data, per Central Bank rules.
+  subprocessors:
+    url: https://inter.co/politica-de-privacidade/privacidade/
+    section: '7. Compartilhamento dos Dados Pessoais'
+    list_published: false
+    evidence:
+    - source: https://inter.co/politica-de-privacidade/privacidade/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'com parceiros comerciais, prestadores de serviços, fornecedores e subcontratados, mediante o seu consentimento ou para a perfeita e correta execução de contratos celebrados junto a eles ou a você, por exemplo, para prestarmos serviço de intermediação de seguros.'
+    note: >-
+      Only categories of recipients are disclosed (group companies, service providers and
+      subcontractors, regulators, advertising/marketing firms, law firms, analytics providers);
+      no named subprocessor list was found on the pages read.
+  age_assurance:
+    url: https://inter.co/politica-de-privacidade/privacidade/
+    section: '5.1. Coleta e Tratamento de Dados Pessoais de Crianças e Adolescentes'
+    evidence:
+    - source: https://inter.co/politica-de-privacidade/privacidade/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'Para garantir maior segurança aos Dados Pessoais de crianças e/ou adolescentes, o Inter poderá solicitar validações e aprovações adicionais de, pelo menos, um dos pais ou do responsável legal do referido Titular, na utilização da conta e dos produtos e serviços lá disponíveis, podendo, ainda, restringir tal utilização.'
+    note: >-
+      Minors may hold accounts; the policy commits to possible parental/guardian validation and
+      approval and usage restriction. It describes parental consent, not a specific age-verification method.

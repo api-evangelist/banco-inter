@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-item-sumario-cobrancas-schema.json",
+  "title": "itemSumarioCobrancas",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-cobranca-bolepix-openapi.yml#/components/schemas/itemSumarioCobrancas",
+  "type": "object",
+  "required": [
+    "situacao",
+    "valor",
+    "quantidade"
+  ],
+  "properties": {
+    "situacao": {
+      "$ref": "#/$defs/StatusCobrancaEnum"
+    },
+    "valor": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor"
+    },
+    "quantidade": {
+      "type": "integer",
+      "format": "int64",
+      "default": 0,
+      "description": "Número de cobranças com esta situação"
+    }
+  },
+  "$defs": {
+    "StatusCobrancaEnum": {
+      "type": "string",
+      "enum": [
+        "RECEBIDO",
+        "A_RECEBER",
+        "MARCADO_RECEBIDO",
+        "ATRASADO",
+        "CANCELADO",
+        "EXPIRADO",
+        "FALHA_EMISSAO",
+        "EM_PROCESSAMENTO",
+        "PROTESTO"
+      ],
+      "description": "Possíveis status de uma cobranca."
+    }
+  }
+}

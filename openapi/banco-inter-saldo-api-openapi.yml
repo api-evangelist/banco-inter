@@ -1,0 +1,208 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Saldo API
+  version: ''
+  description: 'Operations tagged Saldo across 2 of this provider''s published API definitions: swagger-banking-yaml.yaml, banco-inter-banking-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj.partners.bancointer.com.br/banking/v2
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+  description: Servidor de Sandbox
+tags:
+- name: Saldo
+paths:
+  /saldo:
+    get:
+      summary: Consultar saldo
+      description: 'Método utilizado para consultar o saldo por um período específico.
+
+
+        * Escopo requerido: extrato.read
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/saldo
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/saldo
+
+
+        *Obs.: os dados retornados no ambiente **Sandbox** são fictícios. São utilizados apenas para validação da requisição.*'
+      tags:
+      - Saldo
+      operationId: Saldo
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - in: query
+        name: dataSaldo
+        required: false
+        schema:
+          type: string
+          format: date
+        description: "Data de consulta para o saldo posicional.\n\nFormato: YYYY-MM-DD\n\nObs: Caso uma data não seja informada, será utilizada a data atual, e os valores retornados serão: o saldo atual (disponível), \no bloqueado em cheque, o bloqueado judicialmente, o bloqueado administrativo e o limite, até o momento da consulta. \nCaso seja informada uma data, o retorno será somente o valor do saldo naquele dia (disponível). Se a data for a atual, \no valor do saldo até o momento da consulta.\n"
+        example: '2021-01-01'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Saldo'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaSaldo'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+components:
+  responses:
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            nao-encontrado-example:
+              $ref: '#/components/examples/NaoEncontradoExample'
+    ServicoIndisponivel:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            servico-indisponivel-example:
+              $ref: '#/components/examples/ServicoIndisponivelExample'
+    AcessoNegado:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            acesso-negado-example:
+              $ref: '#/components/examples/AcessoNegadoExample'
+    RequisicaoInvalidaSaldo:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida-example:
+              $ref: '#/components/examples/RequisicaoInvalidaSaldoExample'
+  schemas:
+    Problema:
+      type: object
+      required:
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+        title:
+          type: string
+          description: Descrição resumida do problema.
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        timestamp:
+          type: string
+          description: Data no formato timestamp do erro
+    Saldo:
+      type: object
+      properties:
+        bloqueadoCheque:
+          type: number
+          format: int64
+          example: 240.25
+          description: Saldo bloqueado (cheque). Retornando apenas quando **não** é informado a "dataSaldo" na requisição.
+        disponivel:
+          type: number
+          format: int64
+          example: 2850.55
+          description: Saldo líquido
+        bloqueadoJudicialmente:
+          type: number
+          format: int64
+          example: 510.35
+          description: Saldo bloqueado (justiça). Retornando apenas quando **não** é informado a "dataSaldo" na requisição.
+        bloqueadoAdministrativo:
+          type: number
+          format: int64
+          example: 510.35
+          description: Saldo bloqueado (justiça). Retornando apenas quando **não** é informado a "dataSaldo" na requisição.
+        limite:
+          type: number
+          format: int64
+          example: 510.35
+          description: Limite de credito da conta. Retornando apenas quando **não** é informado a "dataSaldo" na requisição.
+        dataReferencia:
+          type: string
+          description: A data referência será retornada quando a consulta for realizada em um dia não útil. Visto que o saldo não é sensibilizado em dias não úteis, será retornada à data referência do saldo, sendo o último dia útil.
+          example: 01/01/2024
+  parameters:
+    xContaCorrente:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação. Necessário somente quando a aplicação estiver associada a mais de uma conta corrente. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+      schema:
+        type: string
+        pattern: ^[1-9][0-9]*$
+  examples:
+    ServicoIndisponivelExample:
+      summary: Exemplo de payload para erro de serviço indisponível
+      value:
+        title: Serviço Indisponível
+        status: '503'
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    AcessoNegadoExample:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Acesso Negado
+        status: '403'
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    RequisicaoInvalidaSaldoExample:
+      summary: Exemplo de erro de requisição inválida
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        violacoes:
+        - razao: Não foi possível converter o valor.
+          propriedade: dataSaldo
+    NaoEncontradoExample:
+      summary: Exemplo de payload para erro de objeto não encontrado
+      value:
+        title: Não Encontrado.
+        status: '404'
+        detail: Entidade não encontrada.
+x-refined-from:
+- swagger-banking-yaml.yaml
+- banco-inter-banking-openapi.yml

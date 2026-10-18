@@ -1,0 +1,412 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-cob-gerada-schema.json",
+  "title": "Cobrança imediata gerada",
+  "description": "Dados criados ou alterados da cobrança imediata via API Pix",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-pix-openapi.yml#/components/schemas/CobGerada",
+  "type": "object",
+  "required": [
+    "txid",
+    "calendario",
+    "revisao",
+    "status",
+    "valor",
+    "chave"
+  ],
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "devedor": {
+          "description": "Não é permitido que o campo devedor.cpf e campo devedor.cnpj estejam preenchidos ao mesmo tempo. Se o campo devedor.nome está preenchido, então deve existir ou um devedor.cpf ou um campo devedor.cnpj preenchido.\n\nOs campos aninhados sob o objeto devedor são opcionais e identificam a pessoa ou a instituição a quem a cobrança está endereçada. Não identifica, necessariamente, quem irá efetivamente realizar o pagamento.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/PessoaFisica"
+            },
+            {
+              "$ref": "#/$defs/PessoaJuridica"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "loc": {
+          "required": [
+            "id",
+            "txid",
+            "tipoCob",
+            "criacao"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/PayloadLocation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "title": "Localização do payload",
+          "description": "Localização do Payload a ser informada na criação da cobrança.",
+          "maxLength": 77,
+          "format": "uri",
+          "readOnly": true
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Status da Cobrança",
+          "enum": [
+            "ATIVA",
+            "CONCLUIDA",
+            "REMOVIDA_PELO_USUARIO_RECEBEDOR",
+            "REMOVIDA_PELO_PSP"
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "valor": {
+          "required": [
+            "original"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/CobValor"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "calendario": {
+          "required": [
+            "expiracao"
+          ],
+          "title": "Calendario",
+          "description": "Os campos aninhados sob o identificador calendário organizam informações a respeito de controle de tempo da cobrança.",
+          "properties": {
+            "expiracao": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Tempo de vida da cobrança, especificado em segundos.",
+              "description": "Tempo de vida da cobrança, especificado em segundos a partir da data de criação (Calendario.criacao)",
+              "default": "86400"
+            },
+            "criacao": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Data de Criação"
+            }
+          }
+        },
+        "txid": {
+          "type": "string",
+          "pattern": "[a-zA-Z0-9]{26,35}"
+        },
+        "revisao": {
+          "$ref": "#/$defs/Revisao"
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/CobBaseCopiaCola"
+    }
+  ],
+  "$defs": {
+    "CobBase": {
+      "type": "object",
+      "title": "Cobrança Base",
+      "description": "Atributos comuns a todas entidades de Cobrança",
+      "properties": {
+        "chave": {
+          "type": "string",
+          "title": "Chave DICT do recebedor",
+          "description": "* O campo chave determina a chave Pix do recebedor que será utilizada para a cobrança.\n* Os tipos de chave podem ser: telefone, e-mail, cpf/cnpj ou EVP.\n* O formato das chaves pode ser encontrado na seção \"Formatação das chaves do DICT no BR Code\" do [Manual de Padrões para iniciação do Pix](https://www.bcb.gov.br/estabilidadefinanceira/pagamentosinstantaneos).\n",
+          "maxLength": 77,
+          "minLength": 1
+        },
+        "solicitacaoPagador": {
+          "type": "string",
+          "title": "Solicitação ao pagador",
+          "description": "O campo solicitacaoPagador determina um texto a ser apresentado ao pagador para que ele possa digitar uma informação correlata, em formato livre, a ser enviada ao recebedor. Esse texto está limitado a 140 caracteres.",
+          "maxLength": 140,
+          "minLength": 1
+        },
+        "infoAdicionais": {
+          "type": "array",
+          "title": "Informações adicionais",
+          "description": "Cada respectiva informação adicional contida na lista (nome e valor) deve ser apresentada ao pagador.",
+          "maximum": 50,
+          "items": {
+            "type": "object",
+            "required": [
+              "nome",
+              "valor"
+            ],
+            "properties": {
+              "nome": {
+                "type": "string",
+                "title": "Nome",
+                "description": "Nome do campo.",
+                "maxLength": 50,
+                "minLength": 1
+              },
+              "valor": {
+                "type": "string",
+                "title": "Valor",
+                "description": "Dados do campo.",
+                "maxLength": 200,
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "CobBaseCopiaCola": {
+      "type": "object",
+      "title": "Cobrança Base com Copia e Cola",
+      "description": "Atributos comuns a todas entidades de Cobrança que possuem informação de Copia e Cola",
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "pixCopiaECola": {
+              "type": "string",
+              "title": "Pix Copia e Cola correspondente à cobrança.",
+              "description": "Este campo retorna o valor do Pix Copia e Cola correspondente à cobrança. Trata-se da sequência de caracteres que representa o BR Code.",
+              "maxLength": 512
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/CobBase"
+        }
+      ]
+    },
+    "CobValor": {
+      "type": "object",
+      "title": "Valor da cobrança imediata",
+      "description": "valores monetários referentes à cobrança.",
+      "required": [
+        "original"
+      ],
+      "properties": {
+        "original": {
+          "type": "string",
+          "title": "Valor",
+          "pattern": "\\d{1,10}\\.\\d{2}",
+          "description": "Valor original da cobrança."
+        },
+        "modalidadeAlteracao": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0,
+          "title": "Modalidade de alteração",
+          "description": "Trata-se de um campo que determina se o valor final do documento\n            pode ser alterado pelo pagador.\n\nNa ausência desse campo, assume-se que não se pode alterar o valor do documento de cobrança, ou seja, assume-se o valor 0. Se o campo estiver presente e com valor 1, então está determinado que o valor final da cobrança pode ter seu valor alterado pelo pagador."
+        },
+        "retirada": {
+          "$ref": "#/$defs/Retirada"
+        }
+      }
+    },
+    "PayloadLocation": {
+      "type": "object",
+      "title": "Location do Payload",
+      "description": "Identificador da localização do payload.",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/PayloadLocationId"
+        },
+        "location": {
+          "type": "string",
+          "title": "Localização do payload",
+          "description": "Localização do Payload a ser informada na criação da cobrança.",
+          "maxLength": 77,
+          "format": "uri",
+          "readOnly": true
+        },
+        "tipoCob": {
+          "type": "string",
+          "title": "Tipo da cobrança",
+          "enum": [
+            "cob",
+            "cobv"
+          ]
+        },
+        "criacao": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Data de Criação",
+          "description": "Data e hora em que a location foi criada. Respeita RFC 3339.",
+          "readOnly": true
+        }
+      }
+    },
+    "PayloadLocationId": {
+      "type": "integer",
+      "format": "int64",
+      "title": "Id da location",
+      "description": "Identificador da location a ser informada na criação da cobrança ."
+    },
+    "PessoaFisica": {
+      "type": "object",
+      "required": [
+        "cpf",
+        "nome"
+      ],
+      "title": "Pessoa Física",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "title": "Nome",
+          "description": "Nome do usuário.",
+          "maxLength": 200
+        },
+        "cpf": {
+          "type": "string",
+          "title": "CPF",
+          "pattern": "\\d{11}",
+          "description": "CPF do usuário."
+        }
+      }
+    },
+    "PessoaJuridica": {
+      "type": "object",
+      "required": [
+        "cnpj",
+        "nome"
+      ],
+      "title": "Pessoa Jurídica",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "title": "Nome",
+          "description": "Nome do usuário.",
+          "maxLength": 200
+        },
+        "cnpj": {
+          "type": "string",
+          "title": "CNPJ",
+          "pattern": "\\d{14}",
+          "description": "CNPJ do usuário."
+        }
+      }
+    },
+    "Retirada": {
+      "description": "É uma estrutura opcional relacionada ao conceito de recebimento de numerário. Apenas um agrupamento por vez é permitido, quando há `saque` não há `troco` e vice-versa.\n\nQuando uma cobrança imediata tem uma estrutura de `retirada` ela deixa de ser considerada Pix comum e passa à categoria de Pix Saque ou Pix Troco.\n\nPara que o preenchimento do objeto `retirada` seja considerado válido as seguintes regras se aplicam:\n- os campos `modalidadeAgente` e `prestadorDoServicoDeSaque` são de **preenchimento obrigatório**;\n- quando o `saque` estiver presente a cobrança deve respeitar as seguintes condições:\n  - O campo `valor.original` deve ser preenchido com **valor igual a 0.00 (zero)**;\n  - O campo `valor.modalidadeAlteracao` deve possuir o valor 0 (zero) explicitamente, ou implicitamente (pelo não preenchimento).\n- quando o `troco` estiver presente a cobrança deve respeitar as seguintes condições:\n  - O campo `valor.original` deve ser preenchido com **valor maior que 0.00 (zero)**;\n  - O campo `valor.modalidadeAlteracao` deve possuir o valor 0 (zero) explicitamente, ou implicitamente (pelo não preenchimento).\n\n**IMPORTANTE**: Quando usados o `saque` ou `troco` não será permitida a alteração do `valor.original` recebido. Na presença de `saque` ou `troco` o recebimento do campo `valor.modalidadeAlteracao` com valor 1 (um) é considerado erro.\n",
+      "title": "Informações de retirada",
+      "type": "object",
+      "properties": {
+        "saque": {
+          "$ref": "#/$defs/Saque"
+        },
+        "troco": {
+          "$ref": "#/$defs/Troco"
+        }
+      }
+    },
+    "Revisao": {
+      "type": "integer",
+      "format": "int32",
+      "title": "Revisão",
+      "description": "# O campo `revisao`\n\nDenota a revisão da cobrança.  Sempre começa em zero. Sempre varia em acréscimos de 1.\n\nO incremento em uma cobrança deve ocorrer sempre que um objeto da cobrança em questão for alterado.\nO campo `loc` é uma exceção a esta regra.\n\nSe em uma determinada alteração em uma cobrança, o único campo alterado for o campo `loc`,\nentão esta operação não incrementa a revisão da cobrança.\n\nO campo `loc` não ocasiona uma alteração na cobrança em si.\nNão é necessário armazenar histórico das alterações do campo `loc` para uma determinada cobrança.\nPara os outros campos da cobrança, registra-se histórico.\n",
+      "readOnly": true
+    },
+    "Saque": {
+      "type": "object",
+      "title": "Saque",
+      "description": "Informações relacionadas ao saque",
+      "required": [
+        "valor",
+        "modalidadeAgente",
+        "prestadorDoServicoDeSaque"
+      ],
+      "properties": {
+        "valor": {
+          "type": "string",
+          "title": "Valor do saque",
+          "pattern": "\\d{1,10}\\.\\d{2}",
+          "description": "Valor do saque efetuado"
+        },
+        "modalidadeAlteracao": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0,
+          "title": "Modalidade de alteração do saque",
+          "description": "Modalidade de alteração de valor do saque. Quando não preenchido o valor assumido é o 0 (zero)."
+        },
+        "modalidadeAgente": {
+          "type": "string",
+          "title": "Modalidade do Agente",
+          "description": "##### Modalidade do Agente <table><tr><th>SIGLA</th><th>Descrição</th></tr><tr><td>AGTEC</td><td>Agente Estabelecimento Comercial</td></tr><tr><td>AGTOT</td><td>Agente Outra Espécie de Pessoa Jurídica ou Correspondente no País</td></tr><tr><td>AGPSS</td><td>Agente Facilitador de Serviço de Saque</td></tr></table> O campo modalidadeAgente permite as seguintes modalidades:\n  * `AGTEC` - Agente Estabelecimento Comercial.\n  * `AGTOT` - Agente Outra Espécie de Pessoa Jurídica ou Correspondente no País.\n  * `AGPSS` - Agente Facilitador de Serviço de Saque.\n"
+        },
+        "prestadorDoServicoDeSaque": {
+          "type": "string",
+          "title": "Facilitador de Serviço de Saque",
+          "description": "ISPB do Facilitador de Serviço de Saque"
+        }
+      }
+    },
+    "Troco": {
+      "type": "object",
+      "title": "Troco",
+      "description": "Informações relacionadas ao troco",
+      "required": [
+        "valor",
+        "modalidadeAgente",
+        "prestadorDoServicoDeSaque"
+      ],
+      "properties": {
+        "valor": {
+          "type": "string",
+          "title": "Valor do troco",
+          "pattern": "\\d{1,10}\\.\\d{2}",
+          "description": "Valor do troco efetuado"
+        },
+        "modalidadeAlteracao": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0,
+          "title": "Modalidade de alteração do troco",
+          "description": "Modalidade de alteração de valor do troco. Quando não preenchido o valor assumido é o 0 (zero)."
+        },
+        "modalidadeAgente": {
+          "type": "string",
+          "title": "Modalidade do Agente",
+          "description": "##### Modalidade do Agente <table><tr><th>SIGLA</th><th>Descrição</th></tr><tr><td>AGTEC</td><td>Agente Estabelecimento Comercial</td></tr><tr><td>AGTOT</td><td>Agente Outra Espécie de Pessoa Jurídica ou Correspondente no País</td></tr><tr><td>AGPSS</td><td>Agente Facilitador de Serviço de Saque</td></tr></table> O campo modalidadeAgente permite as seguintes modalidades:\n  * `AGTEC` - Agente Estabelecimento Comercial.\n  * `AGTOT` - Agente Outra Espécie de Pessoa Jurídica ou Correspondente no País.\n"
+        },
+        "prestadorDoServicoDeSaque": {
+          "type": "string",
+          "title": "Facilitador de Serviço de Saque",
+          "description": "ISPB do Facilitador de Serviço de Saque"
+        }
+      }
+    }
+  }
+}

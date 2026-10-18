@@ -1,0 +1,1266 @@
+openapi: 3.2.0
+info:
+  title: Banco Inter Extrato API
+  version: ''
+  description: 'Operations tagged Extrato across 2 of this provider''s published API definitions: swagger-banking-yaml.yaml, banco-inter-banking-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://cdpj.partners.bancointer.com.br/banking/v2
+  description: Servidor de Produção
+- url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+  description: Servidor de Sandbox
+tags:
+- name: Extrato
+paths:
+  /extrato:
+    get:
+      summary: Consultar extrato
+      description: 'Método utilizado para consultar o extrato por um período específico. O período máximo entre as datas é de 90 dias.
+
+
+        * Escopo requerido: extrato.read
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/extrato
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/extrato
+
+
+        *Obs.: os dados retornados no ambiente **Sandbox** são fictícios. São utilizados apenas para validação da requisição.*'
+      tags:
+      - Extrato
+      operationId: Extrato
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - in: query
+        name: dataInicio
+        required: true
+        schema:
+          type: string
+          format: date
+        description: 'Data início da consulta de extrato.
+
+
+          Formato: YYYY-MM-DD
+
+          '
+        example: '2021-01-01'
+      - in: query
+        name: dataFim
+        required: true
+        schema:
+          type: string
+          format: date
+        description: 'Data fim da consulta de extrato.
+
+
+          Formato: YYYY-MM-DD
+
+          '
+        example: '2021-01-02'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaTransacoes'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaExtrato'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /extrato/exportar:
+    get:
+      summary: Recuperar extrato em PDF
+      description: 'Método utilizado para recuperar o extrato em pdf por um período específico. O período máximo entre as datas é de 90 dias.
+
+
+        * Escopo requerido: extrato.read
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/extrato/exportar
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/extrato/exportar
+
+
+        *Obs. 1: os dados retornados no ambiente **Sandbox** são fictícios. São utilizados apenas para validação da requisição.*
+
+
+        *Obs. 2: a data referência será retornada quando a consulta for realizada em um dia não útil. Visto que o saldo não é sensibilizado em dias não úteis, será retornada à data referência do saldo, sendo o último dia útil.*'
+      tags:
+      - Extrato
+      operationId: ExtratoExport
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - in: query
+        name: dataInicio
+        required: true
+        schema:
+          type: string
+          format: date
+        description: 'Data inicio da exportação de extrato.
+
+
+          Formato: YYYY-MM-DD
+
+          '
+        example: '2021-01-01'
+      - in: query
+        name: dataFim
+        required: true
+        schema:
+          type: string
+          format: date
+        description: 'Data fim da exportação de extrato.
+
+
+          Formato: YYYY-MM-DD
+
+          '
+        example: '2021-01-02'
+      responses:
+        '200':
+          description: Arquivo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PdfModel'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaExtrato'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+  /extrato/completo:
+    get:
+      summary: Consultar extrato enriquecido
+      description: 'Método utilizado para consultar extrato enriquecido com informações
+
+        detalhadas de cada transação dado um período específico.
+
+
+        O período máximo entre as datas é de 90 dias.
+
+
+        **Temos dois modos de paginação disponíveis:**
+
+
+        **Paginação Tradicional**
+
+
+        * Utilize os parâmetros `pagina` e `tamanhoPagina` para navegar pelos
+
+        resultados.
+
+        * Ideal para consultas de volumes menores.
+
+        * Máximo de 10.000 transações.
+
+
+        **Paginação por Scroll**
+
+
+        * Para consultar grandes volumes com mais de 10.000 transações no
+
+        período.
+
+        * Utilize os parâmetros `scrollEnabled` e `scrollId`.
+
+        * Navegação mais eficiente para grandes volumes de dados sem as
+
+        limitações da paginação tradicional.
+
+
+        Características da paginação por scroll:
+
+
+        * Máximo de 10.000 transações por página
+
+
+        * Apenas um scroll ativo por conta corrente
+
+
+        * Expira automaticamente após 6 minutos de inatividade
+
+
+        * Encerramento automático quando retornar `hasMore: false`
+
+
+        Como usar o Scroll
+
+
+        1. **Iniciar Scroll**: Envie `scrollEnabled: true` na primeira
+
+        requisição
+
+
+        Exemplo de iniciação
+
+
+        A resposta com scroll trará a quantidade de transações definida em
+
+        `tamanhoPagina` e dois novos campos: `hasMore` e `scrollId`.
+
+
+        ```bash
+
+        curl -X GET \
+
+        ''https://cdpj.partners.bancointer.com.br/banking/v2/extrato/completo'' \
+
+        -G \
+
+        -d ''dataInicio=2026-01-01'' \
+
+        -d ''dataFim=2026-02-10'' \
+
+        -d ''tamanhoPagina=10000'' \
+
+        -d ''scrollEnabled=true'' \
+
+        -H ''x-inter-conta-corrente: 12345678''
+
+
+        # Resposta inicial:
+
+        # {
+
+        # "totalElementos": 25000,
+
+        # "numeroDeElementos": 10000,
+
+        # "scrollId": "550e8400-e29b-41d4-a716-446655440000",
+
+        # "hasMore": true,
+
+        # "transacoes": [... 10000 primeiras transações]
+
+        # }
+
+        ```
+
+
+        2. **Continuar Scroll**: Use o `scrollId` retornado na requisição
+
+        subsequente.
+
+
+        Exemplo continuação
+
+
+        Envie o `scrollId` retornado para solicitar a próxima página do extrato.
+
+        Enquanto `hasMore` = true as chamadas enviando o `scrollId` continuam
+
+        buscando as páginas subsequentes.
+
+
+        ```bash
+
+        curl -X GET \
+
+        ''https://cdpj.partners.bancointer.com.br/banking/v2/extrato/completo'' \
+
+        -G \
+
+        -d ''dataInicio=2026-01-01'' \
+
+        -d ''dataFim=2026-02-10'' \
+
+        -d ''scrollId=550e8400-e29b-41d4-a716-446655440000'' \
+
+        -H ''x-inter-conta-corrente: 12345678''
+
+
+        # 2. Resposta intermediária
+
+        # {
+
+        # "totalElementos": 25000,
+
+        # "numeroDeElementos": 10000,
+
+        # "scrollId": "550e8400-e29b-41d4-a716-446655440000",
+
+        # "hasMore": true,
+
+        # "transacoes": [... 10000 transações subsequentes]
+
+        # }
+
+        ```
+
+
+        3. **Finalizar**: Quando `hasMore: false`, não há mais transações.
+
+
+        Exemplo fim do scroll
+
+
+        Na última página será retornado hasMore = false, indicando que as
+
+        transações do período selecionado terminaram. Nesse momento o scrollId
+
+        é automaticamente expirado.
+
+
+        ```bash
+
+        curl -X GET \
+
+        ''https://cdpj.partners.bancointer.com.br/banking/v2/extrato/completo'' \
+
+        -G \
+
+        -d ''dataInicio=2026-01-01'' \
+
+        -d ''dataFim=2026-02-10'' \
+
+        -d ''scrollId=550e8400-e29b-41d4-a716-446655440000'' \
+
+        -H ''x-inter-conta-corrente: 12345678''
+
+
+        # 3. Resposta final
+
+        # {
+
+        # "totalElementos": 25000,
+
+        # "numeroDeElementos": 5000,
+
+        # "hasMore": false,
+
+        # "transacoes": [... 5000 últimas transações]
+
+        # }
+
+        ```
+
+
+        * Escopo requerido: extrato.read
+
+        * rate limit:
+
+
+        * 10 chamadas por minuto
+
+
+        * 10 chamadas por minuto
+
+
+        *Obs: O token
+
+        tem validade de 60 minutos e deverá ser reutilizado nas requisições.*
+
+
+        Exemplos de código
+
+
+        https://cdpj.partners.bancointer.com.br/banking/v2/extrato/completo
+
+
+        https://cdpj-sandbox.partners.uatinter.co/banking/v2/extrato/completo
+
+
+        *Obs.: os dados retornados no ambiente **Sandbox** são fictícios. São utilizados apenas para validação da requisição.*'
+      tags:
+      - Extrato
+      operationId: ExtratoComplete
+      parameters:
+      - $ref: '#/components/parameters/xContaCorrente'
+      - in: query
+        name: dataInicio
+        schema:
+          type: string
+          format: date
+        required: true
+        description: 'Data inicio da exportação de extrato.
+
+
+          Formato: YYYY-MM-DD
+
+          '
+        example: '2022-06-12'
+      - in: query
+        name: dataFim
+        schema:
+          type: string
+          format: date
+        required: true
+        description: 'Data fim da exportação de extrato.
+
+
+          Formato: YYYY-MM-DD
+
+          '
+        example: '2022-07-14'
+      - in: query
+        name: pagina
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+        description: 'Posição da página na lista de movimentações.<br />
+
+          **Apenas para paginação tradicional**.
+
+          '
+        example: '0'
+      - in: query
+        name: tamanhoPagina
+        required: false
+        schema:
+          type: integer
+          default: 50
+          maximum: 10000
+        description: 'Tamanho da página na lista de movimentações.<br />
+
+          **Para paginação tradicional**: Define o tamanho da página
+
+          atual.<br />
+
+          **Para scroll**: Define o tamanho de cada página do scroll.<br />
+
+          Máximo de 10.000 registros por página em ambos os modos.
+
+          '
+        example: '5'
+      - in: query
+        name: tipoOperacao
+        example: D
+        description: "values:\n  * `D` - Débito(Saída)\n  * `C` - Crédito(Entrada)\n"
+        required: false
+        schema:
+          type: string
+          enum:
+          - D
+          - C
+      - in: query
+        name: tipoTransacao
+        example: PIX, CAMBIO, ESTORNO, INVESTIMENTO, TRANSFERENCIA, PAGAMENTO, BOLETO_COBRANCA, OUTROS
+        description: transação vinculada a movimentacao
+        required: false
+        schema:
+          type: string
+      - in: query
+        $ref: '#/components/parameters/xInterScrollEnabled'
+      - in: query
+        $ref: '#/components/parameters/xInterScrollId'
+      responses:
+        '200':
+          description: 'Sucesso. O formato da resposta varia dependendo do modo de
+
+            paginação utilizado, **padrão** ou **scroll**
+
+            '
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ListaTransacoesCompletaPadrao'
+                - $ref: '#/components/schemas/ListaTransacoesCompletaScroll'
+        '400':
+          $ref: '#/components/responses/RequisicaoInvalidaExtratoCompleto'
+        '403':
+          $ref: '#/components/responses/AcessoNegado'
+        '404':
+          $ref: '#/components/responses/NaoEncontrado'
+        '503':
+          $ref: '#/components/responses/ServicoIndisponivel'
+    servers:
+    - url: https://cdpj.partners.bancointer.com.br/banking/v2
+      description: Servidor de Produção
+    - url: https://cdpj-sandbox.partners.uatinter.co/banking/v2
+      description: Servidor de Sandbox
+components:
+  schemas:
+    Problema:
+      type: object
+      required:
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de referência que identifica o tipo de problema. De acordo com a RFC 7807.
+        title:
+          type: string
+          description: Descrição resumida do problema.
+        status:
+          type: integer
+          description: Código HTTP do status retornado.
+        detail:
+          type: string
+          description: Descrição completa do problema.
+        timestamp:
+          type: string
+          description: Data no formato timestamp do erro
+    TransacaoCompleta:
+      properties:
+        idTransacao:
+          type: string
+        dataInclusao:
+          type: string
+          format: date
+        dataTransacao:
+          type: string
+          format: date
+        tipoTransacao:
+          type: string
+          description: 'Transação vinculada a movimentação
+
+            * `DEBITO_EM_CONTA`
+
+            * `DEPOSITO_BOLETO`
+
+            * `ANTECIPACAO_RECEBIVEIS`
+
+            * `ANTECIPACAO_RECEBIVEIS_CARTAO`
+
+            * `BOLETO_COBRANCA`
+
+            * `CAMBIO`
+
+            * `CASHBACK`
+
+            * `CHEQUE`
+
+            * `ESTORNO`
+
+            * `DOMICILIO_CARTAO`
+
+            * `FINANCIAMENTO`
+
+            * `IMPOSTO`
+
+            * `INTERPAG`
+
+            * `INVESTIMENTO`
+
+            * `JUROS`
+
+            * `MAQUININHA_GRANITO`
+
+            * `MULTA`
+
+            * `OUTROS`
+
+            * `PAGAMENTO`
+
+            * `PIX`
+
+            * `PROVENTOS`
+
+            * `SAQUE`
+
+            * `COMPRA_DEBITO`
+
+            * `DEBITO_AUTOMATICO`
+
+            * `TARIFA`
+
+            * `TRANSFERENCIA`
+
+            '
+        tipoOperacao:
+          type: string
+          description: 'Tipo de operação realizada
+
+            * `D` - Débito(Saída)
+
+            * `C` - Crédito(Entrada)
+
+            '
+        valor:
+          type: string
+        titulo:
+          type: string
+        descricao:
+          type: string
+        numeroDocumento:
+          type: string
+        detalhes:
+          oneOf:
+          - $ref: '#/components/schemas/DetalhePix'
+          - $ref: '#/components/schemas/DetalheBoletoCobranca'
+          - $ref: '#/components/schemas/DetalheCashback'
+          - $ref: '#/components/schemas/DetalheCheque'
+          - $ref: '#/components/schemas/DetalheCompraDebito'
+          - $ref: '#/components/schemas/DetalheDepositoBoleto'
+          - $ref: '#/components/schemas/DetalheTransferencia'
+          - $ref: '#/components/schemas/DetalhePagamento'
+          - $ref: '#/components/schemas/DetalheTarifa'
+    totalElementos:
+      type: integer
+      format: int64
+      title: Quantidade total de itens
+      description: Quantidade total de itens disponíveis de acordo com os parâmetros informados.
+      minimum: 0
+    totalPaginas:
+      type: integer
+      title: Quantidade total de páginas
+      description: Quantidade total de páginas disponíveis para consulta.
+      minimum: 1
+      example: 1
+    DetalheCompraDebito:
+      title: Compra Débito
+      properties:
+        estabelecimento:
+          type: string
+          example: Loja teste
+        tipoDetalhe:
+          type: string
+          example: COMPLETE
+    DetalheCashback:
+      title: Cashback
+      properties:
+        valorCompra:
+          type: string
+          example: '60.00'
+        produto:
+          type: string
+          example: TIM
+        tipoDetalhe:
+          type: string
+          example: COMPLETE
+    ListaTransacoesCompletaScroll:
+      name: Resposta com Scroll
+      type: object
+      description: 'Resposta para consultas usando modo scroll. Retornado quando
+
+        headers `x-inter-scroll-enabled` ou `x-inter-scroll-id` são utilizados.
+
+        '
+      properties:
+        totalElementos:
+          $ref: '#/components/schemas/totalElementos'
+        scrollId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: 'ID único do scroll para continuar a navegação. Use este valor no
+
+            header `x-inter-scroll-id` das próximas requisições.
+
+            Quando `hasMore: false`, este campo será `null` indicando que o
+
+            scroll foi finalizado e removido.
+
+            '
+          example: 550e8400-e29b-41d4-a716-446655440000
+        hasMore:
+          type: boolean
+          description: Indica se existem mais transações para serem recuperadas. Quando `false`, o scroll é automaticamente removido.
+          example: true
+        transacoes:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/TransacaoCompleta'
+    TransacaoSimples:
+      type: object
+      properties:
+        cpmf:
+          type: string
+        dataEntrada:
+          type: string
+          format: date
+        tipoTransacao:
+          type: string
+          description: 'Transação vinculada a movimentação
+
+            * `DEBITO_EM_CONTA`
+
+            * `DEPOSITO_BOLETO`
+
+            * `ANTECIPACAO_RECEBIVEIS`
+
+            * `ANTECIPACAO_RECEBIVEIS_CARTAO`
+
+            * `BOLETO_COBRANCA`
+
+            * `CAMBIO`
+
+            * `CASHBACK`
+
+            * `CHEQUE`
+
+            * `ESTORNO`
+
+            * `DOMICILIO_CARTAO`
+
+            * `FINANCIAMENTO`
+
+            * `IMPOSTO`
+
+            * `INTERPAG`
+
+            * `INVESTIMENTO`
+
+            * `JUROS`
+
+            * `MAQUININHA_GRANITO`
+
+            * `MULTA`
+
+            * `OUTROS`
+
+            * `PAGAMENTO`
+
+            * `PIX`
+
+            * `PROVENTOS`
+
+            * `SAQUE`
+
+            * `COMPRA_DEBITO`
+
+            * `DEBITO_AUTOMATICO`
+
+            * `TARIFA`
+
+            * `TRANSFERENCIA`
+
+            '
+        tipoOperacao:
+          type: string
+          description: 'Tipo de operação realizada
+
+            * `D` - Débito(Saída)
+
+            * `C` - Crédito(Entrada)
+
+            '
+        valor:
+          type: string
+        titulo:
+          type: string
+        descricao:
+          type: string
+    ListaTransacoes:
+      type: object
+      properties:
+        transacoes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransacaoSimples'
+    DetalhePagamento:
+      title: Pagamento
+      properties:
+        valorTotal:
+          type: string
+          example: '13.45'
+        detalheDescricao:
+          type: string
+          example: Pagamento
+        contaBancaria:
+          type: string
+          example: 0008579377
+        agencia:
+          type: string
+          example: 0001-9
+        adicionado:
+          type: string
+          example: '0.0'
+        dataVencimento:
+          type: string
+          example: '2022-11-08'
+        codigoAfiliado:
+          type: string
+          example: '001'
+        empresaEmissora:
+          type: string
+          example: CAIXA ECONOMICA FEDERAL
+        valorOriginal:
+          type: string
+          example: '13.45'
+        desconto:
+          type: string
+          example: '0.0'
+        cpfCnpj:
+          type: string
+          example: 00436923000190
+        valorPrincipal:
+          type: string
+          example: '25.50'
+        periodoApuracao:
+          type: string
+        valorAumentado:
+          type: string
+          example: '0.0'
+        codBarras:
+          type: string
+          example: '10491916300000013453395782000100040000022263'
+        valorParcial:
+          type: string
+          example: '0.0'
+        hora:
+          type: string
+          example: 16h56
+        juros:
+          type: string
+          example: '0.0'
+        multa:
+          type: string
+          example: '0.0'
+        empresaOrigem:
+          type: string
+          example: Banco Inter
+        nomeDestinatario:
+          type: string
+          example: CEDENTE TESTE GEPEC
+        tipoDetalhe:
+          type: string
+          example: COMPLETE
+        nomeOrigem:
+          type: string
+          example: SACADO TESTE GEPEC
+        codigoReceita:
+          type: string
+          example: '0561'
+        linhaDigitavel:
+          type: string
+          example: 07797777051167847115990071126347192950000003010
+        autenticacao:
+          type: string
+          example: '314089907290729163000000134528'
+    DetalheTransferencia:
+      title: Transferência
+      properties:
+        contaBancariaPagador:
+          type: string
+          example: '9733000'
+        descricaoTransferencia:
+          type: string
+          example: transferência
+        agenciaPagador:
+          type: string
+          example: '0001'
+        bancoRecebedor:
+          type: string
+          example: Nu Pagamentos
+        contaBancariaRecebedor:
+          type: string
+          example: '1372125'
+        cpfCnpjRecebedor:
+          type: string
+          example: 07857016640
+        cpfCnpjPagador:
+          type: string
+          example: 905.678.996-16
+        nomePagador:
+          type: string
+          example: Nome
+        nomeEmpresaPagador:
+          type: string
+          example: Banco Inter
+        nomeRecebedor:
+          type: string
+          example: Fernanda
+        tipoDetalhe:
+          type: string
+          example: COMPLETE
+        idTransferencia:
+          type: string
+          example: PAG20220621248759639
+        agenciaRecebedor:
+          type: string
+          example: '0001'
+        dataEfetivacao:
+          type: string
+          example: 21/06/2022
+    DetalheCheque:
+      title: Cheque
+      properties:
+        agencia:
+          type: string
+          example: '0072'
+        numeroChequeBancario:
+          type: string
+          example: 000219
+        contaBancaria:
+          type: string
+          example: ''
+        dataRetorno:
+          type: string
+        motivoRetorno:
+          type: string
+          example: ''
+        descricaoChequeBancario:
+          type: string
+          example: Cheque Bancário
+        nomeEmpresa:
+          type: string
+          example: BCO SANTANDER (BRASIL) S.A
+        tipoDetalhe:
+          type: string
+          example: COMPLETE
+        codigoAfiliado:
+          type: string
+          example: '033'
+    DetalhePix:
+      title: Pix
+      properties:
+        txId:
+          type: string
+          description: 'ID de identificação do documento.
+
+            Seu objetivo é possibilitar a conciliação de pagamentos.
+
+            '
+          example: Rv1pt4pjd2jtjdzx5nafhtjks7
+        nomePagador:
+          type: string
+          example: Nome Pagador
+        descricaoPix:
+          type: string
+          example: Pagamento do aluguel
+        cpfCnpjPagador:
+          type: string
+          example: '90105709247'
+        contaBancariaRecebedor:
+          type: string
+          example: '17687786'
+        nomeEmpresaPagador:
+          type: string
+          example: Banco Inter
+        tipoDetalhe:
+          type: string
+          example: COMPLETE
+        endToEndId:
+          type: string
+          description: 'Id único para identificação do pagamento Pix.
+
+            '
+          example: E00416968202206201436ghzKRVgnb7A
+        chavePixRecebedor:
+          type: string
+          example: '+5531985443142'
+        nomeEmpresaRecebedor:
+          type: string
+          example: CAIXA ECONOMICA FEDEREAL
+        nomeRecebedor:
+          type: string
+          example: Nome Recebedor
+        agenciaRecebedor:
+          type: string
+          example: 0089
+        cpfCnpjRecebedor:
+          type: string
+          example: 04993960654
+        origemMovimentacao:
+          type: string
+          example: CHAVE
+        codigoSolicitacao:
+          type: string
+          example: f6a4de9c-4630-4806-b349-8cd96ea67d12
+    DetalheBoletoCobranca:
+      title: Boleto Cobrança
+      properties:
+        dataVencimento:
+          type: string
+          example: '2022-07-06'
+        dataTransacao:
+          type: string
+          example: '2022-07-06 11:12:29.810'
+        nossoNumero:
+          type: string
+          example: 00776396923
+        seuNumero:
+          type: string
+          example: '1616'
+        codBarras:
+          type: string
+          example: 07791904700001000000001112056207900776396923
+        juros:
+          type: string
+          example: '0'
+        multa:
+          type: string
+          example: '20.00'
+        desconto1:
+          type: string
+          example: '11.00'
+        desconto2:
+          type: string
+          example: '12.00'
+        desconto3:
+          type: string
+          example: '13.00'
+        nome:
+          type: string
+          example: BoletoCobranca
+        dataLimite:
+          type: string
+          example: '2022-07-17'
+        tipoDetalhe:
+          type: string
+          example: COMPLETE
+        cpfCnpj:
+          type: string
+          example: 08942553630
+        dataEmissao:
+          type: string
+          example: '2022-07-06'
+        abatimento:
+          type: string
+          example: '0'
+    DetalheTarifa:
+      title: Tarifa
+      properties:
+        dataVencimento:
+          type: string
+          example: '2022-07-12'
+        dataEmissao:
+          type: string
+          example: '2022-07-09'
+        dataTransacao:
+          type: string
+          example: '2022-07-09'
+        nossoNumero:
+          type: string
+          example: 00776396923
+        seuNumero:
+          type: string
+          example: '1616'
+        codBarras:
+          type: string
+          example: 07791904700001000000001112056207900776396923
+        endToEndId:
+          type: string
+          example: E00416968202206201436ghzKRVgnb7A
+    ultimaPagina:
+      type: boolean
+      description: Última página
+      example: true
+    numeroDeElementos:
+      type: integer
+      title: Quantidade de itens na página atual
+      description: Quantidade de registros retornado na página atual.
+      minimum: 1
+      required:
+      - TransacaoCompletaComDetalhe
+    DetalheDepositoBoleto:
+      title: Depósito Boleto
+      properties:
+        dataVencimento:
+          type: string
+          example: '2022-07-12'
+        tipoDetalhe:
+          type: string
+          example: COMPLETE
+        dataEmissao:
+          type: string
+          example: '2022-07-09'
+        nossoNumero:
+          type: string
+          example: '7777011657373795603057629'
+        codBarras:
+          type: string
+          example: 07795904400000500007777011657373795603057629
+    ListaTransacoesCompletaPadrao:
+      type: object
+      properties:
+        totalPaginas:
+          $ref: '#/components/schemas/totalPaginas'
+        totalElementos:
+          $ref: '#/components/schemas/totalElementos'
+        ultimaPagina:
+          $ref: '#/components/schemas/ultimaPagina'
+        primeiraPagina:
+          $ref: '#/components/schemas/primeiraPagina'
+        tamanhoPagina:
+          $ref: '#/components/schemas/tamanhoPagina'
+        numeroDeElementos:
+          $ref: '#/components/schemas/numeroDeElementos'
+        transacoes:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/TransacaoCompleta'
+    tamanhoPagina:
+      type: integer
+      title: Quantidade de itens por página
+      description: Quantidade de registros por página, configurado na requisição.
+      minimum: 1
+      example: 20
+    primeiraPagina:
+      type: boolean
+      description: Primeira página
+      example: true
+    PdfModel:
+      type: object
+      properties:
+        pdf:
+          type: string
+          description: Base64 do PDF
+  parameters:
+    xContaCorrente:
+      name: x-conta-corrente
+      in: header
+      description: Conta corrente que será utilizada na operação. Necessário somente quando a aplicação estiver associada a mais de uma conta corrente. Enviar apenas números(incluindo o dígito), e não enviar zeros a esquerda.
+      schema:
+        type: string
+        pattern: ^[1-9][0-9]*$
+    xInterScrollId:
+      name: scrollId
+      in: query
+      description: ID do scroll, use este parâmetro para continuar a paginação. O scrollId expira automaticamente após hasMore retornar`false` ou 6 minutos.
+      schema:
+        type: string
+        format: uuid
+      example: 550e8400-e29b-41d4-a716-446655440000
+    xInterScrollEnabled:
+      name: scrollEnabled
+      in: query
+      description: 'Opcional, habilita o modo de paginação scroll para grandes volumes de transações.
+
+        Use `true` para iniciar um novo scroll. É permitido apenas um scroll ativo  por conta.'
+      schema:
+        type: string
+        enum:
+        - 'true'
+  examples:
+    RequisicaoInvalidaExtratoExample:
+      summary: Exemplo de erro de requisição inválida
+      value:
+        title: Dados inválidos.
+        detail: Verifique se os dados informados estão de acordo com a documentação disponibilizada e tente novamente.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        violacoes:
+        - razao: O valor não pode ser nulo.
+          propriedade: dataInicio
+    ScrollJaAtivoExample:
+      summary: Scroll já ativo para esta conta
+      value:
+        title: Já existe um scroll ativo para esta conta corrente.
+        detail: Aguarde o scroll atual expirar ou finalize-o antes de iniciar um novo.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        typeError: SCROLL_ALREADY_ACTIVE
+    ScrollExpiradoExample:
+      summary: Scroll expirado ou inválido
+      value:
+        title: Scroll ID não encontrado ou expirou.
+        detail: O scroll expirou após 6 minutos de inatividade ou o ID é inválido. Inicie uma nova consulta com scroll.
+        timestamp: '2023-01-01T00:00:00.000000000-03:00'
+        typeError: SCROLL_EXPIRED
+    AcessoNegadoExample:
+      summary: Exemplo de erro da requisição 1
+      value:
+        title: Acesso Negado
+        status: '403'
+        detail: Requisição de participante autenticado que viola alguma regra de autorização.
+    ServicoIndisponivelExample:
+      summary: Exemplo de payload para erro de serviço indisponível
+      value:
+        title: Serviço Indisponível
+        status: '503'
+        detail: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+    NaoEncontradoExample:
+      summary: Exemplo de payload para erro de objeto não encontrado
+      value:
+        title: Não Encontrado.
+        status: '404'
+        detail: Entidade não encontrada.
+  responses:
+    NaoEncontrado:
+      description: Recurso solicitado não foi encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            nao-encontrado-example:
+              $ref: '#/components/examples/NaoEncontradoExample'
+    RequisicaoInvalidaExtrato:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida-example:
+              $ref: '#/components/examples/RequisicaoInvalidaExtratoExample'
+    ServicoIndisponivel:
+      description: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            servico-indisponivel-example:
+              $ref: '#/components/examples/ServicoIndisponivelExample'
+    RequisicaoInvalidaExtratoCompleto:
+      description: Requisição com formato inválido.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            requisicao-invalida:
+              $ref: '#/components/examples/RequisicaoInvalidaExtratoExample'
+            scroll-ja-ativo:
+              $ref: '#/components/examples/ScrollJaAtivoExample'
+            scroll-expirado-inexistente:
+              $ref: '#/components/examples/ScrollExpiradoExample'
+    AcessoNegado:
+      description: Requisição de participante autenticado que viola alguma regra de autorização.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problema'
+          examples:
+            acesso-negado-example:
+              $ref: '#/components/examples/AcessoNegadoExample'
+x-refined-from:
+- swagger-banking-yaml.yaml
+- banco-inter-banking-openapi.yml

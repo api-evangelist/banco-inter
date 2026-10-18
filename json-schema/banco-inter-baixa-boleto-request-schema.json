@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-baixa-boleto-request-schema.json",
+  "title": "baixaBoletoRequest",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-cobranca-openapi.yml#/components/schemas/baixaBoletoRequest",
+  "type": "object",
+  "required": [
+    "motivoCancelamento"
+  ],
+  "properties": {
+    "motivoCancelamento": {
+      "type": "string",
+      "description": "Domínio que descreve o tipo de cancelamento sendo solicitado.\n* `ACERTOS` (cancelado por acertos)\n* `APEDIDODOCLIENTE` (cancelado a pedido do cliente)\n* `PAGODIRETOAOCLIENTE` (cancelado por ter sido pago direto ao cliente)\n* `SUBSTITUICAO` (cancelado por substituição)\n"
+    }
+  }
+}

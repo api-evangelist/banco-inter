@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/banco-inter/main/json-schema/banco-inter-update-publication-request-body-schema.json",
+  "title": "UpdatePublicationRequestBody",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/banco-inter-forum-openapi.yml#/components/schemas/UpdatePublicationRequestBody",
+  "type": "object",
+  "properties": {
+    "text": {
+      "type": "string",
+      "description": "Conteúdo da publicação"
+    },
+    "mediasInformation": {
+      "$ref": "#/$defs/MediasInformationUpdate"
+    },
+    "mediaFiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/MediaFile"
+      },
+      "description": "Arquivos para adicionar na publicação"
+    }
+  },
+  "$defs": {
+    "FileExtension": {
+      "type": "string",
+      "enum": [
+        "PNG",
+        "JPG",
+        "MOV",
+        "MP4",
+        "QUICKTIME",
+        "PDF"
+      ],
+      "description": "Extensão do arquivo"
+    },
+    "MediaFile": {
+      "type": "object",
+      "description": "Arquivo de mídia para adicionar na publicação",
+      "properties": {
+        "file": {
+          "type": "string",
+          "format": "byte",
+          "description": "Imagem, vídeo ou documento"
+        },
+        "extension": {
+          "$ref": "#/$defs/FileExtension"
+        },
+        "position": {
+          "type": "integer",
+          "description": "A posição do arquivo na publicação",
+          "default": 0
+        }
+      }
+    },
+    "MediaInformationUpdate": {
+      "type": "object",
+      "description": "Arquivo de mídia para atualizar na publicação",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "A url do arquivo"
+        },
+        "position": {
+          "type": "integer",
+          "description": "A posição do arquivo na publicação",
+          "default": 0
+        }
+      }
+    },
+    "MediasInformationUpdate": {
+      "type": "object",
+      "description": "Arquivos de mídia para manter na publicação",
+      "properties": {
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/MediaInformationUpdate"
+          },
+          "description": "Imagens para manter na publicação"
+        },
+        "videos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/MediaInformationUpdate"
+          },
+          "description": "Vídeos para manter na publicação"
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/$defs/MediaInformationUpdate"
+          },
+          "description": "Documentos para manter na publicação"
+        }
+      }
+    }
+  }
+}
