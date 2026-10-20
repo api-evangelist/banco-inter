@@ -1,5 +1,5 @@
 generated: '2026-10-18'
-method: none
+method: searched
 source:
 - https://zapier.com/apps/banco-inter/integrations
 - https://n8n.io/integrations/banco-inter/
@@ -8,14 +8,296 @@ source:
 checked:
 - OpenAPI specifications for integration references
 - https://composio.dev/toolkits/banco-inter
+- https://data.directory.openbankingbrasil.org.br/participants
 - https://developers.inter.co/docs/integrations
 - https://monid.ai/tools/banco-inter
 - https://n8n.io/integrations/banco-inter/
+- https://www.bcb.gov.br/estabilidadefinanceira/participantespix
 - https://www.make.com/en/integrations/banco-inter
 - https://zapier.com/apps/banco-inter/integrations
 summary: null
 marketplace_apps: []
-edges: []
+edges:
+- partner_name: Open Finance Brasil
+  partner: null
+  partner_match: register
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://data.directory.openbankingbrasil.org.br/participants
+  category: open finance (Brazil)
+  contract_reference:
+    register: Open Finance Brasil directory (Banco Central do Brasil)
+    spec_file: null
+    standard: Open Finance Brasil
+    role: participant
+    regulator_roles:
+    - CONTA
+    - DADOS
+    - PAGTO
+    registrations: &id001
+    - registered_name: BANCO INTER
+      register_id: 31ee4f72-8769-5136-83e4-03f2dd4c935e
+      cnpj: 00416968000101
+      matched_domain: bancointer.com.br
+      matched_by: domain
+    declared_families:
+    - accounts
+    - bank-fixed-incomes
+    - consents
+    - credit-cards-accounts
+    - credit-fixed-incomes
+    - credit-portability
+    - customers-business
+    - customers-personal
+    - enrollments
+    - exchanges
+    - financings
+    - funds
+    - invoice-financings
+    - loans
+    - opendata-accounts_business-accounts
+    - opendata-accounts_personal-accounts
+    - opendata-capitalization_bonds
+    - opendata-creditcards_business-credit-cards
+    - opendata-creditcards_personal-credit-cards
+    - opendata-exchange_online-rates
+    - opendata-exchange_vet-values
+    - opendata-financings_business-financings
+    - opendata-financings_personal-financings
+    - opendata-insurance_personals
+    - opendata-investments_bank-fixed-incomes
+    - opendata-investments_credit-fixed-incomes
+    - opendata-investments_funds
+    - opendata-investments_treasure-titles
+    - opendata-investments_variable-incomes
+    - opendata-invoicefinancings_personal-invoice-financings
+    - opendata-loans_business-loans
+    - opendata-loans_personal-loans
+    - opendata-pension_risk-coverages
+    - opendata-pension_survival-coverages
+    - opendata-unarranged_business-unarranged-account-overdraft
+    - opendata-unarranged_personal-unarranged-account-overdraft
+    - payments-consents
+    - payments-pix
+    - payments-pix-recurring-payments
+    - payments-pix-recurring-payments-automatic
+    - payments-recurring-consents
+    - payments-recurring-consents-automatic
+    - resources
+    - treasure-titles
+    - unarranged-accounts-overdraft
+    - variable-incomes
+    signal_note: 'participation only: declared families are context; the certification edge carries depth'
+    detected_by: sweep-latam-open-finance.py
+    detected: '2026-10-19'
+  detected_by: sweep-latam-open-finance.py
+  first_seen: '2026-10-19'
+- partner_name: Open Finance Brasil functional certification
+  partner: null
+  partner_match: register
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://data.directory.openbankingbrasil.org.br/participants
+  category: open finance conformance (Brazil)
+  contract_reference:
+    register: Open Finance Brasil directory, per-family CertificationStatus (submissions in github.com/OpenBanking-Brasil/conformance)
+    spec_file: null
+    standard: Open Finance Brasil
+    role: certified-participant
+    registrations: *id001
+    certified_products:
+    - product: accounts
+      families:
+      - accounts
+      - credit-cards-accounts
+      status: Self-Certified
+      expires: '2027-08-04'
+      certification_uri: https://github.com/OpenBanking-Brasil/conformance/blob/main/submissions/functional/accounts/2.5.1/00416968_accounts-v2.5.1_accounts_v2.5.1_03-08-2026.json
+    - product: credit
+      families:
+      - credit-portability
+      - financings
+      - invoice-financings
+      - loans
+      - unarranged-accounts-overdraft
+      status: Self-Certified
+      expires: '2027-05-26'
+      certification_uri: https://github.com/OpenBanking-Brasil/conformance/blob/main/submissions/functional/loans/2.4.0/00416968_loans_loans_v2.4.0_30-06-2025.json
+    - product: customer-data
+      families:
+      - consents
+      - customers-business
+      - customers-personal
+      - resources
+      status: Self-Certified
+      expires: '2027-04-30'
+      certification_uri: https://github.com/OpenBanking-Brasil/conformance/blob/main/submissions/functional/personal/2.2.0/00416968_customer-personal_personal_v2.2.0_30-06-2025.json
+    - product: exchange
+      families:
+      - exchanges
+      status: Self-Certified
+      expires: '2027-04-30'
+      certification_uri: https://github.com/OpenBanking-Brasil/conformance/blob/main/submissions/functional/exchanges/1.0.0/00416968_exchanges_exchanges_v1.0_30-06-2025.json
+    - product: investments
+      families:
+      - bank-fixed-incomes
+      - credit-fixed-incomes
+      - funds
+      - treasure-titles
+      - variable-incomes
+      status: Self-Certified
+      expires: '2027-03-16'
+      certification_uri: https://github.com/OpenBanking-Brasil/conformance/blob/main/submissions/functional/credit-fixed-incomes/1.0.3/00416968_credit-fixed-incomes_credit-fixed-incomes_v1.0.3_01-07-2025.json
+    - product: open-data
+      families:
+      - opendata-accounts_business-accounts
+      - opendata-accounts_personal-accounts
+      - opendata-capitalization_bonds
+      - opendata-creditcards_business-credit-cards
+      - opendata-creditcards_personal-credit-cards
+      - opendata-exchange_online-rates
+      - opendata-exchange_vet-values
+      - opendata-financings_business-financings
+      - opendata-financings_personal-financings
+      - opendata-insurance_personals
+      - opendata-investments_credit-fixed-incomes
+      - opendata-investments_funds
+      - opendata-investments_treasure-titles
+      - opendata-investments_variable-incomes
+      - opendata-invoicefinancings_personal-invoice-financings
+      - opendata-loans_business-loans
+      - opendata-loans_personal-loans
+      - opendata-pension_risk-coverages
+      - opendata-pension_survival-coverages
+      - opendata-unarranged_business-unarranged-account-overdraft
+      - opendata-unarranged_personal-unarranged-account-overdraft
+      status: Self-Certified
+      expires: '2027-10-14'
+      certification_uri: https://web.conformance.directory.openbankingbrasil.org.br/plan-detail.html?plan=jkaK2AeBNZI3O&public=true
+      rejected_families:
+      - opendata-investments_bank-fixed-incomes
+    - product: payments
+      families:
+      - enrollments
+      - payments-consents
+      - payments-pix
+      status: Self-Certified
+      expires: '2027-10-01'
+      certification_uri: https://github.com/OpenBanking-Brasil/conformance/blob/main/submissions/functional/enrollments/2.0.0/00416968_InterJSR_enrollments_v2.0.0_11-11-2024.json
+    - product: recurring-payments
+      families:
+      - payments-pix-recurring-payments
+      - payments-pix-recurring-payments-automatic
+      - payments-recurring-consents
+      - payments-recurring-consents-automatic
+      status: Self-Certified
+      expires: '2027-06-18'
+      certification_uri: https://github.com/OpenBanking-Brasil/conformance/blob/main/submissions/functional/automatic-payments/2.0.0/00416968_V2-API-de-Pagamento_automatic-payments_v2.0.0_17-04-2025.json
+    signal_note: one entry per PRODUCT TYPE, lapsed flagged; family counts are context, never read
+    detected_by: sweep-latam-open-finance.py
+    detected: '2026-10-19'
+  detected_by: sweep-latam-open-finance.py
+  first_seen: '2026-10-19'
+- partner_name: Pix (Banco Central do Brasil)
+  partner: null
+  partner_match: register
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.bcb.gov.br/estabilidadefinanceira/participantespix
+  category: instant payments (Brazil)
+  contract_reference:
+    register: Pix participants (Banco Central do Brasil, https://www.bcb.gov.br/content/estabilidadefinanceira/participantes_pix/lista-participantes-instituicoes-em-adesao-pix-20261019.csv)
+    spec_file: null
+    standard: Pix
+    role: pix-participant
+    registrations:
+    - registered_name: BANCO INTER
+      ispb: 00416968
+      cnpj: 00.416.968/0001-01
+      institution_type: Banco Múltiplo
+      spi_participation: Direta
+      pix_participation: Obrigatória
+      pix_modality: Provedor de Conta Transacional
+      payment_initiation: true
+      matched_domain: bancointer.com.br
+      matched_by: domain
+      identity: Open Finance Brasil directory, same CNPJ 00416968000101 ('BANCO INTER')
+    signal_note: 'participation only: the domain comes from a labelled lookup (registrations[].identity)'
+    detected_by: sweep-latam-open-finance.py
+    detected: '2026-10-19'
+  detected_by: sweep-latam-open-finance.py
+  first_seen: '2026-10-19'
+- partner_name: Open Finance Brasil
+  partner: null
+  type: contract
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://data.directory.openbankingbrasil.org.br/participants
+  contract_reference:
+    register: Open Finance Brasil directory (Banco Central do Brasil)
+    spec_file: null
+    role: participant
+    registered_name: BANCO INTER
+    register_id: 31ee4f72-8769-5136-83e4-03f2dd4c935e
+    matched_domain: bancointer.com.br
+    api_families:
+    - accounts
+    - bank-fixed-incomes
+    - consents
+    - credit-cards-accounts
+    - credit-fixed-incomes
+    - credit-portability
+    - customers-business
+    - customers-personal
+    - discovery_outages
+    - discovery_status
+    - enrollments
+    - exchanges
+    - financings
+    - funds
+    - invoice-financings
+    - loans
+    - opendata-accounts_business-accounts
+    - opendata-accounts_personal-accounts
+    - opendata-capitalization_bonds
+    - opendata-creditcards_business-credit-cards
+    - opendata-creditcards_personal-credit-cards
+    - opendata-exchange_online-rates
+    - opendata-exchange_vet-values
+    - opendata-financings_business-financings
+    - opendata-financings_personal-financings
+    - opendata-insurance_personals
+    - opendata-investments_bank-fixed-incomes
+    - opendata-investments_credit-fixed-incomes
+    - opendata-investments_funds
+    - opendata-investments_treasure-titles
+    - opendata-investments_variable-incomes
+    - opendata-invoicefinancings_personal-invoice-financings
+    - opendata-loans_business-loans
+    - opendata-loans_personal-loans
+    - opendata-pension_risk-coverages
+    - opendata-pension_survival-coverages
+    - opendata-unarranged_business-unarranged-account-overdraft
+    - opendata-unarranged_personal-unarranged-account-overdraft
+    - payments-consents
+    - payments-pix
+    - payments-pix-recurring-payments
+    - payments-pix-recurring-payments-automatic
+    - payments-recurring-consents
+    - payments-recurring-consents-automatic
+    - resources
+    - treasure-titles
+    - unarranged-accounts-overdraft
+    - variable-incomes
+    detected_by: sweep-standard-registers.py
+    detected: '2026-10-20'
 templates: []
 note: No marketplace listings, integration pages, or contract references to third-party services found. Banco Inter
   appears to focus on its core banking APIs rather than third-party integrations.
