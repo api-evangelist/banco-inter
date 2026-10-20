@@ -20,29 +20,19 @@ marketplace_apps: []
 edges:
 - partner_name: Open Finance Brasil
   partner: null
-  partner_match: register
-  type: register
+  type: contract
   channel: regulator-register
   relationship: standard-participant
   direction: partner-built
   evidence: https://data.directory.openbankingbrasil.org.br/participants
-  category: open finance (Brazil)
   contract_reference:
     register: Open Finance Brasil directory (Banco Central do Brasil)
     spec_file: null
-    standard: Open Finance Brasil
     role: participant
-    regulator_roles:
-    - CONTA
-    - DADOS
-    - PAGTO
-    registrations: &id001
-    - registered_name: BANCO INTER
-      register_id: 31ee4f72-8769-5136-83e4-03f2dd4c935e
-      cnpj: 00416968000101
-      matched_domain: bancointer.com.br
-      matched_by: domain
-    declared_families:
+    registered_name: BANCO INTER
+    register_id: 31ee4f72-8769-5136-83e4-03f2dd4c935e
+    matched_domain: bancointer.com.br
+    api_families:
     - accounts
     - bank-fixed-incomes
     - consents
@@ -51,6 +41,8 @@ edges:
     - credit-portability
     - customers-business
     - customers-personal
+    - discovery_outages
+    - discovery_status
     - enrollments
     - exchanges
     - financings
@@ -89,11 +81,8 @@ edges:
     - treasure-titles
     - unarranged-accounts-overdraft
     - variable-incomes
-    signal_note: 'participation only: declared families are context; the certification edge carries depth'
-    detected_by: sweep-latam-open-finance.py
-    detected: '2026-10-19'
-  detected_by: sweep-latam-open-finance.py
-  first_seen: '2026-10-19'
+    detected_by: sweep-standard-registers.py
+    detected: '2026-10-20'
 - partner_name: Open Finance Brasil functional certification
   partner: null
   partner_match: register
@@ -108,7 +97,12 @@ edges:
     spec_file: null
     standard: Open Finance Brasil
     role: certified-participant
-    registrations: *id001
+    registrations:
+    - registered_name: BANCO INTER
+      register_id: 31ee4f72-8769-5136-83e4-03f2dd4c935e
+      cnpj: 00416968000101
+      matched_domain: bancointer.com.br
+      matched_by: domain
     certified_products:
     - product: accounts
       families:
@@ -212,7 +206,7 @@ edges:
   evidence: https://www.bcb.gov.br/estabilidadefinanceira/participantespix
   category: instant payments (Brazil)
   contract_reference:
-    register: Pix participants (Banco Central do Brasil, https://www.bcb.gov.br/content/estabilidadefinanceira/participantes_pix/lista-participantes-instituicoes-em-adesao-pix-20261019.csv)
+    register: Pix participants (Banco Central do Brasil, https://www.bcb.gov.br/content/estabilidadefinanceira/participantes_pix/lista-participantes-instituicoes-em-adesao-pix-20261020.csv)
     spec_file: null
     standard: Pix
     role: pix-participant
@@ -233,71 +227,6 @@ edges:
     detected: '2026-10-19'
   detected_by: sweep-latam-open-finance.py
   first_seen: '2026-10-19'
-- partner_name: Open Finance Brasil
-  partner: null
-  type: contract
-  channel: regulator-register
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://data.directory.openbankingbrasil.org.br/participants
-  contract_reference:
-    register: Open Finance Brasil directory (Banco Central do Brasil)
-    spec_file: null
-    role: participant
-    registered_name: BANCO INTER
-    register_id: 31ee4f72-8769-5136-83e4-03f2dd4c935e
-    matched_domain: bancointer.com.br
-    api_families:
-    - accounts
-    - bank-fixed-incomes
-    - consents
-    - credit-cards-accounts
-    - credit-fixed-incomes
-    - credit-portability
-    - customers-business
-    - customers-personal
-    - discovery_outages
-    - discovery_status
-    - enrollments
-    - exchanges
-    - financings
-    - funds
-    - invoice-financings
-    - loans
-    - opendata-accounts_business-accounts
-    - opendata-accounts_personal-accounts
-    - opendata-capitalization_bonds
-    - opendata-creditcards_business-credit-cards
-    - opendata-creditcards_personal-credit-cards
-    - opendata-exchange_online-rates
-    - opendata-exchange_vet-values
-    - opendata-financings_business-financings
-    - opendata-financings_personal-financings
-    - opendata-insurance_personals
-    - opendata-investments_bank-fixed-incomes
-    - opendata-investments_credit-fixed-incomes
-    - opendata-investments_funds
-    - opendata-investments_treasure-titles
-    - opendata-investments_variable-incomes
-    - opendata-invoicefinancings_personal-invoice-financings
-    - opendata-loans_business-loans
-    - opendata-loans_personal-loans
-    - opendata-pension_risk-coverages
-    - opendata-pension_survival-coverages
-    - opendata-unarranged_business-unarranged-account-overdraft
-    - opendata-unarranged_personal-unarranged-account-overdraft
-    - payments-consents
-    - payments-pix
-    - payments-pix-recurring-payments
-    - payments-pix-recurring-payments-automatic
-    - payments-recurring-consents
-    - payments-recurring-consents-automatic
-    - resources
-    - treasure-titles
-    - unarranged-accounts-overdraft
-    - variable-incomes
-    detected_by: sweep-standard-registers.py
-    detected: '2026-10-20'
 templates: []
 note: No marketplace listings, integration pages, or contract references to third-party services found. Banco Inter
   appears to focus on its core banking APIs rather than third-party integrations.

@@ -6,8 +6,7 @@
 - slug: banco-inter-open-finance-brasil
   label: Open Finance Brasil
   partner_name: Open Finance Brasil
-  category: open finance (Brazil)
-  type: register
+  type: contract
   channel: regulator-register
   evidence: https://data.directory.openbankingbrasil.org.br/participants
   source: edge
@@ -15,19 +14,11 @@
   contract_reference:
     register: Open Finance Brasil directory (Banco Central do Brasil)
     spec_file: null
-    standard: Open Finance Brasil
     role: participant
-    regulator_roles:
-    - CONTA
-    - DADOS
-    - PAGTO
-    registrations: &id001
-    - registered_name: BANCO INTER
-      register_id: 31ee4f72-8769-5136-83e4-03f2dd4c935e
-      cnpj: 00416968000101
-      matched_domain: bancointer.com.br
-      matched_by: domain
-    declared_families:
+    registered_name: BANCO INTER
+    register_id: 31ee4f72-8769-5136-83e4-03f2dd4c935e
+    matched_domain: bancointer.com.br
+    api_families:
     - accounts
     - bank-fixed-incomes
     - consents
@@ -36,6 +27,8 @@
     - credit-portability
     - customers-business
     - customers-personal
+    - discovery_outages
+    - discovery_status
     - enrollments
     - exchanges
     - financings
@@ -74,9 +67,8 @@
     - treasure-titles
     - unarranged-accounts-overdraft
     - variable-incomes
-    signal_note: 'participation only: declared families are context; the certification edge carries depth'
-    detected_by: sweep-latam-open-finance.py
-    detected: '2026-10-19'
+    detected_by: sweep-standard-registers.py
+    detected: '2026-10-20'
   status: not-a-workflow
   arazzo: null
 - slug: banco-inter-open-finance-brasil-functional-certification
@@ -93,7 +85,12 @@
     spec_file: null
     standard: Open Finance Brasil
     role: certified-participant
-    registrations: *id001
+    registrations:
+    - registered_name: BANCO INTER
+      register_id: 31ee4f72-8769-5136-83e4-03f2dd4c935e
+      cnpj: 00416968000101
+      matched_domain: bancointer.com.br
+      matched_by: domain
     certified_products:
     - product: accounts
       families:
@@ -197,7 +194,7 @@
   source: edge
   relationship: standard-participant
   contract_reference:
-    register: Pix participants (Banco Central do Brasil, https://www.bcb.gov.br/content/estabilidadefinanceira/participantes_pix/lista-participantes-instituicoes-em-adesao-pix-20261019.csv)
+    register: Pix participants (Banco Central do Brasil, https://www.bcb.gov.br/content/estabilidadefinanceira/participantes_pix/lista-participantes-instituicoes-em-adesao-pix-20261020.csv)
     spec_file: null
     standard: Pix
     role: pix-participant
