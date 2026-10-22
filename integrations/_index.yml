@@ -215,3 +215,38 @@
     detected: '2026-10-19'
   status: not-a-workflow
   arazzo: null
+- slug: banco-inter-banco-central-do-brasil-authorized-banks
+  label: Banco Central do Brasil authorized banks
+  partner_name: Banco Central do Brasil authorized banks
+  category: Brazil BCB-authorized bank
+  type: register
+  channel: regulator-register
+  evidence: https://www.bcb.gov.br/estabilidadefinanceira/relacao_instituicoes_funcionamento
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: Banco Central do Brasil authorized banks
+    spec_file: null
+    standard: null
+    role: authorized-bank
+    institution_class: incumbent
+    registrations:
+    - registered_name: BANCO INTER S.A.
+      register_status: authorized-active
+      register_country: BR
+      register_id: CNPJ 00416968
+      segment: Banco Múltiplo
+      matched_domain: bancointer.com.br
+      matched_by: domain
+      evidence_url: https://www.bcb.gov.br/estabilidadefinanceira/relacao_instituicoes_funcionamento
+      licences:
+      - Banco Múltiplo
+      situation: Autorizada em Atividade
+      tariff_list_confirmed: true
+      domain_source: bcb-verified-own-domain
+    signal_note: 'participation only: a Banco Central do Brasil authorisation to operate; no API conformance is
+      published by this register'
+    detected_by: sweep-brazil-bcb-authorized-institutions.py
+    detected: '2026-10-22'
+  status: not-a-workflow
+  arazzo: null
