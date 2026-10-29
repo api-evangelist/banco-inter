@@ -64,5 +64,68 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Banco Inter is a company surfaced via the API Evangelist harvest backlog (source: kin-score-markets) and added to the network as a stub for full-pipeline profiling.
-- https://bancointer.com.br
+Banco Inter (Inter&Co, Nasdaq: INTR) is a Brazilian digital bank and financial super app offering free digital checking accounts, payments, Pix, credit, investments, insurance and an international Global Account. Its Inter Empresas developer portal (developers.inter.co) documents business banking APIs secured with mTLS certificates and OAuth 2.0: statements (Extrato), balances (Saldos), payments, Pix Cobrança, Pix Pagamento, Pix Automático and boleto collection (Cobrança), plus webhooks, a sandbox environment, SDKs (Java, C#, Python, PHP), CNAB file tooling and an MCP server.
+
+**Areas:** Company · Banking · Fintech · Payments · Pix · Brazil · Digital Bank · Open Banking
+
+## Banco Inter on APIs.io
+
+Everything profiled for Banco Inter is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/banco-inter/](https://apis.io/providers/banco-inter/)** — or go straight to one of the APIs or properties below.
+
+### APIs (23)
+
+- Banco Inter Boletos API — The Boletos API from Banco Inter — 5 operation(s) for boletos.
+- Banco Inter Cobrança API — The Cobrança API from Banco Inter — 7 operation(s) for cobrança.
+- Banco Inter Cobrança com Vencimento API — The Cobrança com Vencimento API from Banco Inter — 4 operation(s) for cobrança com vencimento.
+- Banco Inter Cobrança com Vencimento em Lote API — The Cobrança com Vencimento em Lote API from Banco Inter — 4 operation(s) for cobrança com vencimento em lote.
+- Banco Inter Cobrança Imediata API — The Cobrança Imediata API from Banco Inter — 4 operation(s) for cobrança imediata.
+- Banco Inter Cobrança Recorrente API — Esta seção apresenta os endpoints relacionados ao gerenciamento de cobranças associadas a uma recorrência. As cobranças só poderão ser geradas utilizando…
+- Banco Inter Extrato API — The Extrato API from Banco Inter — 3 operation(s) for extrato.
+- Banco Inter Location API — The Location API from Banco Inter — 3 operation(s) for location.
+- Banco Inter Location da Recorrência API — Esta seção apresenta os endpoints relacionados ao gerenciamento de payloads associadas a uma recorrência. ---
+- Banco Inter Pagamento API — The Pagamento API from Banco Inter — 5 operation(s) for pagamento.
+- Banco Inter Pix API — The Pix API from Banco Inter — 3 operation(s) for pix.
+- Banco Inter Pix Pagamento API — The Pix Pagamento API from Banco Inter — 2 operation(s) for pix pagamento.
+- Banco Inter Proposta API — The Proposta API from Banco Inter — 1 operation(s) for proposta.
+- Banco Inter Publicação API — The Publicação API from Banco Inter — 2 operation(s) for publicação.
+- Banco Inter Recorrência API — Essa seção apresenta os endpoints relacionados ao gerenciamento de recorrências do Pix Automático. Para que as cobranças sejam geradas automaticamente para…
+- Banco Inter Saldo API — The Saldo API from Banco Inter — 1 operation(s) for saldo.
+- Banco Inter Solicitar Recorrência API — Esta seção apresenta os endpoints relacionados ao gerenciamento de solicitações de confirmação de recorrência, que equivalem às autorizações necessárias.…
+- Banco Inter Token API — The Token API from Banco Inter — 1 operation(s) for token.
+- Banco Inter Upload de mídia API — The Upload de mídia API from Banco Inter — 1 operation(s) for upload de mídia.
+- Banco Inter Webhook API — The Webhook API from Banco Inter — 8 operation(s) for webhook.
+- Banco Inter Webhook de Cobranças Recorrentes API — Esta seção apresenta os endpoints relacionados ao gerenciamento do serviço de notificações de cobranças recorrentes. ---
+- Banco Inter Webhook de Pix Cobrança API — The Webhook de Pix Cobrança API from Banco Inter — 3 operation(s) for webhook de pix cobrança.
+- Banco Inter Webhook de Recorrências API — Esta seção apresenta os endpoints relacionados ao gerenciamento do serviço de notificações acerca de recorrências. ---
+
+_These APIs get their own pages on APIs.io at the next catalog build, and this README is re-rendered with links when they do._
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://bancointer.com.br)
+- [Documentation](https://developers.inter.co/docs/introducao/sobre-este-portal)
+- [API reference](https://developers.inter.co/references/token)
+- [Support](https://developers.inter.co/contacts)
+- [Changelog](https://developers.inter.co/changelog)
+- [Blog](https://blog-us.inter.co)
+- [Security](https://inter.co/en/security/)
+- [Privacy policy](https://inter.co/politica-de-privacidade/)
+- [GitHub](https://github.com/inter-co)
+
+## API Evangelist rating
+
+Not yet rated. See [apis.io/providers/banco-inter/](https://apis.io/providers/banco-inter/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Banco Inter: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/banco-inter/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
